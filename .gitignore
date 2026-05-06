@@ -14,5 +14,15 @@ dist/
 *.swp
 Thumbs.db
 
+# Screenshot / demo-video generator scratch dirs
+tmp-screenshots/
+tmp-demo/
+
+# Demo video output (large binary; reproducible via scripts/record-demo.mjs)
+docs/demo/*.mp4
+docs/demo/*.webm
+landing/assets/demo.mp4
+landing/assets/demo.webm
+
 # Claude Code session data
 .claude/
