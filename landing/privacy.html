@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aydınlatma Metni — WA Contacts Exporter</title>
+    <meta name="description" content="WA Contacts Exporter KVKK / GDPR aydınlatma metni — Bluedev." />
+    <meta name="theme-color" content="#015AFF" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/icon48.png" />
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .privacy-page {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 64px 24px 96px;
+      }
+      .privacy-page h1 {
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin: 0 0 8px;
+      }
+      .privacy-page h2 {
+        font-size: 20px;
+        margin: 36px 0 8px;
+        color: var(--c-primary);
+      }
+      .privacy-page p, .privacy-page ul {
+        margin: 0 0 14px;
+        color: var(--c-text);
+      }
+      .privacy-page ul {
+        padding-left: 24px;
+      }
+      .privacy-page li {
+        margin-bottom: 6px;
+      }
+      .privacy-page .meta {
+        font-size: 14px;
+        color: var(--c-muted);
+        margin-bottom: 28px;
+      }
+      .callout {
+        padding: 16px 18px;
+        background: var(--c-primary-tint);
+        border-left: 3px solid var(--c-primary);
+        border-radius: var(--r-sm);
+        font-size: 15px;
+        margin: 16px 0 24px;
+      }
+      .lang-toggle-row {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      .lang-pill {
+        padding: 4px 12px;
+        border: 1px solid var(--c-border);
+        border-radius: 999px;
+        cursor: pointer;
+        background: #fff;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .lang-pill.active {
+        background: var(--c-primary);
+        color: #fff;
+        border-color: var(--c-primary);
+      }
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: var(--c-muted);
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <a href="./index.html" class="brand-link">
+          <div class="brand-mark">WA</div>
+          <div class="brand-text">
+            <div class="brand-name">Contacts Exporter</div>
+            <div class="brand-sub">by Bluedev · v0.1.0 Beta</div>
+          </div>
+        </a>
+        <nav class="nav-links">
+          <a href="./index.html#features">Özellikler</a>
+          <a href="./index.html#install" class="btn btn-primary btn-sm">Kurulum</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="privacy-page">
+      <a href="./index.html" class="back-link">← Ana sayfaya dön</a>
+      <div class="lang-toggle-row">
+        <button class="lang-pill active" data-set-lang="tr">🇹🇷 Türkçe</button>
+        <button class="lang-pill" data-set-lang="en">🇬🇧 English</button>
+      </div>
+
+      <!-- TR section -->
+      <section data-lang-section="tr">
+        <h1>KVKK / GDPR Aydınlatma Metni</h1>
+        <p class="meta">Son güncelleme: 6 Mayıs 2026 · v0.1.0</p>
+
+        <div class="callout">
+          <strong>Önemli:</strong> Bu eklenti çıkarılan hiçbir veriyi sunucuya
+          göndermez, üçüncü taraflarla paylaşmaz, bulut tabanlı bir hizmet
+          kullanmaz (sizin açıkça seçtiğiniz AI sağlayıcısı hariç). Tüm işlem
+          cihazınızda yereldir.
+        </div>
+
+        <h2>1. Veri sorumlusu</h2>
+        <p>
+          Bu eklentiyi geliştiren <strong>Bluedev</strong>, eklentinin sizin
+          cihazınızda çalışan bir yazılım parçası olduğunu ve eklenti
+          kullanımında oluşturulan veriler üzerinde hiçbir sunucu işleme
+          gerçekleştirmediğini beyan eder. Eklenti sadece sizin etkileşim
+          ettiğiniz WhatsApp Web sayfasındaki verilere erişir.
+        </p>
+
+        <h2>2. Hangi veriler işlenir?</h2>
+        <p>
+          Sizin tetiklediğiniz "Çıkar" işlemleri sırasında WhatsApp Web'in kendi
+          <em>Store</em> nesnesinden okunan veriler:
+        </p>
+        <ul>
+          <li>Sohbet adları, telefon numaraları, son mesaj zaman damgaları</li>
+          <li>Grup adları, üye listesi, üyelerin telefon numaraları ve admin durumu</li>
+          <li>WhatsApp etiketleri ve hangi sohbete uygulandığı</li>
+          <li>Kayıtlı kişiler (Contact koleksiyonu)</li>
+          <li>Mesaj geçmişi (sohbet başına 100-5000, kullanıcı kontrollü)</li>
+        </ul>
+        <p>
+          Bu veriler yalnızca sizin tarayıcınızın <code>chrome.storage.local</code>
+          alanında geçici olarak (popup oturumu boyunca) ve indirdiğiniz
+          CSV/XLSX/VCard dosyasında saklanır.
+        </p>
+
+        <h2>3. AI sağlayıcı seçimi ve veri akışı</h2>
+        <p>
+          AI özelliklerini kullanırsanız, seçtiğiniz sağlayıcının domain'ine
+          (Anthropic, OpenAI, Google, Groq veya kendi yerel Ollama / LM Studio
+          sunucunuz) <strong>doğrudan tarayıcınızdan</strong> istek yapılır.
+          Bluedev bu istekleri görmez ve aracılık etmez. API anahtarlarınız
+          yalnızca yerel olarak <code>chrome.storage.local</code>'da saklanır.
+        </p>
+
+        <h2>4. KVKK / GDPR Sorumluluğu</h2>
+        <p>
+          Eklentiyi kullanarak çıkardığınız veriler, üçüncü kişilere ait
+          kişisel verileri içerebilir (sohbet ettiğiniz kişilerin telefon
+          numaraları, isimleri, grup üyeleri vb.). Bu veriler için:
+        </p>
+        <ul>
+          <li>İlgili kişilerden gerekli açık rızayı almak,</li>
+          <li>KVKK 5. madde veya GDPR 6. madde anlamında hukuki sebep belirlemek,</li>
+          <li>Verileri yalnızca işleme amacıyla sınırlı tutmak,</li>
+          <li>Verileri güvenli saklamak veya silmek</li>
+        </ul>
+        <p>
+          <strong>Tamamen kullanıcının (sizin) sorumluluğunuzdadır.</strong>
+          Bluedev, kullanıcının yetkisiz veri işleme faaliyetlerinden hiçbir
+          şekilde sorumlu değildir.
+        </p>
+
+        <h2>5. Varsayılan ayarlar</h2>
+        <ul>
+          <li>"Kayıtlı olmayan kişileri dahil et" anahtarı <strong>varsayılan kapalıdır</strong>.</li>
+          <li>Eklenti ilk açılışta KVKK rızası ister; rıza verilmeden hiçbir çıkarma yapılamaz.</li>
+          <li>Otomatik cevap modülü <strong>varsayılan kapalı</strong>; etkin olduğunda taslak modunda çalışır.</li>
+          <li>Hata logu yalnızca yerel <code>chrome.storage.local</code>'da, en fazla 50 kayıt; otomatik döner.</li>
+        </ul>
+
+        <h2>6. Verilerin silinmesi</h2>
+        <p>
+          Eklentinin tuttuğu yerel verileri silmek için
+          <code>chrome://extensions</code> → "WA Contacts Exporter" → "Detaylar"
+          → "Site verilerini sil" yolunu kullanabilirsiniz. İndirdiğiniz
+          dosyalar bilgisayarınızda kalmaya devam eder; onları kendiniz
+          silmelisiniz.
+        </p>
+
+        <h2>7. Meta / WhatsApp ile bağlantı</h2>
+        <p>
+          Bu eklenti <strong>resmi WhatsApp / Meta ürünü değildir</strong> ve
+          WhatsApp LLC veya Meta Platforms Inc. tarafından desteklenmez,
+          sponsorluk almaz veya bağlantılı değildir. WhatsApp markası WhatsApp
+          LLC'ye aittir. Eklenti yalnızca kullanıcının kendi cihazındaki kendi
+          WhatsApp Web oturumundaki kendi verilerine erişir.
+        </p>
+
+        <h2>8. İletişim</h2>
+        <p>
+          Bu metin veya eklenti hakkında soru ve görüşleriniz için:
+          <a href="https://bluedev.dev">bluedev.dev</a> ·
+          <a href="https://bluedev.dev/destek">bluedev.dev/destek</a>
+        </p>
+      </section>
+
+      <!-- EN section -->
+      <section data-lang-section="en" hidden>
+        <h1>Privacy Policy (GDPR / KVKK)</h1>
+        <p class="meta">Last updated: 2026-05-06 · v0.1.0</p>
+
+        <div class="callout">
+          <strong>Important:</strong> This extension does not send any extracted
+          data to any server, does not share with third parties, and does not
+          use any cloud-based service (except the AI provider you explicitly
+          select). All processing is local on your device.
+        </div>
+
+        <h2>1. Data controller</h2>
+        <p>
+          <strong>Bluedev</strong>, the developer of this extension, declares
+          that the extension is a piece of software running on your device, and
+          that no server-side processing is performed on data generated through
+          its use. The extension only accesses data on the WhatsApp Web page
+          you interact with.
+        </p>
+
+        <h2>2. What data is processed?</h2>
+        <p>
+          Data read from WhatsApp Web's own <em>Store</em> object during user-initiated
+          "Extract" operations:
+        </p>
+        <ul>
+          <li>Chat names, phone numbers, last-message timestamps</li>
+          <li>Group names, member lists, members' phone numbers and admin status</li>
+          <li>WhatsApp labels and which chat each is applied to</li>
+          <li>Saved contacts (Contact collection)</li>
+          <li>Message history (100-5000 per chat, user-controlled)</li>
+        </ul>
+        <p>
+          This data is stored only temporarily in your browser's
+          <code>chrome.storage.local</code> (for the popup session) and in any
+          CSV/XLSX/VCard file you download.
+        </p>
+
+        <h2>3. AI provider selection and data flow</h2>
+        <p>
+          When you use AI features, requests go <strong>directly from your
+          browser</strong> to the domain of the provider you select (Anthropic,
+          OpenAI, Google, Groq, or your own local Ollama / LM Studio server).
+          Bluedev does not see or proxy these requests. API keys are stored only
+          locally in <code>chrome.storage.local</code>.
+        </p>
+
+        <h2>4. GDPR / KVKK responsibility</h2>
+        <p>
+          Data extracted using the extension may include personal data of third
+          parties (phone numbers, names, group members of people you chat with).
+          For this data:
+        </p>
+        <ul>
+          <li>Obtain the necessary explicit consent,</li>
+          <li>Establish a lawful basis under GDPR Article 6 / KVKK Article 5,</li>
+          <li>Limit data use to the processing purpose,</li>
+          <li>Store securely or delete</li>
+        </ul>
+        <p>
+          <strong>Is entirely the user's (your) responsibility.</strong> Bluedev
+          is not liable for any unauthorized data processing by the user.
+        </p>
+
+        <h2>5. Default settings</h2>
+        <ul>
+          <li>"Include unsaved contacts" defaults <strong>OFF</strong>.</li>
+          <li>The first run requires consent; without consent, no extraction is allowed.</li>
+          <li>Auto-reply module defaults <strong>OFF</strong>; when enabled, runs in draft mode.</li>
+          <li>Error log lives only in local <code>chrome.storage.local</code>, capped at 50 entries; rotates.</li>
+        </ul>
+
+        <h2>6. Data deletion</h2>
+        <p>
+          To delete the local data the extension keeps, go to
+          <code>chrome://extensions</code> → "WA Contacts Exporter" → "Details"
+          → "Clear site data". Files you've downloaded remain on your computer;
+          delete them yourself.
+        </p>
+
+        <h2>7. Meta / WhatsApp affiliation</h2>
+        <p>
+          This extension is <strong>not an official WhatsApp / Meta product</strong> and
+          is not affiliated with, endorsed by, or sponsored by WhatsApp LLC or
+          Meta Platforms Inc. The WhatsApp trademark is owned by WhatsApp LLC.
+          The extension only accesses data from the user's own WhatsApp Web
+          session on the user's own device.
+        </p>
+
+        <h2>8. Contact</h2>
+        <p>
+          For questions or comments about this policy or the extension:
+          <a href="https://bluedev.dev">bluedev.dev</a> ·
+          <a href="https://bluedev.dev/destek">bluedev.dev/destek</a>
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div>
+          <div class="brand-link">
+            <div class="brand-mark">WA</div>
+            <div class="brand-text">
+              <div class="brand-name">Contacts Exporter</div>
+              <div class="brand-sub">Made by <a href="https://bluedev.dev">Bluedev</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-links">
+          <a href="./index.html">Ana sayfa / Home</a>
+          <a href="https://bluedev.dev/destek">Destek / Support</a>
+          <a href="https://bluedev.dev">bluedev.dev</a>
+        </div>
+        <div class="footer-disclaimer">
+          WhatsApp™ WhatsApp LLC's registered trademark. This extension is not
+          affiliated with Meta / WhatsApp. © 2026 Bluedev. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const sections = document.querySelectorAll('[data-lang-section]');
+        const pills = document.querySelectorAll('[data-set-lang]');
+        function set(lang) {
+          sections.forEach(s => {
+            s.hidden = s.getAttribute('data-lang-section') !== lang;
+          });
+          pills.forEach(p => {
+            p.classList.toggle('active', p.getAttribute('data-set-lang') === lang);
+          });
+          document.documentElement.setAttribute('lang', lang);
+          try { localStorage.setItem('wa-contacts-lang', lang); } catch(_){}
+        }
+        let initial = 'tr';
+        try {
+          const stored = localStorage.getItem('wa-contacts-lang');
+          if (stored === 'tr' || stored === 'en') initial = stored;
+        } catch(_){}
+        set(initial);
+        pills.forEach(p => {
+          p.addEventListener('click', () => set(p.getAttribute('data-set-lang')));
+        });
+      })();
+    </script>
+  </body>
+</html>

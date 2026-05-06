@@ -1,0 +1,55 @@
+{
+  "name": "wa-contacts-exporter",
+  "version": "0.1.0",
+  "description": "WhatsApp Web sohbet, kişi ve mesajlarınızı dışa aktarın (CSV/XLSX/VCard). Yerel veya bulut AI ile özet ve cevap önerisi üretin.",
+  "private": true,
+  "type": "module",
+  "homepage": "https://github.com/aydogandagidir/wa-contacts-exporter#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aydogandagidir/wa-contacts-exporter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aydogandagidir/wa-contacts-exporter/issues",
+    "email": "destek@bluedev.dev"
+  },
+  "keywords": [
+    "whatsapp",
+    "whatsapp-web",
+    "export",
+    "csv",
+    "xlsx",
+    "vcard",
+    "ai",
+    "kvkk",
+    "gdpr",
+    "chrome-extension",
+    "manifest-v3",
+    "ollama",
+    "claude",
+    "chatgpt",
+    "gemini",
+    "groq"
+  ],
+  "scripts": {
+    "icons": "node scripts/generate-icons.mjs",
+    "dev": "vite",
+    "build": "npm run icons && vite build",
+    "preview": "vite preview",
+    "package": "npm run build && node scripts/package-zip.mjs"
+  },
+  "dependencies": {
+    "papaparse": "^5.4.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.25",
+    "sharp": "^0.33.5",
+    "vite": "^5.4.10"
+  },
+  "author": {
+    "name": "Bluedev",
+    "url": "https://bluedev.dev"
+  },
+  "license": "UNLICENSED"
+}

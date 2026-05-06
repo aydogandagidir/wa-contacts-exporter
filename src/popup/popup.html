@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WA Contacts Exporter</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark">WA</div>
+        <div class="brand-text">
+          <div class="brand-title">Contacts Exporter</div>
+          <div class="brand-sub">v0.1.0 · Bluedev</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- KVKK consent gate — first-run blocker. Hidden once user accepts. -->
+    <section class="consent-gate" id="consent-gate" hidden>
+      <div class="consent-gate__inner">
+        <div class="consent-title">KVKK / GDPR Onayı</div>
+        <p class="consent-body">
+          Bu eklenti yalnızca yerel olarak çalışır; çıkardığınız veriler
+          hiçbir sunucuya gönderilmez. Ancak çıkardığınız verilerin
+          (telefon numaraları, isimler, grup üyeleri vb.)
+          <strong>KVKK / GDPR uyumluluğu sizin sorumluluğunuzdadır</strong>.
+        </p>
+        <p class="consent-body">
+          Devam etmek için aşağıdaki onayı vermeniz gerekir:
+        </p>
+        <label class="consent-check">
+          <input type="checkbox" id="consent-checkbox" />
+          <span>
+            Bu aracı yalnızca yasal olarak işleme yetkim olan kişisel veriler
+            için kullanacağım.
+          </span>
+        </label>
+        <div class="consent-actions">
+          <button class="btn btn--primary" id="consent-accept" disabled>Onaylıyorum, devam et</button>
+          <a class="consent-link" id="consent-privacy-link" href="#" target="_blank" rel="noopener">Aydınlatma metni</a>
+        </div>
+      </div>
+    </section>
+
+    <main id="app">
+      <section class="status-card" id="status-card">
+        <div class="status-dot status-dot--idle" id="status-dot"></div>
+        <div class="status-text" id="status-text">WhatsApp Web aranıyor…</div>
+      </section>
+
+      <section class="health-card" id="health-card" hidden>
+        <button type="button" class="health-card__head" id="health-toggle" aria-expanded="false">
+          <span class="health-title">API Sağlık Kontrolü</span>
+          <span class="health-toggle__icon">▸</span>
+        </button>
+        <div class="health-body" id="health-body" hidden>
+          <ul class="health-list" id="health-list"></ul>
+          <div class="health-meta" id="health-meta"></div>
+        </div>
+      </section>
+
+      <nav class="tabs" id="tabs" hidden role="tablist">
+        <button type="button" class="tab is-active" data-tab="chats" role="tab" aria-selected="true">Sohbetler</button>
+        <button type="button" class="tab" data-tab="messages" role="tab" aria-selected="false">Mesajlar</button>
+        <button type="button" class="tab" data-tab="ai" role="tab" aria-selected="false">AI ✨</button>
+        <button type="button" class="tab" data-tab="autoreply" role="tab" aria-selected="false">Oto-Cevap 🤖</button>
+        <button type="button" class="tab" data-tab="groups" role="tab" aria-selected="false">Gruplar</button>
+        <button type="button" class="tab" data-tab="labels" role="tab" aria-selected="false">Etiketler</button>
+        <button type="button" class="tab" data-tab="contacts" role="tab" aria-selected="false">Tüm Kişiler</button>
+      </nav>
+
+      <!-- Sohbetler tab -->
+      <section class="data-card tab-panel" id="panel-chats" data-tab="chats" hidden>
+        <div class="data-card__head">
+          <div class="data-card__title">Sohbetler</div>
+          <div class="data-card__count" id="chats-count">—</div>
+        </div>
+        <label class="opt-row">
+          <input type="checkbox" id="include-unsaved" />
+          <span>Kayıtlı olmayan kişileri dahil et</span>
+        </label>
+        <div class="data-card__actions">
+          <button class="btn btn--primary" id="extract-chats-btn">Sohbetleri Çıkar</button>
+        </div>
+        <div class="preview" id="chats-preview" hidden>
+          <table class="preview-table">
+            <thead><tr><th>İsim</th><th>Telefon</th><th>Tip</th><th>Son mesaj</th></tr></thead>
+            <tbody id="chats-tbody"></tbody>
+          </table>
+          <div class="preview-note" id="chats-note"></div>
+        </div>
+        <div class="export-row" id="chats-export-row" hidden>
+          <button class="btn" id="chats-export-csv">CSV indir</button>
+          <button class="btn" id="chats-export-xlsx">XLSX</button>
+          <button class="btn" id="chats-export-vcard">VCard</button>
+        </div>
+      </section>
+
+      <!-- Mesajlar tab -->
+      <section class="data-card tab-panel" id="panel-messages" data-tab="messages" hidden>
+        <div class="data-card__head">
+          <div class="data-card__title">Mesajlar</div>
+          <div class="data-card__count" id="messages-count">—</div>
+        </div>
+        <div class="msg-info">
+          WhatsApp Web'in hâlâ hafızasında olan mesajları çıkarır. Daha eski
+          mesajlar için <strong>her sohbeti açıp yukarıya doğru kaydırın</strong>,
+          sonra Çıkar'a basın. KVKK: mesaj içerikleri yerel olarak işlenir,
+          sunucuya gönderilmez.
+        </div>
+        <div class="opt-row">
+          <label class="opt-row__inner">
+            <span>Sohbet başına en fazla:</span>
+            <select id="messages-per-chat-limit">
+              <option value="100">100</option>
+              <option value="500" selected>500</option>
+              <option value="1000">1000</option>
+              <option value="5000">5000</option>
+            </select>
+          </label>
+        </div>
+        <div class="opt-row">
+          <label class="opt-row__inner">
+            <span>Eski mesaj yükleme turu (yavaş):</span>
+            <select id="messages-load-earlier">
+              <option value="0" selected>0 (sadece hafızadakiler)</option>
+              <option value="2">2 tur</option>
+              <option value="5">5 tur</option>
+              <option value="10">10 tur</option>
+            </select>
+          </label>
+        </div>
+        <div class="data-card__actions">
+          <button class="btn btn--primary" id="extract-messages-btn">Mesajları Çıkar</button>
+        </div>
+        <div class="preview" id="messages-preview" hidden>
+          <table class="preview-table">
+            <thead><tr><th>Sohbet</th><th>Gönderen</th><th>Mesaj</th><th>Zaman</th></tr></thead>
+            <tbody id="messages-tbody"></tbody>
+          </table>
+          <div class="preview-note" id="messages-note"></div>
+        </div>
+        <div class="export-row" id="messages-export-row" hidden>
+          <button class="btn" id="messages-export-csv">CSV indir</button>
+          <button class="btn" id="messages-export-xlsx">XLSX</button>
+        </div>
+      </section>
+
+      <!-- AI tab -->
+      <section class="data-card tab-panel" id="panel-ai" data-tab="ai" hidden>
+        <div class="data-card__head">
+          <div class="data-card__title">AI Asistan ✨</div>
+          <div class="data-card__count" id="ai-status">—</div>
+        </div>
+
+        <!-- One-shot migration banner: shown when default model was bumped -->
+        <div class="ai-banner" id="ai-migration-banner" hidden>
+          <div class="ai-banner__body" id="ai-migration-body"></div>
+          <button type="button" class="ai-banner__close" id="ai-migration-close" aria-label="Kapat">×</button>
+        </div>
+
+        <div class="ai-info" id="ai-info"></div>
+
+        <details class="ai-config" id="ai-config">
+          <summary>Sağlayıcı ayarları</summary>
+          <div class="ai-config__body">
+            <label class="ai-row">
+              <span>Sağlayıcı</span>
+              <select id="ai-provider">
+                <optgroup label="Yerel (ücretsiz)">
+                  <option value="ollama">Ollama</option>
+                  <option value="openai_compat">OpenAI uyumlu (LM Studio / llama.cpp)</option>
+                </optgroup>
+                <optgroup label="Cloud (API anahtarı gerekir)">
+                  <option value="anthropic">Anthropic Claude</option>
+                  <option value="openai">OpenAI ChatGPT</option>
+                  <option value="gemini">Google Gemini</option>
+                  <option value="groq">Groq (hızlı)</option>
+                </optgroup>
+              </select>
+            </label>
+            <label class="ai-row" id="ai-baseurl-row">
+              <span>Sunucu URL</span>
+              <input type="text" id="ai-baseurl" placeholder="http://localhost:11434/v1" />
+            </label>
+            <label class="ai-row" id="ai-apikey-row" hidden>
+              <span>API Anahtarı</span>
+              <input type="password" id="ai-api-key" placeholder="sk-ant-..." autocomplete="off" />
+            </label>
+            <label class="ai-row">
+              <span>Model</span>
+              <select id="ai-model-select"></select>
+              <input type="text" id="ai-model" placeholder="aya-expanse:8b" hidden />
+            </label>
+            <div class="ai-model-info" id="ai-model-info" hidden></div>
+            <div class="ai-row__actions">
+              <button class="btn btn--primary" id="ai-save-key">Kaydet</button>
+              <button class="btn btn--ghost" id="ai-test-key">Bağlantıyı test et</button>
+              <a href="#" target="_blank" rel="noopener" class="ai-link" id="ai-help-link">Kurulum rehberi</a>
+            </div>
+            <div class="ai-config__note" id="ai-provider-help">
+              <strong>Ollama (önerilen, ücretsiz):</strong> ollama.com'dan indir,
+              <code>ollama pull llama3.2</code> ile model yükle, sonra
+              <code>OLLAMA_ORIGINS=chrome-extension://* ollama serve</code>
+              ile çalıştır (eklentiden bağlanabilmesi için).
+            </div>
+          </div>
+        </details>
+
+        <div class="ai-actions">
+          <div class="ai-action-card">
+            <div class="ai-action-card__title">📋 Sohbet özetle / 💬 Cevap öner</div>
+            <div class="ai-action-card__body">
+              Önce <strong>Mesajlar</strong> sekmesinden ilgili sohbetin
+              mesajlarını çıkarın. Sonra burada o sohbeti seçip Özet veya
+              Öneri üretin.
+            </div>
+            <details class="info-details info-details--inline">
+              <summary>Parantez içindeki "(X mesaj)" sayısı ne demek?</summary>
+              <div class="info-details__body">
+                Bu sayı, sadece <strong>Mesajlar sekmesinden çıkardığınız</strong>
+                mesajları gösterir — sohbetin tam geçmişi DEĞİL. WhatsApp Web her
+                sohbet için yalnızca son 1–50 mesajı RAM'de tutar. Daha fazla
+                mesaj için <strong>Mesajlar → "Eski mesaj yükleme turu"</strong>
+                ayarını <strong>5+</strong> yapıp yeniden çıkarın.
+                Düşük sayı (⚠️ az veri / üslup yetersiz) işaretli sohbetlerde AI
+                önerileri kalitesiz olabilir.
+              </div>
+            </details>
+            <select id="ai-chat-select" class="ai-select">
+              <option value="">— Sohbet seç —</option>
+            </select>
+            <textarea id="ai-chat-instructions"
+                      class="ai-instructions"
+                      rows="2"
+                      placeholder="(opsiyonel) Bu sohbete özel talimat — ör: 'Kısa ve samimi ton kullan', 'Cevaplara saat ve yer detayı ekle', 'İş gündemine odaklan'"></textarea>
+            <div class="ai-instructions__row">
+              <button class="btn btn--ghost ai-instructions__save" id="ai-instructions-save">Talimatı kaydet</button>
+              <span class="ai-instructions__hint" id="ai-instructions-hint"></span>
+            </div>
+            <div class="ai-action-buttons">
+              <button class="btn btn--primary" id="ai-summarize-btn" disabled>Özet üret</button>
+              <button class="btn btn--primary" id="ai-followups-btn" disabled>Öneri üret</button>
+            </div>
+          </div>
+
+          <div class="ai-action-card">
+            <div class="ai-action-card__title">🎯 Sohbet önceliklendir</div>
+            <div class="ai-action-card__body">
+              Tüm sohbetlerinizi acil cevap gerektirenden başlayarak sıralar
+              (Sohbetler sekmesinde "Çıkar" yapmış olmanız gerekir).
+            </div>
+            <button class="btn btn--primary" id="ai-triage-btn" disabled>Sıralamayı üret</button>
+          </div>
+        </div>
+
+        <div class="ai-output" id="ai-output" hidden>
+          <div class="ai-output__head">
+            <div class="ai-output__title" id="ai-output-title">Sonuç</div>
+            <button class="btn btn--ghost ai-output__copy" id="ai-output-copy">Kopyala</button>
+          </div>
+          <pre class="ai-output__body" id="ai-output-body"></pre>
+          <div class="ai-output__meta" id="ai-output-meta"></div>
+        </div>
+
+        <!-- Tek-öneri iteratif sistem (cevap/takip için) -->
+        <div class="suggestion-card" id="suggestion-card" hidden>
+          <div class="suggestion-card__head">
+            <div class="suggestion-card__title" id="suggestion-title">Öneri</div>
+            <button type="button" class="copy-btn" id="suggestion-copy" title="Kopyala" aria-label="Kopyala"></button>
+          </div>
+          <div class="suggestion-target" id="suggestion-target"></div>
+          <div class="suggestion-body" id="suggestion-body"></div>
+          <div class="suggestion-meta" id="suggestion-meta"></div>
+          <div class="suggestion-actions" id="suggestion-actions">
+            <button class="btn btn--ghost" id="suggestion-refresh">↻ Yenile</button>
+            <button class="btn btn--ghost" id="suggestion-feedback">✎ Düzelt</button>
+          </div>
+          <div class="suggestion-feedback" id="suggestion-feedback-row" hidden>
+            <textarea id="suggestion-feedback-text" rows="2" placeholder="Ne değişmesini istersin? (örn: 'daha kısa', 'daha resmi', 'soruyu farklı sor')"></textarea>
+            <div class="suggestion-feedback__actions">
+              <button class="btn btn--primary" id="suggestion-feedback-apply">Geri bildirimle yenile</button>
+              <button class="btn btn--ghost" id="suggestion-feedback-cancel">İptal</button>
+            </div>
+          </div>
+          <div class="suggestion-history" id="suggestion-history" hidden>
+            <div class="suggestion-history__title">Reddedilen öneriler</div>
+            <ul class="suggestion-history__list" id="suggestion-history-list"></ul>
+          </div>
+        </div>
+
+        <!-- Triage gets its own structured render with verification badges -->
+        <div class="ai-output" id="ai-triage-output" hidden>
+          <div class="ai-output__head">
+            <div class="ai-output__title">Öncelik sıralaması</div>
+            <button class="btn btn--ghost ai-output__copy" id="ai-triage-copy">Kopyala</button>
+          </div>
+          <ol class="triage-list" id="ai-triage-list"></ol>
+          <div class="triage-stats" id="ai-triage-stats"></div>
+          <div class="ai-output__meta" id="ai-triage-meta"></div>
+        </div>
+      </section>
+
+      <!-- Otomatik Cevap tab -->
+      <section class="data-card tab-panel" id="panel-autoreply" data-tab="autoreply" hidden>
+        <div class="data-card__head">
+          <div class="data-card__title">Otomatik Cevap 🤖</div>
+          <div class="data-card__count" id="autoreply-status">Kapalı</div>
+        </div>
+
+        <details class="info-details">
+          <summary>Nasıl çalışır?</summary>
+          <div class="info-details__body">
+            Varsayılan mod <strong>Taslak</strong>: AI cevap üretir, sen
+            onaylayınca gönderilir. Otomatik gönderim için her sohbeti tek
+            tek aktif et; oran limiti ve sessiz saatleri kontrol et.
+          </div>
+        </details>
+
+        <div class="ar-master">
+          <label class="opt-row">
+            <input type="checkbox" id="ar-master-enabled" />
+            <span><strong>Ana anahtar</strong> — yeni mesaj dinlemeyi başlat</span>
+          </label>
+          <label class="opt-row">
+            <span>Mod:</span>
+            <select id="ar-mode">
+              <option value="draft">Taslak (önce göster, sonra gönder)</option>
+              <option value="auto">Otomatik (anında gönder — dikkat)</option>
+            </select>
+          </label>
+          <div class="ar-grid">
+            <label class="opt-row">
+              <span>Saat başına max:</span>
+              <input type="number" id="ar-max-hour" min="1" max="100" value="10" />
+            </label>
+            <label class="opt-row">
+              <span>Gün başına max:</span>
+              <input type="number" id="ar-max-day" min="1" max="500" value="50" />
+            </label>
+          </div>
+          <label class="opt-row">
+            <input type="checkbox" id="ar-quiet-enabled" />
+            <span>Sessiz saatler:</span>
+            <input type="number" id="ar-quiet-start" min="0" max="23" value="22" style="width:50px"/>
+            <span>– </span>
+            <input type="number" id="ar-quiet-end" min="0" max="23" value="8" style="width:50px"/>
+          </label>
+        </div>
+
+        <div class="ar-section">
+          <div class="ar-section__title">Sohbet seç ve etkinleştir</div>
+          <select id="ar-chat-select" class="ai-select">
+            <option value="">— Önce Sohbetler sekmesinden çıkar —</option>
+          </select>
+          <textarea id="ar-instructions" rows="2" placeholder="(opsiyonel) Bu sohbete özel talimat — ör: 'Toplantı önerilerini onayla', 'Kısa ve profesyonel ol', 'Detay sorulduğunda nazikçe ertele'"></textarea>
+          <label class="opt-row">
+            <input type="checkbox" id="ar-chat-enabled" />
+            <span>Bu sohbet için otomatik cevap aktif</span>
+          </label>
+          <button class="btn btn--primary" id="ar-save-chat">Sohbet ayarını kaydet</button>
+        </div>
+
+        <div class="ar-section">
+          <div class="ar-section__title">Bekleyen taslaklar</div>
+          <div id="ar-pending-list" class="ar-pending"></div>
+          <div class="preview-note" id="ar-pending-empty">Henüz taslak yok. Yeni mesaj geldiğinde burada görünecek.</div>
+        </div>
+
+        <div class="ar-section">
+          <div class="ar-section__title">Geçmiş (son 20)</div>
+          <div id="ar-history-list" class="ar-history"></div>
+        </div>
+      </section>
+
+      <!-- Gruplar tab -->
+      <section class="data-card tab-panel" id="panel-groups" data-tab="groups" hidden>
+        <div class="data-card__head">
+          <div class="data-card__title">Gruplar</div>
+          <div class="data-card__count" id="groups-count">—</div>
+        </div>
+        <details class="info-details">
+          <summary>Üye satırları nasıl çıkıyor?</summary>
+          <div class="info-details__body">
+            Telefonunuzda kayıtlı üyelerin <strong>isim ve telefon</strong>'u gelir.
+            <strong>+905…</strong> formatındaki üyeler ise telefonunuzda kayıtlı
+            <strong>olmayan</strong> kişilerdir; WA Web onların yalnızca telefon
+            numarasını paylaşır.
+          </div>
+        </details>
+        <label class="opt-row">
+          <input type="checkbox" id="groups-include-unsaved" />
+          <span>Kayıtlı olmayan üyeleri dahil et</span>
+        </label>
+        <div class="data-card__actions">
+          <button class="btn btn--primary" id="extract-groups-btn">Grupları Çıkar</button>
+        </div>
+        <div class="preview" id="groups-preview" hidden>
+          <table class="preview-table">
+            <thead><tr><th>Grup adı</th><th>Üye</th><th>Son mesaj</th></tr></thead>
+            <tbody id="groups-tbody"></tbody>
+          </table>
+          <div class="preview-note" id="groups-note"></div>
+        </div>
+        <div class="export-row" id="groups-export-row" hidden>
+          <button class="btn" id="groups-export-csv">CSV indir</button>
+          <button class="btn" id="groups-export-xlsx">XLSX</button>
+          <button class="btn" id="groups-export-vcard">VCard</button>
+        </div>
+      </section>
+
+      <!-- Etiketler tab -->
+      <section class="data-card tab-panel" id="panel-labels" data-tab="labels" hidden>
+        <div class="data-card__head">
+          <div class="data-card__title">Etiketler</div>
+          <div class="data-card__count" id="labels-count">—</div>
+        </div>
+        <label class="opt-row">
+          <input type="checkbox" id="labels-include-system" />
+          <span>Sistem filtrelerini de göster (Unread, Favorites, Groups…)</span>
+        </label>
+        <div class="data-card__actions">
+          <button class="btn btn--primary" id="extract-labels-btn">Etiketleri Çıkar</button>
+        </div>
+        <div class="preview" id="labels-preview" hidden>
+          <table class="preview-table">
+            <thead><tr><th>Etiket</th><th>Renk</th><th>Sohbet sayısı</th></tr></thead>
+            <tbody id="labels-tbody"></tbody>
+          </table>
+          <div class="preview-note" id="labels-note"></div>
+        </div>
+        <div class="export-row" id="labels-export-row" hidden>
+          <button class="btn" id="labels-export-csv">CSV indir</button>
+          <button class="btn" id="labels-export-xlsx">XLSX</button>
+        </div>
+      </section>
+
+      <!-- Tüm Kişiler tab -->
+      <section class="data-card tab-panel" id="panel-contacts" data-tab="contacts" hidden>
+        <div class="data-card__head">
+          <div class="data-card__title">Tüm Kişiler</div>
+          <div class="data-card__count" id="contacts-count">—</div>
+        </div>
+        <label class="opt-row">
+          <input type="checkbox" id="contacts-include-unsaved" />
+          <span>Kayıtlı olmayan kişileri dahil et</span>
+        </label>
+        <div class="data-card__actions">
+          <button class="btn btn--primary" id="extract-contacts-btn">Kişileri Çıkar</button>
+        </div>
+        <div class="preview" id="contacts-preview" hidden>
+          <table class="preview-table">
+            <thead><tr><th>İsim</th><th>Telefon</th><th>Tip</th></tr></thead>
+            <tbody id="contacts-tbody"></tbody>
+          </table>
+          <div class="preview-note" id="contacts-note"></div>
+        </div>
+        <div class="export-row" id="contacts-export-row" hidden>
+          <button class="btn" id="contacts-export-csv">CSV indir</button>
+          <button class="btn" id="contacts-export-xlsx">XLSX</button>
+          <button class="btn" id="contacts-export-vcard">VCard</button>
+        </div>
+      </section>
+
+      <!-- VCard import help — appears after a successful VCard download -->
+      <section class="vcard-help" id="vcard-help" hidden>
+        <div class="vcard-help__title">VCard indirildi ✓</div>
+        <p class="vcard-help__body">
+          Windows'ta <strong>Yeni Outlook</strong> .vcf import desteklemez. Bu
+          platformlardan birini deneyin:
+        </p>
+        <ul class="vcard-help__list">
+          <li><a href="https://contacts.google.com" target="_blank" rel="noopener">Google Contacts</a> → "Import" → dosyayı seç</li>
+          <li><a href="https://www.icloud.com/contacts" target="_blank" rel="noopener">iCloud Contacts</a> → ⚙ → "Import vCard"</li>
+          <li><strong>Android / iPhone:</strong> dosyayı telefonda aç → rehbere ekle</li>
+          <li><strong>Klasik Outlook (Windows):</strong> File → Open → Import</li>
+        </ul>
+        <div class="vcard-help__actions">
+          <button class="btn btn--ghost" id="vcard-copy-btn">VCard içeriğini panoya kopyala</button>
+          <button class="btn btn--ghost" id="vcard-help-close">Kapat</button>
+        </div>
+      </section>
+
+      <section class="cta-row" id="cta-row" hidden>
+        <button class="btn btn--ghost" id="refresh-btn">Yenile</button>
+        <button class="btn btn--ghost" id="copy-debug-btn">Hata raporu kopyala</button>
+      </section>
+
+      <p class="disclaimer">
+        KVKK/GDPR uyumu kullanıcı sorumluluğundadır.
+        <a href="#" id="footer-privacy-link" target="_blank" rel="noopener">Aydınlatma metni</a>
+      </p>
+    </main>
+
+    <footer class="app-footer">
+      <span>Made by <a href="https://bluedev.dev" target="_blank" rel="noopener">Bluedev</a></span>
+    </footer>
+
+    <script type="module" src="./popup.js"></script>
+  </body>
+</html>

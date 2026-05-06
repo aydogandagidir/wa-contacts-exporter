@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "WA Contacts Exporter",
+  "version": "0.1.0",
+  "description": "WhatsApp Web sohbet, kişi ve mesajlarınızı dışa aktarın (CSV/XLSX/VCard). Yerel veya bulut AI ile özet ve cevap önerisi üretin.",
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "WA Contacts Exporter"
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["src/content/content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": ["storage", "downloads", "activeTab"],
+  "host_permissions": [
+    "https://web.whatsapp.com/*",
+    "https://api.anthropic.com/*",
+    "https://api.openai.com/*",
+    "https://generativelanguage.googleapis.com/*",
+    "https://api.groq.com/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["src/content/inject.js"],
+      "matches": ["https://web.whatsapp.com/*"]
+    },
+    {
+      "resources": ["src/popup/privacy.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

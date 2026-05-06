@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aydınlatma Metni — WA Contacts Exporter</title>
+    <style>
+      :root {
+        --c-primary: #015AFF;
+        --c-text: #2D3142;
+        --c-muted: #6B7280;
+        --c-bg: #FFFFFF;
+        --c-bg-alt: #F3F4F6;
+        --c-border: #D1D5DB;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 15px;
+        color: var(--c-text);
+        line-height: 1.6;
+        background: var(--c-bg);
+      }
+      .wrap { max-width: 720px; margin: 0 auto; padding: 32px 24px 64px; }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 28px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--c-border);
+      }
+      .brand-mark {
+        width: 36px; height: 36px; border-radius: 8px;
+        background: var(--c-primary); color: #fff;
+        font-weight: 800; display: grid; place-items: center;
+        letter-spacing: -0.5px;
+      }
+      .brand-title { font-weight: 700; font-size: 18px; }
+      .brand-sub { font-size: 12px; color: var(--c-muted); }
+      h1 { font-size: 24px; margin: 0 0 8px; }
+      h2 { font-size: 16px; margin: 28px 0 6px; color: var(--c-primary); }
+      p, ul { margin: 0 0 12px; }
+      ul { padding-left: 22px; }
+      li { margin-bottom: 4px; }
+      strong { color: var(--c-text); }
+      .meta {
+        font-size: 13px; color: var(--c-muted); margin-bottom: 24px;
+      }
+      .callout {
+        padding: 12px 14px;
+        background: var(--c-bg-alt);
+        border-left: 3px solid var(--c-primary);
+        border-radius: 4px;
+        font-size: 14px;
+        margin: 16px 0;
+      }
+      a { color: var(--c-primary); }
+      footer {
+        margin-top: 48px;
+        padding-top: 16px;
+        border-top: 1px solid var(--c-border);
+        font-size: 12px;
+        color: var(--c-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="brand">
+        <div class="brand-mark">WA</div>
+        <div>
+          <div class="brand-title">Contacts Exporter</div>
+          <div class="brand-sub">Aydınlatma Metni · v0.1.0</div>
+        </div>
+      </div>
+
+      <h1>KVKK / GDPR Aydınlatma Metni</h1>
+      <p class="meta">Son güncelleme: 6 Mayıs 2026 · v0.1.0</p>
+
+      <div class="callout">
+        <strong>Önemli:</strong> Bu eklenti çıkarılan hiçbir veriyi sunucuya
+        göndermez, üçüncü taraflarla paylaşmaz, bulut tabanlı bir hizmet
+        kullanmaz. Tüm işlem cihazınızda yereldir.
+      </div>
+
+      <h2>1. Veri sorumlusu</h2>
+      <p>
+        Bu eklentiyi geliştiren <strong>Bluedev</strong>, eklentinin sizin
+        cihazınızda çalışan bir yazılım parçası olduğunu ve eklenti
+        kullanımında oluşturulan veriler üzerinde hiçbir sunucu işleme
+        gerçekleştirmediğini beyan eder. Eklenti sadece sizin etkileşim
+        ettiğiniz WhatsApp Web sayfasındaki verilere erişir.
+      </p>
+
+      <h2>2. Hangi veriler işlenir?</h2>
+      <p>
+        Sizin tetiklediğiniz "Çıkar" işlemleri sırasında WhatsApp Web'in
+        kendi <em>Store</em> nesnesinden okunan veriler:
+      </p>
+      <ul>
+        <li>Sohbet adları, telefon numaraları, son mesaj zaman damgaları</li>
+        <li>Grup adları, üye listesi, üyelerin telefon numaraları ve admin durumu (eğer GroupMetadata modülü mevcutsa)</li>
+        <li>WhatsApp etiketleri ve hangi sohbete uygulandığı</li>
+        <li>Kayıtlı kişiler (Contact koleksiyonu)</li>
+      </ul>
+      <p>
+        Bu veriler yalnızca sizin tarayıcınızın <code>chrome.storage.local</code>
+        alanında geçici olarak (popup oturumu boyunca) ve indirdiğiniz
+        CSV/XLSX/VCard dosyasında saklanır.
+      </p>
+
+      <h2>3. Verilerin nereye gönderildiği</h2>
+      <p>
+        <strong>Hiçbir yere.</strong> Eklentinin manifestindeki
+        <code>host_permissions</code> sadece <code>https://web.whatsapp.com/*</code>
+        adresine ait olup eklenti dışarıya HTTP isteği yapmaz. Bunu
+        <code>chrome://extensions</code> → "WA Contacts Exporter" → "Site
+        izinleri" üzerinden doğrulayabilirsiniz.
+      </p>
+
+      <h2>4. KVKK / GDPR Sorumluluğu</h2>
+      <p>
+        Eklentiyi kullanarak çıkardığınız veriler, üçüncü kişilere ait
+        kişisel verileri içerebilir (sohbet ettiğiniz kişilerin telefon
+        numaraları, isimleri, grup üyeleri vb.). Bu veriler için:
+      </p>
+      <ul>
+        <li>İlgili kişilerden gerekli açık rızayı almak,</li>
+        <li>KVKK 5. madde veya GDPR 6. madde anlamında bir hukuki sebep belirlemek,</li>
+        <li>Verileri yalnızca işleme amacıyla sınırlı tutmak,</li>
+        <li>Verileri güvenli bir şekilde saklamak veya silmek</li>
+      </ul>
+      <p>
+        <strong>Tamamen kullanıcının (sizin) sorumluluğunuzdadır.</strong>
+        Bluedev, kullanıcının yetkisiz veri işleme faaliyetlerinden hiçbir
+        şekilde sorumlu değildir.
+      </p>
+
+      <h2>5. Varsayılan ayarlar</h2>
+      <p>
+        KVKK / GDPR uyumlu varsayılanlar:
+      </p>
+      <ul>
+        <li>"Kayıtlı olmayan kişileri dahil et" anahtarı <strong>varsayılan olarak kapalıdır</strong> — telefon defterinizde olmayan kişilerin verileri sizin açık opt-in'iniz olmadan dışa aktarılmaz.</li>
+        <li>Eklenti ilk açılışta KVKK rızası istemekte; rıza verilmeden hiçbir çıkarma işlemi yapılamaz.</li>
+        <li>Hata logu yalnızca yerel olarak <code>chrome.storage.local</code>'da tutulur, en fazla 50 kayıt; otomatik döner.</li>
+      </ul>
+
+      <h2>6. Verilerin silinmesi</h2>
+      <p>
+        Eklentinin tuttuğu yerel verileri silmek için
+        <code>chrome://extensions</code> → "WA Contacts Exporter" → "Detaylar"
+        → "Site verilerini sil" yolunu kullanabilirsiniz. İndirdiğiniz
+        dosyalar bilgisayarınızda kalmaya devam eder; onları kendiniz
+        silmelisiniz.
+      </p>
+
+      <h2>7. İletişim</h2>
+      <p>
+        Bu metin veya eklenti hakkında soru ve görüşleriniz için:
+        <a href="https://bluedev.dev" target="_blank" rel="noopener">bluedev.dev</a>
+      </p>
+
+      <footer>
+        Made by <a href="https://bluedev.dev" target="_blank" rel="noopener">Bluedev</a> ·
+        WA Contacts Exporter v0.1.0
+      </footer>
+    </div>
+  </body>
+</html>

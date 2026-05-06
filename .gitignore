@@ -1,0 +1,18 @@
+node_modules/
+dist/
+*.zip
+*.crx
+.vite/
+.DS_Store
+.env
+.env.local
+*.log
+
+# Editor / tooling
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+
+# Claude Code session data
+.claude/

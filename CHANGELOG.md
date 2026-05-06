@@ -1,0 +1,75 @@
+# Changelog
+
+Tüm önemli değişiklikler bu dosyada belgelenir.
+Format [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) standardına dayanır.
+
+## [0.1.0] — 2026-05-06
+
+İlk beta sürümü. Çekirdek export + AI asistan + otomatik cevap modülleri tamamlandı.
+
+### ✨ Eklendi
+
+#### Veri çıkarımı (export)
+- **Sohbetler**: tüm 1-on-1 ve grup sohbetleri, son mesaj zaman damgalarıyla
+- **Mesajlar**: WA Web hafızasındaki mesajları sohbet bazında çıkarma; "Eski mesaj yükleme turu" ile geriye doğru gidebilme
+- **Gruplar**: her grup için katılımcı listesi + admin/super-admin işaretleri
+  (modern WA Web shape değişikliklerine dayanıklı çoklu yükleme stratejisi)
+- **Etiketler**: WhatsApp Business etiketleri + sohbet eşleşmeleri
+  (sistem filtrelerini ayrı işaretler — `Unread`, `Favorites`, `Groups` gibi)
+- **Tüm Kişiler**: kayıtlı + (opt-in ile) kayıtsız kişiler
+
+#### Format desteği
+- **CSV**: PapaParse + UTF-8 BOM (Excel TR Türkçe karakter uyumlu)
+- **XLSX**: SheetJS lazy-loaded (~430 KB sadece ihtiyaç duyulduğunda); 5 sayfa
+  (Sohbetler / Mesajlar / Gruplar / Etiketler / Kişiler), bold header + üst satır frozen
+- **VCard 3.0**: hand-rolled (sıfır dependency); chats / contacts / group-members 3 varyant
+
+#### AI Asistan (yeni)
+- **6 sağlayıcı** desteği:
+  - Yerel: Ollama, OpenAI uyumlu (LM Studio / llama.cpp)
+  - Bulut: Anthropic Claude, OpenAI ChatGPT, Google Gemini, Groq
+- **Sohbet özetleme**: TR formatlı çıktı (özet + ana konular + eylem maddeleri + ton)
+- **Cevap önerisi**: hedef mesaja kilitli iteratif tek-öneri (Yenile/Düzelt/Geri bildirim)
+- **Takip mesajı**: kullanıcının yanıtsız kalan mesajına göre otomatik hatırlatma
+- **Önceliklendirme**: hibrit (kural-tabanlı skor + AI gerekçe) + doğrulama UI
+- **Üslup taklit**: kullanıcının kendi geçmiş mesajlarını üslup örneği olarak kullanma
+- **SENDER → RECEIVER prompt çerçevesi**: rol karışıklığını yapısal engelleme
+- **Per-chat talimat**: her sohbet için özel AI yönlendirmesi (kalıcı)
+- **Anti-hallucination**: sohbette geçmeyen konu/aktivite/kişi uydurma yasağı
+
+#### Otomatik cevap (oto-cevap)
+- **Taslak modu** (default): AI cevap üretir → kullanıcı onaylayıp gönderir
+- **Otomatik mod**: opt-in per-chat, anında gönderim
+- **Güvenlik katmanları**: master switch + per-chat opt-in + saat/gün limiti +
+  sessiz saatler + kendi mesajlarına cevap verme + status mesajı filtreleme
+- **Audit log**: son 100 olay (gönderildi/iptal/sessiz-saat/limit-aşıldı/hata)
+
+#### KVKK & gizlilik
+- First-run **rıza ekranı** (mecburi onay olmadan extraction yok)
+- Türkçe **Aydınlatma Metni** sayfası (privacy.html, 7 madde)
+- "Kayıtsız kişileri dahil et" toggle'ı **default kapalı** (KVKK uyumlu varsayılan)
+- Tüm veri yerel: hiçbir şey Bluedev sunucusuna gitmez
+- API anahtarları yalnızca `chrome.storage.local`'da
+
+#### Mimari
+- **Manifest V3** uyumlu
+- **Multi-strategy webpack/MetroBundler hook** (modern WA Web shape değişikliklerine dayanıklı)
+- **document_start MAIN-world inject** ile `Object.defineProperty` üzerinden `window.__d` yakalama
+- **`window.require` tabanlı modül çözümü** + 6 modül için functional fallback
+
+#### UI/UX
+- 7 sekmeli popup: Sohbetler / Mesajlar / AI ✨ / Oto-Cevap 🤖 / Gruplar / Etiketler / Tüm Kişiler
+- Modern ikon-tabanlı kopyala butonu (Claude tarzı)
+- Sağlayıcıya duyarlı bilgi banner'ı (Ollama/Anthropic/OpenAI/Gemini/Groq metinleri farklı)
+- Bağlam yetersizliği uyarıları (⚠️ az veri, üslup yetersiz)
+- "Hata raporu kopyala" — JSON formatlı debug log
+
+### 📦 Build
+- Vite + `@crxjs/vite-plugin`
+- Lazy-loaded XLSX chunk (popup ana JS gzipped ~33 KB)
+- Otomatik PNG icon üretimi (sharp + SVG kaynak)
+- `npm run package` ile Chrome Web Store-ready ZIP
+
+---
+
+[0.1.0]: https://github.com/bluedev/wa-contacts-exporter/releases/tag/v0.1.0

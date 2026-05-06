@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="tr" data-lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-i18n="meta.title">WA Contacts Exporter — WhatsApp Web Export + AI · Bluedev</title>
+    <meta name="description" data-i18n="meta.description" content="WhatsApp Web sohbet, kişi ve mesajlarınızı dışa aktarın (CSV/XLSX/VCard). Yerel veya bulut AI ile özet ve cevap önerisi üretin. KVKK uyumlu, açık kaynak şeffaflığı." />
+    <meta name="theme-color" content="#015AFF" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/icon48.png" />
+    <link rel="apple-touch-icon" sizes="128x128" href="../icons/icon128.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="WA Contacts Exporter — WhatsApp Web Export + AI" />
+    <meta property="og:description" content="WhatsApp Web verilerinizi yerel olarak dışa aktarın ve AI ile yönetin. KVKK uyumlu, hiçbir sunucuya veri göndermez." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bluedev.dev/wa-contacts-exporter" />
+    <meta property="og:image" content="./assets/social-banner.png" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WA Contacts Exporter — WhatsApp Web Export + AI" />
+    <meta name="twitter:description" content="Export WhatsApp Web data locally + AI assistant. GDPR-compliant. Free beta." />
+    <meta name="twitter:image" content="./assets/social-banner.png" />
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- Top nav -->
+    <header class="nav">
+      <div class="nav-inner">
+        <a href="#top" class="brand-link">
+          <div class="brand-mark">WA</div>
+          <div class="brand-text">
+            <div class="brand-name">Contacts Exporter</div>
+            <div class="brand-sub">by Bluedev · v0.1.0 Beta</div>
+          </div>
+        </a>
+        <nav class="nav-links">
+          <a href="#features" data-i18n="nav.features">Özellikler</a>
+          <a href="#providers" data-i18n="nav.providers">AI Sağlayıcılar</a>
+          <a href="#privacy" data-i18n="nav.privacy">Gizlilik</a>
+          <a href="#faq" data-i18n="nav.faq">SSS</a>
+          <button class="lang-switcher" aria-label="Language" data-action="toggle-lang">
+            <span data-lang-flag>🇹🇷 TR</span>
+          </button>
+          <a href="#install" class="btn btn-primary btn-sm" data-i18n="nav.install">Kurulum</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="container hero-inner">
+          <div class="hero-text">
+            <div class="hero-badge" data-i18n="hero.badge">🚀 Beta açıldı · ücretsiz</div>
+            <h1 class="hero-title" data-i18n="hero.title">
+              WhatsApp Web verilerinizi <span class="hl">dışa aktarın</span>,
+              <span class="hl-alt">yapay zeka</span> ile yönetin.
+            </h1>
+            <p class="hero-sub" data-i18n="hero.sub">
+              Sohbetlerinizi, kişilerinizi, gruplarınızı ve mesajlarınızı tek tıkla
+              CSV / XLSX / VCard olarak dışa aktarın. İsteğe bağlı AI asistanıyla
+              özet üretin, cevap önerisi alın, önceliklerinizi sıralayın.
+              <strong>Veri tarayıcınızdan çıkmaz.</strong>
+            </p>
+            <div class="hero-cta">
+              <a href="#install" class="btn btn-primary">
+                <span data-i18n="hero.cta_install">Eklentiyi Yükle</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href="#demo" class="btn btn-ghost">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span data-i18n="hero.cta_demo">Demo Videosu</span>
+              </a>
+            </div>
+            <ul class="hero-features">
+              <li data-i18n="hero.feature_1">✓ KVKK / GDPR uyumlu — veri yerelde</li>
+              <li data-i18n="hero.feature_2">✓ 6 AI sağlayıcı (yerel veya bulut)</li>
+              <li data-i18n="hero.feature_3">✓ Türkçe karakter sorunsuz Excel çıktısı</li>
+              <li data-i18n="hero.feature_4">✓ Otomatik cevap (taslak modu)</li>
+            </ul>
+          </div>
+          <div class="hero-visual">
+            <img src="./assets/screenshots/01_sohbetler_tab.png" alt="Sohbetler sekmesi ekran görüntüsü" loading="lazy" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 3-column features -->
+      <section id="features" class="features">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-i18n="features.heading">Üç temel modül</h2>
+            <p data-i18n="features.sub">Eklentinin tek amacı: kendi verinizi kendi hızınızda yönetmek.</p>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <div class="feature-icon">📤</div>
+              <h3 data-i18n="features.export.title">Veri dışa aktarma</h3>
+              <p data-i18n="features.export.body">
+                Sohbet listesi, mesaj geçmişi, grup üyeleri, etiketler, kayıtlı kişiler — hepsi
+                CSV (UTF-8 BOM), XLSX (5 sayfalı) veya VCard 3.0 formatında. Excel'de Türkçe
+                karakter sorunu yok.
+              </p>
+              <ul class="feature-list">
+                <li>1-on-1 + grup sohbetleri</li>
+                <li>WhatsApp Business etiketleri</li>
+                <li>Kayıtsız kişiler (opt-in)</li>
+              </ul>
+            </article>
+
+            <article class="feature-card feature-card-accent">
+              <div class="feature-icon">🤖</div>
+              <h3 data-i18n="features.ai.title">AI asistan</h3>
+              <p data-i18n="features.ai.body">
+                Yerel Ollama'dan Claude / ChatGPT / Gemini'ye altı sağlayıcı seçeneği.
+                Sohbet özetleme, cevap önerisi, eylem maddesi çıkarımı ve sohbet
+                önceliklendirme. AI sizin geçmiş mesajlarınızdan üslubunuzu öğrenir.
+              </p>
+              <ul class="feature-list">
+                <li>İteratif tek-öneri (Yenile / Düzelt)</li>
+                <li>Üslup taklidi (kendi mesajlarınızdan)</li>
+                <li>Triage doğrulama UI</li>
+              </ul>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">⚡</div>
+              <h3 data-i18n="features.auto.title">Otomatik cevap</h3>
+              <p data-i18n="features.auto.body">
+                Gelen mesajlara taslak modu ile cevap üretir; siz onaylar gönderirsiniz.
+                Master switch varsayılan kapalı. Saatlik/günlük limit, sessiz saatler,
+                sohbet bazlı opt-in zorunlu.
+              </p>
+              <ul class="feature-list">
+                <li>Taslak modu varsayılan</li>
+                <li>Rate limit + sessiz saatler</li>
+                <li>Tüm gönderimlerin denetim kaydı</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Demo video -->
+      <section id="demo" class="demo">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-i18n="demo.heading">90 saniye — eklenti çalışırken</h2>
+            <p data-i18n="demo.sub">Kurulumdan ilk export'a, AI asistandan otomatik cevaba.</p>
+          </div>
+          <div class="video-wrap">
+            <div class="video-placeholder" data-i18n="demo.placeholder">
+              🎥 Demo videosu buraya gömülecek<br/>
+              <small>YouTube unlisted veya direkt MP4 — 90 sn / 1080p / &lt; 50 MB</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI providers -->
+      <section id="providers" class="providers">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-i18n="providers.heading">Altı AI sağlayıcı — siz seçin</h2>
+            <p data-i18n="providers.sub">
+              Yerel veya bulut. Ücretsiz veya ücretli. Gizliliğinize ve bütçenize göre.
+            </p>
+          </div>
+          <div class="provider-grid">
+            <div class="provider-card provider-recommended">
+              <div class="provider-tag" data-i18n="providers.tag_recommended">Önerilen</div>
+              <div class="provider-name">Ollama</div>
+              <div class="provider-meta">🟢 Yerel · Ücretsiz</div>
+              <div class="provider-desc" data-i18n="providers.ollama.desc">
+                Bilgisayarınızda çalışan açık kaynak LLM sunucusu. Aya Expanse 8B önerilir
+                (Türkçe ⭐⭐⭐⭐).
+              </div>
+            </div>
+            <div class="provider-card">
+              <div class="provider-name">LM Studio</div>
+              <div class="provider-meta">🟢 Yerel · Ücretsiz</div>
+              <div class="provider-desc" data-i18n="providers.lmstudio.desc">
+                GUI ile model indirme + OpenAI uyumlu API. Ollama alternatifi.
+              </div>
+            </div>
+            <div class="provider-card">
+              <div class="provider-name">Anthropic Claude</div>
+              <div class="provider-meta">☁️ Bulut · Ücretli</div>
+              <div class="provider-desc" data-i18n="providers.claude.desc">
+                Türkçe kalitesi en yüksek bulut model. $0.001-0.05 / istek.
+              </div>
+            </div>
+            <div class="provider-card">
+              <div class="provider-name">OpenAI ChatGPT</div>
+              <div class="provider-meta">☁️ Bulut · Ücretli</div>
+              <div class="provider-desc" data-i18n="providers.openai.desc">
+                gpt-4o-mini ve üstü; iyi balance maliyet/kalite.
+              </div>
+            </div>
+            <div class="provider-card">
+              <div class="provider-name">Google Gemini</div>
+              <div class="provider-meta">☁️ Bulut · <strong>Ücretsiz tier</strong></div>
+              <div class="provider-desc" data-i18n="providers.gemini.desc">
+                1500 istek/gün ücretsiz tier. API key Gemini AI Studio'dan alınır.
+              </div>
+            </div>
+            <div class="provider-card">
+              <div class="provider-name">Groq</div>
+              <div class="provider-meta">☁️ Bulut · <strong>Ücretsiz tier</strong></div>
+              <div class="provider-desc" data-i18n="providers.groq.desc">
+                Ultra hızlı (saniyede 1000+ token). Llama 3.3, Mixtral.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screenshots -->
+      <section class="screenshots">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-i18n="screenshots.heading">Eklenti içinden</h2>
+            <p data-i18n="screenshots.sub">Tüm UI Türkçe; İngilizce locale yolda.</p>
+          </div>
+          <div class="screenshot-grid">
+            <figure>
+              <img src="./assets/screenshots/01_sohbetler_tab.png" alt="Sohbetler sekmesi" loading="lazy" />
+              <figcaption data-i18n="screenshots.s1">Sohbetler sekmesi · CSV / XLSX / VCard export</figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/screenshots/02_mesajlar_tab.png" alt="Mesajlar sekmesi" loading="lazy" />
+              <figcaption data-i18n="screenshots.s2">Mesajlar sekmesi · Sohbet başına 100-5000 mesaj</figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/screenshots/03_ai_provider.png" alt="AI sağlayıcı seçimi" loading="lazy" />
+              <figcaption data-i18n="screenshots.s3">AI sekmesi · 6 sağlayıcı seçimi</figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/screenshots/04_ai_suggestion.png" alt="AI öneri kartı" loading="lazy" />
+              <figcaption data-i18n="screenshots.s4">İteratif tek-öneri · Yenile / Düzelt</figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/screenshots/05_oto_cevap.png" alt="Otomatik cevap modülü" loading="lazy" />
+              <figcaption data-i18n="screenshots.s5">Oto-Cevap sekmesi · Taslak modu</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- Privacy section -->
+      <section id="privacy" class="privacy">
+        <div class="container privacy-inner">
+          <div>
+            <div class="privacy-badge">🔒 KVKK + GDPR</div>
+            <h2 data-i18n="privacy.heading">Veri tarayıcınızda kalır</h2>
+            <p data-i18n="privacy.body">
+              Bluedev'in sunucusu yok. Eklentinin manifest'inde tanımlı tüm host
+              izinlerini <code>chrome://extensions</code> üzerinden inceleyebilirsiniz.
+              AI istekleri tarayıcınızdan doğrudan seçtiğiniz sağlayıcıya gider —
+              aracı sunucu kullanılmaz.
+            </p>
+            <ul class="privacy-list">
+              <li data-i18n="privacy.l1">✓ İlk açılışta KVKK rıza ekranı zorunlu</li>
+              <li data-i18n="privacy.l2">✓ "Kayıtsız kişileri dahil et" varsayılan KAPALI</li>
+              <li data-i18n="privacy.l3">✓ API anahtarları sadece <code>chrome.storage.local</code></li>
+              <li data-i18n="privacy.l4">✓ Hata logu max 50 kayıt, otomatik döner</li>
+            </ul>
+            <a href="./privacy.html" class="btn btn-ghost btn-sm" data-i18n="privacy.cta">Aydınlatma Metni →</a>
+          </div>
+          <div class="privacy-visual">
+            <pre class="privacy-code"><code>// manifest.json (alıntı)
+"host_permissions": [
+  "https://web.whatsapp.com/*",
+  "https://api.anthropic.com/*",
+  "https://api.openai.com/*",
+  "https://generativelanguage.googleapis.com/*",
+  "https://api.groq.com/*",
+  "http://localhost/*"
+]</code></pre>
+            <small data-i18n="privacy.code_caption">
+              Her host izni şeffaftır; AI sağlayıcısı seçmediğiniz sürece o domain'e
+              istek yapılmaz.
+            </small>
+          </div>
+        </div>
+      </section>
+
+      <!-- Install -->
+      <section id="install" class="install">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-i18n="install.heading">Kurulum</h2>
+            <p data-i18n="install.sub">
+              Chrome Web Store yayını onay bekliyor. O zamana kadar dev mode kurulumu:
+            </p>
+          </div>
+          <ol class="install-steps">
+            <li>
+              <strong data-i18n="install.s1_title">GitHub release indir</strong>
+              <span data-i18n="install.s1_body">
+                <code>wa-contacts-exporter-0.1.0.zip</code> dosyasını çıkar.
+              </span>
+            </li>
+            <li>
+              <strong data-i18n="install.s2_title">Chrome'da uzantılar sayfası</strong>
+              <span data-i18n="install.s2_body">
+                Adres çubuğuna <code>chrome://extensions</code> yaz, Enter.
+              </span>
+            </li>
+            <li>
+              <strong data-i18n="install.s3_title">Geliştirici modu</strong>
+              <span data-i18n="install.s3_body">
+                Sağ üstteki "Geliştirici modu" anahtarını aç.
+              </span>
+            </li>
+            <li>
+              <strong data-i18n="install.s4_title">Paketlenmemiş yükle</strong>
+              <span data-i18n="install.s4_body">
+                "Paketlenmemiş öğe yükle" tıkla → çıkardığın <code>dist/</code> klasörünü seç.
+              </span>
+            </li>
+            <li>
+              <strong data-i18n="install.s5_title">WhatsApp Web'i aç + KVKK rıza</strong>
+              <span data-i18n="install.s5_body">
+                <code>web.whatsapp.com</code> adresine git, eklenti popup'ında rıza ekranını onayla.
+              </span>
+            </li>
+          </ol>
+          <div class="install-cta">
+            <a href="#" class="btn btn-primary" data-i18n="install.download_btn">Beta zip indir (yakında)</a>
+            <small data-i18n="install.note">
+              CWS yayını sonrasında bu adım tek tıkla "Chrome'a Ekle" butonuna dönüşecek.
+            </small>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="faq">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-i18n="faq.heading">Sıkça sorulanlar</h2>
+          </div>
+          <div class="faq-list">
+            <details>
+              <summary data-i18n="faq.q1">Bu Meta'nın resmi uzantısı mı?</summary>
+              <p data-i18n="faq.a1">
+                Hayır. Bluedev tarafından geliştirilmiştir; WhatsApp / Meta ile bağlantılı
+                değildir, sponsorluk almaz. Yalnızca sizin kendi WhatsApp Web oturumunuzdaki
+                kendi verilerinize erişir. WhatsApp markası WhatsApp LLC'ye aittir.
+              </p>
+            </details>
+            <details>
+              <summary data-i18n="faq.q2">Verilerim güvende mi?</summary>
+              <p data-i18n="faq.a2">
+                Evet. Eklentinin manifest'inde <code>web.whatsapp.com</code> dışında
+                yalnızca seçtiğiniz AI sağlayıcısının domain'i için istek yapılır.
+                Bluedev'in sunucusu yok, aracı sunucu kullanılmaz, hiçbir telemetri toplanmaz.
+              </p>
+            </details>
+            <details>
+              <summary data-i18n="faq.q3">Toplu pazarlama / spam için kullanılabilir mi?</summary>
+              <p data-i18n="faq.a3">
+                Hayır — tasarımı buna karşı. Otomatik cevap modülü taslak modunda çalışır,
+                rate limit + sessiz saat zorunludur, sohbet bazlı opt-in gerekir. KVKK uyum
+                yükümlülüğü tamamen kullanıcıya aittir.
+              </p>
+            </details>
+            <details>
+              <summary data-i18n="faq.q4">Yapay zeka için ücret ödemem gerekiyor mu?</summary>
+              <p data-i18n="faq.a4">
+                Hayır. Yerel Ollama / LM Studio ücretsizdir. Bulut isteyenler için Gemini
+                ve Groq'un ücretsiz tier'ları yeterli. Claude / ChatGPT için kendi API
+                anahtarınızı kullanırsınız.
+              </p>
+            </details>
+            <details>
+              <summary data-i18n="faq.q5">Mesajların tamamı export ediliyor mu?</summary>
+              <p data-i18n="faq.a5">
+                WhatsApp Web yalnızca son ~50 mesajı RAM'de tutuyor. Daha eski geçmiş için
+                sohbeti yukarı kaydırın veya "Eski mesaj yükleme turu = 5+" ayarını kullanın.
+                Eklenti hafıza sınırını aşamaz; bu Meta'nın WA Web tarafındaki tasarım
+                kararıdır.
+              </p>
+            </details>
+            <details>
+              <summary data-i18n="faq.q6">Beta sürecinden sonra ne olacak?</summary>
+              <p data-i18n="faq.a6">
+                Beta süresi boyunca ücretsiz kalacak. Geri bildirimleri toplayıp v0.2.0'da
+                Pro tier seçenekleri sunmayı planlıyoruz (ekip özellikleri, gelişmiş AI).
+                Beta kullanıcıları Pro'ya erken erişim hakkı kazanacak.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container footer-inner">
+        <div>
+          <div class="brand-link">
+            <div class="brand-mark">WA</div>
+            <div class="brand-text">
+              <div class="brand-name">Contacts Exporter</div>
+              <div class="brand-sub">Made by <a href="https://bluedev.dev">Bluedev</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-links">
+          <a href="./privacy.html" data-i18n="footer.privacy">Aydınlatma Metni</a>
+          <a href="https://bluedev.dev/destek" data-i18n="footer.support">Destek</a>
+          <a href="https://bluedev.dev" data-i18n="footer.web">bluedev.dev</a>
+        </div>
+        <div class="footer-disclaimer" data-i18n="footer.disclaimer">
+          WhatsApp™, WhatsApp LLC'nin tescilli markasıdır. Bu eklenti Meta / WhatsApp
+          ile bağlantılı, onlar tarafından desteklenen veya sponsor edilen bir ürün
+          değildir. © 2026 Bluedev. Tüm hakları saklıdır.
+        </div>
+      </div>
+    </footer>
+
+    <script src="./i18n.js" defer></script>
+  </body>
+</html>
