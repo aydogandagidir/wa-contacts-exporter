@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Scene 07 · Privacy + Pricing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+<link rel="stylesheet" href="../style.css" />
+<style>
+  .s7 {
+    background: linear-gradient(160deg, #0F172A 0%, #1E293B 100%);
+    color: #fff;
+    padding: 44px 70px;
+    flex-direction: column;
+    gap: 24px;
+    align-items: stretch;
+  }
+  .s7__head {
+    text-align: center;
+    animation: fadeInUp .8s cubic-bezier(.2,.8,.2,1) .1s both;
+  }
+  .s7__eyebrow {
+    color: #10B981;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .s7__h {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -1.4px;
+    line-height: 1.05;
+  }
+  .s7__h .accent { color: #FFD700; }
+  .s7__cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+  }
+  .s7__card {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeInUp .8s cubic-bezier(.2,.8,.2,1) both;
+    position: relative;
+    overflow: hidden;
+  }
+  .s7__card.left { animation-delay: .5s; }
+  .s7__card.right {
+    animation-delay: .8s;
+    border-color: var(--c-pro);
+    background: linear-gradient(160deg, rgba(255, 215, 0, 0.10), rgba(110, 0, 255, 0.10));
+  }
+  .s7__card.right::before {
+    content: "★ BEST VALUE";
+    position: absolute;
+    top: 16px; right: 16px;
+    padding: 4px 10px;
+    background: var(--gradient-pro);
+    color: #5C3A00;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    border-radius: 99px;
+  }
+  .s7__card-tier {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.8;
+  }
+  .s7__card-price {
+    font-size: 50px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-top: -2px;
+  }
+  .s7__card.right .s7__card-price {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .s7__card-pricesub {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+  .s7__card ul {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 0;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .s7__card ul li {
+    font-size: 13px;
+    line-height: 1.4;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .s7__card .icon {
+    width: 18px; height: 18px; border-radius: 50%;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    font-size: 10px; font-weight: 800;
+    margin-top: 1px;
+  }
+  .s7__card .icon--check { background: rgba(16, 185, 129, 0.20); color: #34D399; }
+  .s7__card .icon--star  { background: var(--gradient-pro); color: #5C3A00; }
+  .s7__card .icon--x     { background: rgba(239, 68, 68, 0.18); color: #FCA5A5; }
+
+  .s7__privacy-bar {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px;
+    padding: 14px 20px;
+    background: rgba(16, 185, 129, 0.10);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    animation: fadeInUp .7s cubic-bezier(.2,.8,.2,1) 1.2s both;
+  }
+  .s7__privacy-bar strong { color: #34D399; }
+</style>
+</head>
+<body data-stage="video" data-duration="11500">
+  <div class="stage s7">
+    <div class="bg-glow bg-glow--blue" style="top: -120px; left: -100px; opacity: 0.25;"></div>
+
+    <div class="s7__head">
+      <div class="s7__eyebrow">🔒 PRIVATE BY DEFAULT</div>
+      <div class="s7__h">100% local. <span class="accent">$29 lifetime.</span></div>
+    </div>
+
+    <div class="s7__cards">
+      <div class="s7__card left">
+        <div class="s7__card-tier">Free</div>
+        <div class="s7__card-price">$0</div>
+        <div class="s7__card-pricesub">Always free · Chrome Web Store</div>
+        <ul>
+          <li><span class="icon icon--check">✓</span>CSV / XLSX / VCard export</li>
+          <li><span class="icon icon--check">✓</span>500 messages per chat</li>
+          <li><span class="icon icon--check">✓</span>KVKK / GDPR compliant</li>
+          <li><span class="icon icon--x">✕</span>No AI · No auto-reply</li>
+        </ul>
+      </div>
+      <div class="s7__card right">
+        <div class="s7__card-tier">Pro</div>
+        <div class="s7__card-price">$29</div>
+        <div class="s7__card-pricesub">One-time · lifetime · all updates</div>
+        <ul>
+          <li><span class="icon icon--star">★</span><strong>Everything in Free</strong></li>
+          <li><span class="icon icon--check">✓</span>5,000 messages per chat (10×)</li>
+          <li><span class="icon icon--check">✓</span>AI Assistant · 6 providers</li>
+          <li><span class="icon icon--check">✓</span>Smart auto-reply · inbox triage</li>
+          <li><span class="icon icon--check">✓</span>Priority support · 30-day refund</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="s7__privacy-bar">
+      <span style="font-size: 18px;">🔒</span>
+      <span>All data stays local. <strong>Bluedev never sees your messages.</strong> AI runs on your provider with your API key.</span>
+    </div>
+  </div>
+</body>
+</html>

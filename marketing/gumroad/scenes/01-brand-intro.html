@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Scene 01 · Brand Intro</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+<link rel="stylesheet" href="../style.css" />
+<style>
+  .s1 {
+    background: var(--gradient-hero);
+    color: #fff;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  .s1__brand-mark {
+    width: 140px; height: 140px;
+    border-radius: 30px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.28);
+    display: grid; place-items: center;
+    font-weight: 900; font-size: 56px;
+    letter-spacing: -2px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    animation: scaleIn .9s cubic-bezier(.34, 1.56, .64, 1) both;
+  }
+  .s1__name {
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    animation: fadeInUp .9s cubic-bezier(.2,.8,.2,1) .4s both;
+  }
+  .s1__pro {
+    color: #FFD700;
+    font-weight: 900;
+    margin-left: 14px;
+  }
+  .s1__sub {
+    font-size: 22px;
+    opacity: 0.85;
+    font-weight: 500;
+    animation: fadeInUp .9s cubic-bezier(.2,.8,.2,1) .8s both;
+  }
+  .s1__by {
+    margin-top: 26px;
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    animation: fadeIn 1.2s ease-out 1.6s both;
+  }
+</style>
+</head>
+<body data-stage="video" data-duration="4500">
+  <div class="stage s1">
+    <div class="bg-glow bg-glow--pink anim-drift" style="top: -200px; left: -160px;"></div>
+    <div class="bg-glow bg-glow--blue anim-drift" style="bottom: -200px; right: -120px; animation-delay: -3s;"></div>
+    <div class="bg-grid" style="opacity: 0.4;"></div>
+
+    <div class="s1__brand-mark">WA</div>
+    <div class="s1__name">Contacts Exporter<span class="s1__pro">PRO</span></div>
+    <div class="s1__sub">For WhatsApp Web · Export + AI · Auto-Reply</div>
+    <div class="s1__by">— a Bluedev product —</div>
+  </div>
+</body>
+</html>

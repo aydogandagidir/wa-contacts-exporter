@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Hero · 3-Up Feature Showcase</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+<link rel="stylesheet" href="./style.css" />
+<style>
+  .hero-stage {
+    background: linear-gradient(160deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+    color: #fff;
+    padding: 48px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-head {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .hero-head h1 {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+  .hero-head .accent { color: #FFD700; }
+  .hero-head .pill {
+    background: var(--gradient-pro);
+    color: #5C3A00;
+    font-weight: 800;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    flex: 1;
+  }
+  .hero-card {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-card__icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: grid; place-items: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .icon-bg-1 { background: linear-gradient(135deg, #015AFF, #6E00FF); }
+  .icon-bg-2 { background: linear-gradient(135deg, #25D366, #128C7E); }
+  .icon-bg-3 { background: linear-gradient(135deg, #F59E0B, #EF4444); }
+  .hero-card h3 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+  }
+  .hero-card p {
+    font-size: 13px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .hero-card__demo {
+    margin-top: auto;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 12px;
+    font-size: 11px;
+    line-height: 1.5;
+    font-family: var(--font-mono);
+    color: rgba(255, 255, 255, 0.85);
+    min-height: 90px;
+  }
+  .hero-foot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .hero-foot__providers {
+    display: flex; gap: 8px;
+    flex-wrap: wrap;
+  }
+  .hero-foot__cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    background: var(--gradient-pro);
+    color: #5C3A00;
+    border-radius: 99px;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    box-shadow: 0 12px 30px rgba(255, 165, 0, 0.4);
+  }
+  .ai-typing-line {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ai-typing-line::after {
+    content: "▎";
+    color: var(--c-primary);
+    animation: blink 1s infinite;
+  }
+</style>
+</head>
+<body data-stage="cover">
+  <div class="stage hero-stage">
+    <div class="bg-glow bg-glow--blue" style="top: -160px; left: -100px; opacity: 0.35;"></div>
+    <div class="bg-glow bg-glow--pink" style="bottom: -200px; right: -120px; opacity: 0.3;"></div>
+
+    <div class="hero-head">
+      <h1>Three superpowers <span class="accent">unlocked</span> with Pro</h1>
+      <div class="pill">$29 · LIFETIME</div>
+    </div>
+
+    <div class="hero-grid">
+      <div class="hero-card">
+        <div class="hero-card__icon icon-bg-1">📤</div>
+        <h3>Export anything</h3>
+        <p>Chats, messages, contacts, groups, labels — to CSV, XLSX, or VCard. Up to <strong>5,000 msgs/chat</strong>.</p>
+        <div class="hero-card__demo">
+contacts.csv → 2,341 rows<br/>
+messages.xlsx → 5 sheets<br/>
+groups.vcf → 187 cards
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card__icon icon-bg-2">✨</div>
+        <h3>AI that mimics your voice</h3>
+        <p>Summarize, draft replies, prioritize inbox. Learns your <strong>tone &amp; style</strong> from past messages.</p>
+        <div class="hero-card__demo">
+&gt; Özetle<br/>
+✓ Toplantı 14:30 onaylandı<br/>
+✓ Fatura sorusu cevap bekliyor<br/>
+✓ Tone: friendly, brief
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card__icon icon-bg-3">🤖</div>
+        <h3>Smart auto-reply</h3>
+        <p>Drafts ready when you are — or fully automatic with <strong>quiet hours, rate limits, per-chat opt-in</strong>.</p>
+        <div class="hero-card__demo">
+🟢 Master: ON<br/>
+⏰ Quiet: 22:00–08:00<br/>
+📊 Rate: 10/h · 50/d<br/>
+✏️ Mode: Draft (review before send)
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-foot">
+      <div class="hero-foot__providers">
+        <div class="provider-chip"><span class="provider-chip__dot provider-chip__dot--green"></span> Ollama</div>
+        <div class="provider-chip"><span class="provider-chip__dot" style="background:#F0B90B"></span> Claude</div>
+        <div class="provider-chip"><span class="provider-chip__dot" style="background:#10A37F"></span> ChatGPT</div>
+        <div class="provider-chip"><span class="provider-chip__dot provider-chip__dot--blue"></span> Gemini</div>
+        <div class="provider-chip"><span class="provider-chip__dot provider-chip__dot--orange"></span> Groq</div>
+        <div class="provider-chip"><span class="provider-chip__dot provider-chip__dot--purple"></span> LM Studio</div>
+      </div>
+      <div class="hero-foot__cta">Get Pro on Gumroad →</div>
+    </div>
+  </div>
+</body>
+</html>

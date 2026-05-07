@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Scene 04 · Export Demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+<link rel="stylesheet" href="../style.css" />
+<style>
+  .s4 {
+    background: linear-gradient(160deg, #F8FAFC 0%, #E2E8F0 100%);
+    padding: 50px 70px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .s4__left {
+    width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .s4__eyebrow {
+    color: var(--c-primary);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: fadeInUp .7s cubic-bezier(.2,.8,.2,1) .1s both;
+  }
+  .s4__h {
+    font-size: 50px;
+    font-weight: 800;
+    letter-spacing: -1.6px;
+    line-height: 1.06;
+    color: var(--c-text);
+    animation: fadeInUp .9s cubic-bezier(.2,.8,.2,1) .3s both;
+  }
+  .s4__h .accent { color: var(--c-primary); }
+  .s4__lead {
+    font-size: 16px;
+    color: var(--c-muted);
+    line-height: 1.55;
+    animation: fadeInUp .8s cubic-bezier(.2,.8,.2,1) .6s both;
+  }
+  .s4__formats {
+    display: flex; gap: 10px;
+    margin-top: 14px;
+  }
+  .s4__fmt {
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid var(--c-border);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--c-text);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    display: flex; align-items: center; gap: 8px;
+    animation: fadeInUp .7s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .s4__fmt.delay-1 { animation-delay: 1.0s; }
+  .s4__fmt.delay-2 { animation-delay: 1.2s; }
+  .s4__fmt.delay-3 { animation-delay: 1.4s; }
+  .s4__fmt-icon {
+    width: 24px; height: 24px; border-radius: 6px;
+    display: grid; place-items: center;
+    color: #fff;
+    font-weight: 800; font-size: 10px;
+  }
+  .s4__fmt-icon--csv { background: #10B981; }
+  .s4__fmt-icon--xlsx { background: #1E40AF; }
+  .s4__fmt-icon--vcard { background: #DC2626; }
+
+  /* Right — popup mock with extract action */
+  .s4__right {
+    width: 480px;
+    animation: scaleIn .9s cubic-bezier(.2,.8,.2,1) .3s both;
+  }
+  .popup-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.18);
+    overflow: hidden;
+  }
+  .popup-card__head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--c-border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .popup-card__brand {
+    width: 32px; height: 32px; border-radius: 7px;
+    background: var(--c-primary); color: #fff;
+    font-weight: 800; font-size: 12px;
+    display: grid; place-items: center;
+  }
+  .popup-card__title { font-weight: 700; font-size: 14px; }
+  .popup-card__tabs {
+    display: flex;
+    border-bottom: 1px solid var(--c-border);
+    padding: 0 18px;
+  }
+  .popup-card__tab {
+    padding: 10px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--c-muted);
+    border-bottom: 2px solid transparent;
+  }
+  .popup-card__tab.active { color: var(--c-primary); border-bottom-color: var(--c-primary); }
+  .popup-card__body { padding: 18px; }
+  .popup-card__title-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .popup-card__count { font-size: 12px; color: var(--c-success); font-weight: 700; }
+  .popup-card__btn-extract {
+    width: 100%;
+    padding: 11px;
+    background: var(--c-primary);
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(1,90,255,0.30);
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .popup-card__btn-extract::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s ease-in-out 2s infinite;
+  }
+  .popup-card__table {
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .popup-card__row {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--c-border);
+    font-size: 11px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 0.6fr;
+    gap: 10px;
+  }
+  .popup-card__row:last-child { border-bottom: 0; }
+  .popup-card__row--head {
+    background: var(--c-light);
+    font-weight: 700;
+    color: var(--c-muted);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .popup-card__row--data {
+    animation: fadeInUp .5s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .popup-card__row--data.d1 { animation-delay: 2.4s; }
+  .popup-card__row--data.d2 { animation-delay: 2.55s; }
+  .popup-card__row--data.d3 { animation-delay: 2.70s; }
+  .popup-card__row--data.d4 { animation-delay: 2.85s; }
+  .popup-card__exports {
+    display: flex; gap: 6px;
+  }
+  .popup-card__export {
+    flex: 1;
+    padding: 8px;
+    background: var(--c-light);
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--c-text);
+    animation: fadeInUp .5s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .popup-card__export.de1 { animation-delay: 3.4s; }
+  .popup-card__export.de2 { animation-delay: 3.55s; }
+  .popup-card__export.de3 { animation-delay: 3.70s; }
+
+  /* Floating success toast */
+  .toast {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: #10B981;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: toast-in 1s cubic-bezier(.2,.8,.2,1) 4.5s both;
+  }
+  @keyframes toast-in {
+    0% { opacity: 0; transform: translateY(-20px); }
+    20% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+  }
+</style>
+</head>
+<body data-stage="video" data-duration="9500">
+  <div class="stage s4">
+    <div class="s4__left">
+      <div class="s4__eyebrow">📤 Export — Free + Pro</div>
+      <div class="s4__h">One click. <span class="accent">Three formats.</span></div>
+      <div class="s4__lead">
+        Chats, contacts, groups, labels, messages — exported in clean
+        UTF-8 with proper Turkish character handling.
+      </div>
+      <div class="s4__formats">
+        <div class="s4__fmt delay-1">
+          <div class="s4__fmt-icon s4__fmt-icon--csv">CSV</div>
+          UTF-8 BOM
+        </div>
+        <div class="s4__fmt delay-2">
+          <div class="s4__fmt-icon s4__fmt-icon--xlsx">XL</div>
+          5-sheet workbook
+        </div>
+        <div class="s4__fmt delay-3">
+          <div class="s4__fmt-icon s4__fmt-icon--vcard">VCF</div>
+          VCard 3.0
+        </div>
+      </div>
+    </div>
+    <div class="s4__right">
+      <div class="popup-card">
+        <div class="popup-card__head">
+          <div class="popup-card__brand">WA</div>
+          <div>
+            <div class="popup-card__title">Contacts Exporter</div>
+            <div style="font-size: 10px; color: var(--c-muted);">Pro · Bluedev</div>
+          </div>
+        </div>
+        <div class="popup-card__tabs">
+          <div class="popup-card__tab active">Sohbetler</div>
+          <div class="popup-card__tab">Mesajlar</div>
+          <div class="popup-card__tab">Gruplar</div>
+          <div class="popup-card__tab">Etiketler</div>
+        </div>
+        <div class="popup-card__body">
+          <div class="popup-card__title-row">
+            <div style="font-weight: 700; font-size: 13px;">Sohbetler</div>
+            <div class="popup-card__count">2,341 satır</div>
+          </div>
+          <div class="popup-card__btn-extract">📥 Sohbetleri Çıkar</div>
+          <div class="popup-card__table">
+            <div class="popup-card__row popup-card__row--head">
+              <div>İsim</div><div>Telefon</div><div>Tip</div>
+            </div>
+            <div class="popup-card__row popup-card__row--data d1">
+              <div>Ahmet Bey</div><div>+90 532 ••• 1234</div><div style="color: var(--c-success); font-weight: 600;">1-on-1</div>
+            </div>
+            <div class="popup-card__row popup-card__row--data d2">
+              <div>Tedarikçi Grubu</div><div>—</div><div style="color: var(--c-primary); font-weight: 600;">Grup</div>
+            </div>
+            <div class="popup-card__row popup-card__row--data d3">
+              <div>Ayşe Hanım</div><div>+90 533 ••• 5678</div><div style="color: var(--c-success); font-weight: 600;">1-on-1</div>
+            </div>
+            <div class="popup-card__row popup-card__row--data d4">
+              <div>Aile</div><div>—</div><div style="color: var(--c-primary); font-weight: 600;">Grup</div>
+            </div>
+          </div>
+          <div class="popup-card__exports">
+            <div class="popup-card__export de1">CSV indir</div>
+            <div class="popup-card__export de2">XLSX</div>
+            <div class="popup-card__export de3">VCard</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="toast">✓ chats.csv indirildi</div>
+  </div>
+</body>
+</html>

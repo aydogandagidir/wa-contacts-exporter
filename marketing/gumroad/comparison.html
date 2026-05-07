@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Comparison · Free vs Pro</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+<link rel="stylesheet" href="./style.css" />
+<style>
+  .cmp-stage {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+    padding: 48px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .cmp-head {
+    text-align: center;
+  }
+  .cmp-head h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    color: var(--c-text);
+    margin-bottom: 6px;
+  }
+  .cmp-head p {
+    color: var(--c-muted);
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .cmp-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+  }
+  .cmp-card {
+    border-radius: 18px;
+    padding: 26px 28px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--c-border);
+    position: relative;
+    overflow: hidden;
+  }
+  .cmp-card--pro {
+    background: linear-gradient(160deg, #1E293B 0%, #0F172A 100%);
+    color: #fff;
+    border-color: var(--c-primary);
+    box-shadow: 0 24px 60px rgba(1, 90, 255, 0.30);
+  }
+  .cmp-card--pro::before {
+    content: "";
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(135deg, #015AFF, #6E00FF, #FFD700);
+    border-radius: 19px;
+    z-index: -1;
+    opacity: 0.6;
+  }
+  .cmp-card__badge {
+    position: absolute;
+    top: 14px; right: 14px;
+    padding: 4px 12px;
+    background: var(--gradient-pro);
+    color: #5C3A00;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 6px 18px rgba(255, 165, 0, 0.5);
+  }
+  .cmp-card__title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    margin-bottom: 4px;
+  }
+  .cmp-card__sub {
+    font-size: 13px;
+    color: var(--c-muted);
+    margin-bottom: 18px;
+  }
+  .cmp-card--pro .cmp-card__sub { color: rgba(255, 255, 255, 0.7); }
+  .cmp-card__price {
+    font-size: 44px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .cmp-card--pro .cmp-card__price {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .cmp-card__price-sub {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--c-muted);
+  }
+  .cmp-card--pro .cmp-card__price-sub { color: rgba(255, 215, 0, 0.85); }
+  .cmp-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    flex: 1;
+    padding: 0;
+    margin: 18px 0 0;
+  }
+  .cmp-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .cmp-list .icon {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    font-size: 12px; font-weight: 800;
+    margin-top: 1px;
+  }
+  .icon--check { background: rgba(16, 185, 129, 0.15); color: #10B981; }
+  .icon--x     { background: rgba(239, 68, 68, 0.12);  color: #EF4444; }
+  .icon--star  { background: var(--gradient-pro); color: #5C3A00; }
+  .cmp-card--pro .icon--check { background: rgba(16, 185, 129, 0.25); }
+  .cmp-list .feature-strong { font-weight: 700; }
+  .cmp-list .feature-muted { color: var(--c-muted); }
+  .cmp-card--pro .feature-muted { color: rgba(255,255,255,0.65); }
+</style>
+</head>
+<body data-stage="cover">
+  <div class="stage cmp-stage">
+    <div class="cmp-head">
+      <h1>Free <span style="color: var(--c-muted);">vs</span> <span class="gradient-text">Pro</span></h1>
+      <p>Same extension. Activate your key — Pro unlocks instantly.</p>
+    </div>
+    <div class="cmp-cards">
+      <div class="cmp-card">
+        <div class="cmp-card__title">Free</div>
+        <div class="cmp-card__sub">Available on Chrome Web Store</div>
+        <div class="cmp-card__price">$0<span style="font-size: 18px; font-weight: 600; color: var(--c-muted);"> · always</span></div>
+        <ul class="cmp-list">
+          <li><span class="icon icon--check">✓</span><span class="feature-strong">CSV / XLSX / VCard export</span></li>
+          <li><span class="icon icon--check">✓</span>Chats, contacts, groups, labels</li>
+          <li><span class="icon icon--check">✓</span>Up to <strong>500 messages</strong> per chat</li>
+          <li><span class="icon icon--check">✓</span>KVKK / GDPR compliant</li>
+          <li><span class="icon icon--x">✕</span><span class="feature-muted">AI summarization &amp; replies</span></li>
+          <li><span class="icon icon--x">✕</span><span class="feature-muted">Smart auto-reply</span></li>
+          <li><span class="icon icon--x">✕</span><span class="feature-muted">Inbox triage</span></li>
+        </ul>
+      </div>
+      <div class="cmp-card cmp-card--pro">
+        <div class="cmp-card__badge">★ Best value</div>
+        <div class="cmp-card__title">Pro</div>
+        <div class="cmp-card__sub">Lifetime license · all updates included</div>
+        <div class="cmp-card__price">$29<span class="cmp-card__price-sub"> · one-time</span></div>
+        <ul class="cmp-list">
+          <li><span class="icon icon--star">★</span><span class="feature-strong">Everything in Free</span></li>
+          <li><span class="icon icon--check">✓</span><strong>5,000 messages</strong> per chat (10×)</li>
+          <li><span class="icon icon--check">✓</span><strong>AI Assistant</strong> — summarize, suggest, refine</li>
+          <li><span class="icon icon--check">✓</span><strong>Smart Auto-Reply</strong> with rate limits</li>
+          <li><span class="icon icon--check">✓</span><strong>Inbox triage</strong> — AI prioritization</li>
+          <li><span class="icon icon--check">✓</span><strong>6 AI providers</strong>: Claude · ChatGPT · Gemini · Groq · Ollama · LM Studio</li>
+          <li><span class="icon icon--check">✓</span>Priority support · 30-day refund</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

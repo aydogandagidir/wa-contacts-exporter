@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Scene 06 · Auto-Reply Demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+<link rel="stylesheet" href="../style.css" />
+<style>
+  .s6 {
+    background: linear-gradient(160deg, #FAFBFC 0%, #E2E8F0 100%);
+    padding: 50px 70px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+  }
+  .s6__left {
+    width: 480px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .s6__eyebrow {
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: fadeInUp .7s cubic-bezier(.2,.8,.2,1) .1s both;
+  }
+  .s6__h {
+    font-size: 50px;
+    font-weight: 800;
+    letter-spacing: -1.6px;
+    line-height: 1.06;
+    color: var(--c-text);
+    animation: fadeInUp .9s cubic-bezier(.2,.8,.2,1) .3s both;
+  }
+  .s6__h .accent { color: var(--c-primary); }
+  .s6__lead {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--c-muted);
+    animation: fadeInUp .8s cubic-bezier(.2,.8,.2,1) .6s both;
+  }
+  .s6__safety {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-top: 8px;
+  }
+  .s6__safety-pill {
+    padding: 8px 12px;
+    background: rgba(16,185,129,0.10);
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 8px;
+    font-size: 12px;
+    color: #047857;
+    font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+    animation: fadeInUp .6s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .s6__safety-pill.s1 { animation-delay: 1.0s; }
+  .s6__safety-pill.s2 { animation-delay: 1.15s; }
+  .s6__safety-pill.s3 { animation-delay: 1.3s; }
+  .s6__safety-pill.s4 { animation-delay: 1.45s; }
+
+  .s6__right {
+    width: 500px;
+    animation: scaleIn .9s cubic-bezier(.2,.8,.2,1) .3s both;
+  }
+  .ar-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.18);
+    overflow: hidden;
+  }
+  .ar-card__head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--c-border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .ar-card__brand {
+    width: 32px; height: 32px; border-radius: 7px;
+    background: var(--c-primary); color: #fff;
+    font-weight: 800; font-size: 12px;
+    display: grid; place-items: center;
+  }
+  .ar-card__title { font-weight: 700; font-size: 14px; }
+  .ar-card__status-pill {
+    margin-left: auto;
+    padding: 4px 10px;
+    background: rgba(16,185,129,0.12);
+    color: #047857;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .ar-card__body {
+    padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .ar-card__pending {
+    background: var(--c-light);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .ar-card__pending-head {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .ar-msg {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--c-border);
+    margin-bottom: 8px;
+    animation: fadeInUp .7s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .ar-msg.m1 { animation-delay: 1.6s; }
+  .ar-msg__head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .ar-msg__name { font-weight: 700; font-size: 12px; }
+  .ar-msg__time { font-size: 10px; color: var(--c-muted); }
+  .ar-msg__incoming {
+    padding: 6px 8px;
+    border-left: 2px solid var(--c-muted);
+    font-size: 11px;
+    color: var(--c-muted);
+    background: var(--c-light);
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 6px;
+  }
+  .ar-msg__draft {
+    padding: 6px 8px;
+    border-left: 2px solid var(--c-primary);
+    font-size: 12px;
+    color: var(--c-text);
+    background: rgba(1,90,255,0.05);
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 8px;
+    animation: fadeInUp .6s cubic-bezier(.2,.8,.2,1) 2.6s both;
+  }
+  .ar-msg__actions { display: flex; gap: 6px; animation: fadeInUp .5s cubic-bezier(.2,.8,.2,1) 3.2s both; }
+  .ar-msg__actions .btn-mini {
+    flex: 1;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+  }
+  .btn-mini--send {
+    background: var(--c-success);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+  .btn-mini--edit {
+    background: #fff;
+    border: 1px solid var(--c-border);
+    color: var(--c-text);
+  }
+  .btn-mini--skip {
+    background: #fff;
+    border: 1px solid var(--c-border);
+    color: var(--c-muted);
+  }
+</style>
+</head>
+<body data-stage="video" data-duration="9500">
+  <div class="stage s6">
+    <div class="s6__left">
+      <div class="s6__eyebrow">🤖 SMART AUTO-REPLY · PRO</div>
+      <div class="s6__h">Drafts ready when <span class="accent">you are.</span></div>
+      <div class="s6__lead">
+        AI drafts replies in your voice. You approve before send —
+        or set per-chat auto mode for known senders.
+      </div>
+      <div class="s6__safety">
+        <div class="s6__safety-pill s1">✓ Master kill switch</div>
+        <div class="s6__safety-pill s2">✓ Quiet hours</div>
+        <div class="s6__safety-pill s3">✓ Rate limits</div>
+        <div class="s6__safety-pill s4">✓ Per-chat opt-in</div>
+      </div>
+    </div>
+    <div class="s6__right">
+      <div class="ar-card">
+        <div class="ar-card__head">
+          <div class="ar-card__brand">WA</div>
+          <div>
+            <div class="ar-card__title">Otomatik Cevap 🤖</div>
+            <div style="font-size: 10px; color: var(--c-muted);">Mode: Draft (review before send)</div>
+          </div>
+          <div class="ar-card__status-pill">● Aktif</div>
+        </div>
+        <div class="ar-card__body">
+          <div class="ar-card__pending">
+            <div class="ar-card__pending-head">⏳ Bekleyen taslak</div>
+            <div class="ar-msg m1">
+              <div class="ar-msg__head">
+                <div class="ar-msg__name">Müşteri • Ahmet Bey</div>
+                <div class="ar-msg__time">şimdi</div>
+              </div>
+              <div class="ar-msg__incoming">
+                "Merhaba, yarın 14:30'da görüşmemiz hâlâ uygun mu?"
+              </div>
+              <div class="ar-msg__draft">
+                <strong>AI Taslak:</strong> Merhaba Ahmet Bey, evet yarın 14:30'da görüşmemiz teyit edilmiştir. Görüşmek üzere.
+              </div>
+              <div class="ar-msg__actions">
+                <div class="btn-mini btn-mini--send">✓ Gönder</div>
+                <div class="btn-mini btn-mini--edit">✎ Düzenle</div>
+                <div class="btn-mini btn-mini--skip">Atla</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--c-muted); padding: 0 4px; line-height: 1.55;">
+            Saat başına 10 · Gün başına 50 · Sessiz saatler 22:00–08:00
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
