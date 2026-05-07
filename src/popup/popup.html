@@ -69,6 +69,7 @@
         <button type="button" class="tab" data-tab="groups" role="tab" aria-selected="false">Gruplar</button>
         <button type="button" class="tab" data-tab="labels" role="tab" aria-selected="false">Etiketler</button>
         <button type="button" class="tab" data-tab="contacts" role="tab" aria-selected="false">Tüm Kişiler</button>
+        <button type="button" class="tab tab--license" data-tab="license" role="tab" aria-selected="false">Pro 🔑</button>
       </nav>
 
       <!-- Sohbetler tab -->
@@ -462,6 +463,58 @@
           <button class="btn" id="contacts-export-xlsx">XLSX</button>
           <button class="btn" id="contacts-export-vcard">VCard</button>
         </div>
+      </section>
+
+      <!-- Lisans / Pro tab -->
+      <section class="data-card tab-panel" id="panel-license" data-tab="license" hidden>
+        <div class="data-card__head">
+          <div class="data-card__title">Pro Lisans 🔑</div>
+          <div class="data-card__count" id="license-status-pill">Free</div>
+        </div>
+
+        <div class="license-info" id="license-info-free">
+          <div class="license-info__title">Şu an <strong>Free</strong> sürümü kullanıyorsunuz.</div>
+          <p>Pro ile şunlar açılır:</p>
+          <ul class="license-features">
+            <li>✨ AI Asistan (özetleme, cevap önerileri, sohbet önceliklendirme — 6 sağlayıcı)</li>
+            <li>🤖 Akıllı Oto-Cevap (taslak veya otomatik)</li>
+            <li>📈 Sohbet başına <strong>5000 mesaja</strong> kadar export (Free: 500)</li>
+            <li>♾️ Lifetime — tek seferlik ödeme, ömür boyu güncellemeler</li>
+          </ul>
+          <a class="btn btn--primary license-buy" id="license-buy-btn" href="#" target="_blank" rel="noopener">Gumroad'da Pro'yu Al →</a>
+        </div>
+
+        <div class="license-info license-info--pro" id="license-info-pro" hidden>
+          <div class="license-info__title">✓ <strong>Pro aktif</strong></div>
+          <div class="license-info__meta" id="license-info-meta"></div>
+          <div class="license-info__actions">
+            <button class="btn btn--ghost" id="license-recheck-btn">Şimdi yeniden doğrula</button>
+            <button class="btn btn--ghost" id="license-deactivate-btn">Bu cihazda devre dışı bırak</button>
+          </div>
+        </div>
+
+        <details class="license-activate" id="license-activate">
+          <summary>Lisans anahtarını gir</summary>
+          <div class="license-activate__body">
+            <label class="ai-row">
+              <span>E-posta (Gumroad satın alımı)</span>
+              <input type="email" id="license-email" placeholder="ornek@mail.com" autocomplete="email" />
+            </label>
+            <label class="ai-row">
+              <span>Lisans anahtarı</span>
+              <input type="text" id="license-key" placeholder="ABCD-1234-EFGH-5678" autocomplete="off" />
+            </label>
+            <div class="ai-row__actions">
+              <button class="btn btn--primary" id="license-activate-btn">Aktive et</button>
+              <span class="license-activate__hint" id="license-activate-hint"></span>
+            </div>
+            <p class="license-activate__note">
+              Anahtar Gumroad'dan satın alma sonrası e-postanızla gelir.
+              Aktivasyon, anahtarı bu cihazda saklar; verifikasyon haftada bir
+              otomatik yenilenir.
+            </p>
+          </div>
+        </details>
       </section>
 
       <!-- VCard import help — appears after a successful VCard download -->

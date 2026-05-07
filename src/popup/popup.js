@@ -20,6 +20,8 @@ import {
   getAiChatInstruction, setAiChatInstruction,
   getAutoReply, setAutoReply, appendAutoReplyHistory,
 } from "../utils/storage.js";
+import { initLicenseTab, requirePro, refreshLicenseTab } from "./license-tab.js";
+import { effectiveMessageLimit, FREE_MSG_LIMIT_PER_CHAT } from "../license/license-manager.js";
 
 const $ = (id) => document.getElementById(id);
 const dot = $("status-dot");
@@ -270,6 +272,9 @@ function bindEvents() {
   if (aiChatInstructions) aiChatInstructions.addEventListener("input", () => updateInstructionHint("dirty"));
   setupCopyButton(aiOutputCopy, () => aiOutputBody.textContent);
   loadAiSettings();
+
+  // License tab — bind once
+  initLicenseTab();
 
   // Auto-reply controls
   arMasterEnabled.addEventListener("change", onMasterToggle);
@@ -1129,6 +1134,7 @@ function aiBusy(btn, on, idleText) {
 }
 
 async function runAiSummarize() {
+  if (!await requirePro({ feature: "AI Sohbet Özeti", anchorEl: aiSummarizeBtn })) return;
   const ai = await getAiSettings();
   const chatId = aiChatSelect.value;
   if (!chatId) return;
@@ -1155,6 +1161,7 @@ const suggestionSession = {
 };
 
 async function runAiFollowups() {
+  if (!await requirePro({ feature: "AI Cevap Önerileri", anchorEl: aiFollowupsBtn })) return;
   const ai = await getAiSettings();
   const chatId = aiChatSelect.value;
   if (!chatId) return;
@@ -1381,6 +1388,7 @@ function updateInstructionHint(state) {
 }
 
 async function runAiTriage() {
+  if (!await requirePro({ feature: "Sohbet Önceliklendirme", anchorEl: aiTriageBtn })) return;
   const ai = await getAiSettings();
   if (!state.chats.extracted || state.chats.extracted.length === 0) {
     alert("Önce Sohbetler sekmesinde 'Çıkar' deyin.");
@@ -1587,6 +1595,10 @@ async function saveAutoReplyMaster() {
 }
 
 async function onMasterToggle() {
+  if (arMasterEnabled.checked && !await requirePro({ feature: "Otomatik Cevap", anchorEl: arMasterEnabled })) {
+    arMasterEnabled.checked = false;
+    return;
+  }
   await setAutoReply({ masterEnabled: arMasterEnabled.checked });
   if (arMasterEnabled.checked) {
     await ensureSubscribed();
@@ -1681,6 +1693,10 @@ async function handleIncomingMessage(rec) {
   try {
     const ar = await getAutoReply();
     if (!ar.masterEnabled) return;
+    // Pro gate: silently no-op for free users (no UI prompt — auto-reply runs
+    // in background; surfacing prompts here would spam the user).
+    const { isPro } = await import("../license/license-manager.js");
+    if (!await isPro()) return;
     const chatCfg = ar.perChat[rec.chat_id];
     if (!chatCfg || !chatCfg.enabled) return;
 
@@ -1837,7 +1853,20 @@ async function extractMessages() {
   hide(messagesPreview);
   hide(messagesExportRow);
   try {
-    const perChatLimit = parseInt(messagesPerChatLimitSel.value, 10) || 500;
+    const requestedLimit = parseInt(messagesPerChatLimitSel.value, 10) || 500;
+    const { limit: perChatLimit, capped } = await effectiveMessageLimit(requestedLimit);
+    if (capped) {
+      const proceed = confirm(
+        `Free sürümde sohbet başına en fazla ${FREE_MSG_LIMIT_PER_CHAT} mesaj çıkarılabilir.\n\n` +
+        `Seçtiğiniz ${requestedLimit} → ${perChatLimit} olarak sınırlanacak.\n\n` +
+        `Daha yüksek limit için Pro sekmesinden lisansınızı aktive edin.\n\nDevam edilsin mi?`
+      );
+      if (!proceed) {
+        extractMessagesBtn.disabled = false;
+        extractMessagesBtn.textContent = "Mesajları Çıkar";
+        return;
+      }
+    }
     const loadEarlierBatches = parseInt(messagesLoadEarlierSel.value, 10) || 0;
     const reply = await chrome.tabs.sendMessage(currentTab.id, {
       kind: "WA_REQ",

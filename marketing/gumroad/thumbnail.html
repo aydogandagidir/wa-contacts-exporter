@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Thumbnail · WA Contacts Exporter Pro</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&display=swap" />
+<link rel="stylesheet" href="./style.css" />
+<style>
+  body[data-stage="thumb"] { width: 600px; height: 600px; }
+  .thumb {
+    width: 100%; height: 100%;
+    background: var(--gradient-hero);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 56px;
+    text-align: center;
+  }
+  .thumb__brand-mark {
+    width: 96px; height: 96px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    display: grid; place-items: center;
+    font-weight: 900; font-size: 38px;
+    letter-spacing: -1.5px;
+    margin-bottom: 24px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  }
+  .thumb__brand-name {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .thumb__pro {
+    color: #FFD700;
+    font-weight: 900;
+    margin-left: 6px;
+  }
+  .thumb__sub {
+    font-size: 16px;
+    opacity: 0.85;
+    margin-top: 8px;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+  .thumb__price-chip {
+    display: inline-flex; align-items: baseline; gap: 8px;
+    padding: 12px 22px;
+    background: var(--gradient-pro);
+    color: #5C3A00;
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(255, 165, 0, 0.45);
+    font-weight: 800;
+  }
+  .thumb__price-amount { font-size: 30px; }
+  .thumb__price-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .thumb__icons {
+    display: flex; gap: 14px;
+    margin-top: 22px;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  .thumb__icons span {
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 99px;
+  }
+</style>
+</head>
+<body data-stage="thumb">
+  <div class="thumb">
+    <div class="bg-glow bg-glow--pink" style="top: -160px; right: -120px; opacity: 0.55;"></div>
+    <div class="bg-glow bg-glow--blue" style="bottom: -150px; left: -120px; opacity: 0.5;"></div>
+    <div class="bg-grid" style="opacity: 0.5;"></div>
+
+    <div class="thumb__brand-mark">WA</div>
+    <div class="thumb__brand-name">Contacts Exporter<span class="thumb__pro">PRO</span></div>
+    <div class="thumb__sub">WhatsApp Web · Export + AI · Auto-Reply</div>
+    <div class="thumb__price-chip">
+      <span class="thumb__price-amount">$29</span>
+      <span class="thumb__price-label">lifetime</span>
+    </div>
+    <div class="thumb__icons">
+      <span>📤 Export</span>
+      <span>🤖 AI</span>
+      <span>🔒 Local</span>
+    </div>
+  </div>
+</body>
+</html>

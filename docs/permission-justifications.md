@@ -24,6 +24,12 @@ CWS submission'da her permission için "neden gerekli?" açıklaması istenir. B
 
 **EN**: Used to send messages to the active WhatsApp Web tab when the popup is opened. Only invoked while the user is interacting with the popup.
 
+### `alarms`
+
+**TR**: Pro lisans anahtarının haftada bir kez Gumroad License API'si üzerinden yeniden doğrulanması için. Anahtar yoksa hiçbir alarm tetiklenmez. Doğrulama, kullanıcı arayüzü ile etkileşmeden background service worker tarafında sessizce çalışır.
+
+**EN**: Used to re-verify the Pro license key against Gumroad's License API once per week. No alarm fires when no license is present. Verification runs silently in the background service worker without user interaction.
+
 ---
 
 ## Host permissions
@@ -63,6 +69,12 @@ CWS submission'da her permission için "neden gerekli?" açıklaması istenir. B
 **TR**: Kullanıcının kendi bilgisayarında çalıştırdığı **Yerel Ollama** veya **LM Studio** sunucusuna bağlanmak için. Bu seçenek default'tur ve kullanıcı verilerinin tamamen yerel kalmasını sağlar.
 
 **EN**: Used to connect to the user's locally running **Ollama** or **LM Studio** server. This is the default option and ensures user data stays entirely local.
+
+### `https://api.gumroad.com/*`
+
+**TR**: Yalnızca Pro lisans anahtarının doğrulanması için. Gumroad'un public License API endpoint'ine (`POST /v2/licenses/verify`) anahtar + ürün id ile istek atılır. İstek body'sinde mesaj/sohbet içeriği yer ALMAZ — yalnızca lisans anahtarı. Free sürüm hiç bu host'a istek yapmaz.
+
+**EN**: Used solely to verify the Pro license key. Calls Gumroad's public License API endpoint (`POST /v2/licenses/verify`) with the license key + product id. The request body contains NO message/chat content — only the license key. Free users never hit this host.
 
 ---
 
@@ -117,7 +129,7 @@ CWS submission'da her permission için "neden gerekli?" açıklaması istenir. B
 ## Privacy practices URL
 
 CWS form'da **Privacy policy URL** istenir:
-- `https://bluedev.dev/wa-contacts-exporter/privacy`
+- `https://bluedev.dev/products/wa-contacts-exporter/privacy`
 
 (Henüz live değilse alternatif: GitHub'daki `PRIVACY.md` raw URL'si — ama private repo olduğu için bunu kullanamıyoruz. Landing page deploy edildikten sonra resmi URL kullanılır.)
 

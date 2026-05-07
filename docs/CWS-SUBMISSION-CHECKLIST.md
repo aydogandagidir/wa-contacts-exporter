@@ -4,7 +4,7 @@ Bu doküman CWS Developer Console'da yayın taslağı doldururken kullanacağın
 
 > **🟢 Live URL'ler doğrulandı (2026-05-07):**
 > - **Ürün sayfası**: https://bluedev.dev/products/wa-contacts-exporter
-> - **Privacy URL (CWS form için)**: https://bluedev.dev/wa-contacts-exporter/privacy
+> - **Privacy URL (CWS form için)**: https://bluedev.dev/products/wa-contacts-exporter/privacy
 > - **Eski URL** (geriye dönük uyumlu): https://bluedev.dev/wa-contacts-exporter → 301 → product page
 >
 > Privacy URL'i CWS Developer Console'da Step 5'teki "Privacy practices URL" alanına kopyala-yapıştır.
@@ -77,7 +77,7 @@ Aynı şekilde **+ Add another language → English** seç, sonra:
 YouTube'a **Unlisted** olarak yükle:
 - Dosya: `docs/demo/demo-90s.mp4` (5.8 MB, 92 sn, 1080p, sessiz)
 - Title: `WA Contacts Exporter — WhatsApp Web Export + AI · Bluedev`
-- Description: kısa özet + `bluedev.dev/wa-contacts-exporter` link
+- Description: kısa özet + `bluedev.dev/products/wa-contacts-exporter` link
 - Thumbnail: `docs/demo/poster.jpg` (otomatik embed edilmiş)
 
 YouTube URL'i CWS form'undaki **YouTube video** alanına yapıştır.

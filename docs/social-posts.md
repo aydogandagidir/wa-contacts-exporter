@@ -65,7 +65,7 @@ Made by Bluedev · bluedev.dev
 ```
 WhatsApp Web verilerinizi tek tıkla Excel'e döküyor, yapay zeka ile özetliyor ve cevap
 öneriyor. Yerel Ollama'dan Gemini'ye 6 sağlayıcı seçeneği — veri tarayıcınızdan çıkmıyor.
-Beta ücretsiz: bluedev.dev/wa-contacts-exporter
+Beta ücretsiz: bluedev.dev/products/wa-contacts-exporter
 ```
 
 ---
@@ -129,7 +129,7 @@ Bluedev aracı sunucu kullanmıyor. API anahtarlarınız yalnızca chrome.storag
 ```
 Beta ücretsiz. Chrome Web Store yayınımız onay bekliyor; o zamana kadar dev mode +
 GitHub release indirme yöntemi. Detaylar:
-👉 bluedev.dev/wa-contacts-exporter
+👉 bluedev.dev/products/wa-contacts-exporter
 
 #WhatsAppWeb #ChromeExtension #YapayZeka #SaaS #KVKK
 ```
@@ -179,7 +179,7 @@ provider, no Bluedev relay. API keys live only in chrome.storage.local.
 **7/7**
 ```
 Beta is free. CWS approval pending; until then it's dev-mode + GitHub release.
-Details: 👉 bluedev.dev/wa-contacts-exporter
+Details: 👉 bluedev.dev/products/wa-contacts-exporter
 
 #WhatsAppWeb #ChromeExtension #AI #SaaS #GDPR
 ```
@@ -228,7 +228,7 @@ gerçekçi bir şekilde test etmesini umuyorum.
 
 **Beta**:
 Chrome Web Store onayı bekliyor; o zamana kadar GitHub release + developer mode
-yükleme. Link: bluedev.dev/wa-contacts-exporter
+yükleme. Link: bluedev.dev/products/wa-contacts-exporter
 
 Geri bildirim, kritik, "şu özelliği eklemelisiniz" yorumu — hepsi memnuniyetle
 karşılanır. Eğer denerseniz hata raporu butonu var, JSON'u bana yapıştırın
@@ -275,7 +275,7 @@ LM Studio, Claude, ChatGPT, Gemini, Groq).
 GitHub repo is private during beta; CWS submission pending. Looking for
 feedback on architecture, security review, edge cases.
 
-Demo: bluedev.dev/wa-contacts-exporter
+Demo: bluedev.dev/products/wa-contacts-exporter
 ```
 
 ### r/whatsapp / r/SmallBusiness (EN, casual tone)
@@ -297,7 +297,7 @@ through Ollama (free) or Claude/ChatGPT/Gemini if you prefer cloud.
 
 Beta is free. CWS pending — for now it's a dev-mode install + GitHub release.
 
-bluedev.dev/wa-contacts-exporter
+bluedev.dev/products/wa-contacts-exporter
 
 Happy to answer questions about how it works.
 ```
@@ -311,7 +311,7 @@ Happy to answer questions about how it works.
 ```
 Selam, Bluedev'le 3 aydır WhatsApp Web için bir Chrome eklentisi geliştiriyorduk
 — bugün beta açıldı. KOBİ ve satış ekipleri için: tek tıkla CSV export + yapay
-zeka asistanı, KVKK uyumlu. Denemek ister misin? bluedev.dev/wa-contacts-exporter
+zeka asistanı, KVKK uyumlu. Denemek ister misin? bluedev.dev/products/wa-contacts-exporter
 ```
 
 ### EN — DM template
@@ -320,7 +320,7 @@ zeka asistanı, KVKK uyumlu. Denemek ister misin? bluedev.dev/wa-contacts-export
 Hey, our team just shipped a beta of a Chrome extension that exports WhatsApp
 Web data and summarizes chats with AI (Ollama / Claude / ChatGPT options).
 Privacy-first, GDPR-compliant. Mind giving it a try and sending feedback?
-bluedev.dev/wa-contacts-exporter
+bluedev.dev/products/wa-contacts-exporter
 ```
 
 ### Email outreach (TR — KOBİ network'ü)
@@ -340,7 +340,7 @@ WA Contacts Exporter:
 İlk 2 haftalık beta sürecinde gerçek kullanıcı geri bildirimi alıyoruz. Sizinki
 de aramızda olursa çok memnun oluruz; şu an ücretsiz, kurulum 5 dakika.
 
-Detaylar: bluedev.dev/wa-contacts-exporter
+Detaylar: bluedev.dev/products/wa-contacts-exporter
 İletişim: aydogan.dagidir@yahoo.com.tr (kişisel) veya bluedev.dev/destek
 
 Saygılarımla,

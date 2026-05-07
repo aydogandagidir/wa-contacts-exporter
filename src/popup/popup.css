@@ -345,6 +345,9 @@ body {
   border-bottom: 1px solid var(--c-border);
   gap: 0;
 }
+.tab--license { color: var(--c-primary); }
+.tab--license.is-pro { color: var(--c-success); }
+.tab--license.is-pro::before { content: "★ "; }
 .tab {
   padding: 10px 6px;
   font-size: 12px;
@@ -1116,6 +1119,111 @@ body {
   gap: 6px;
 }
 .vcard-help__actions .btn { flex: 1; font-size: 11px; padding: 5px 8px; }
+
+/* License / Pro tab */
+.license-info {
+  padding: 12px;
+  background: var(--c-primary-soft);
+  border: 1px solid rgba(1, 90, 255, 0.18);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--c-text);
+}
+.license-info--pro {
+  background: var(--c-success-soft);
+  border-color: var(--c-success);
+}
+.license-info__title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--c-text);
+}
+.license-info p { margin: 6px 0; }
+.license-features {
+  margin: 6px 0;
+  padding-left: 18px;
+  font-size: 12px;
+}
+.license-features li { margin-bottom: 3px; }
+.license-info__meta {
+  font-size: 11px;
+  color: var(--c-muted);
+  margin-bottom: 8px;
+}
+.license-info__meta strong { color: var(--c-text); font-weight: 600; }
+.license-info__actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.license-info__actions .btn { font-size: 11px; padding: 5px 10px; }
+.license-buy {
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+  text-decoration: none;
+  margin-top: 8px;
+}
+.license-activate {
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  background: var(--c-bg-alt);
+}
+.license-activate > summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-text);
+}
+.license-activate__body {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+.license-activate__hint {
+  font-size: 10px;
+  color: var(--c-muted);
+  flex: 1;
+}
+.license-activate__hint--ok { color: var(--c-success); font-weight: 600; }
+.license-activate__hint--err { color: var(--c-danger); font-weight: 600; }
+.license-activate__note {
+  margin: 0;
+  font-size: 10px;
+  color: var(--c-muted);
+  line-height: 1.5;
+}
+.data-card__count.is-pro {
+  color: var(--c-success);
+  font-weight: 700;
+}
+
+/* Pro upgrade prompt — minimal inline overlay shown when a free user clicks
+   a Pro-only button. */
+.pro-prompt {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--c-primary-soft);
+  border-left: 3px solid var(--c-primary);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--c-text);
+  line-height: 1.5;
+}
+.pro-prompt__title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.pro-prompt__actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.pro-prompt__actions .btn { font-size: 11px; padding: 5px 10px; }
 
 /* KVKK consent gate */
 .consent-gate {

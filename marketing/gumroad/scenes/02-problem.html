@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Scene 02 · Problem</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+<link rel="stylesheet" href="../style.css" />
+<style>
+  .s2 {
+    background: linear-gradient(160deg, #1E293B 0%, #0F172A 100%);
+    color: #fff;
+    padding: 60px 80px;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+  .s2__left { width: 540px; display: flex; flex-direction: column; gap: 20px; }
+  .s2__eyebrow {
+    color: #EF4444;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: fadeInUp .8s cubic-bezier(.2,.8,.2,1) .2s both;
+  }
+  .s2__h {
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    animation: fadeInUp .9s cubic-bezier(.2,.8,.2,1) .5s both;
+  }
+  .s2__h span { color: #FFD700; }
+  .s2__pain-list { display: flex; flex-direction: column; gap: 10px; }
+  .s2__pain {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 17px;
+    opacity: 0.85;
+    animation: fadeInUp .7s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .s2__pain-dot {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.18);
+    color: #EF4444;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .s2__pain.delay-1 { animation-delay: 1.2s; }
+  .s2__pain.delay-2 { animation-delay: 1.5s; }
+  .s2__pain.delay-3 { animation-delay: 1.8s; }
+
+  /* Right — fake locked WhatsApp UI */
+  .s2__right {
+    width: 440px;
+    height: 540px;
+    border-radius: 20px;
+    background: #1A2332;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+    animation: scaleIn .9s cubic-bezier(.2,.8,.2,1) .4s both;
+  }
+  .s2__wa-bar {
+    background: #128C7E;
+    padding: 14px 16px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .s2__wa-row {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .s2__avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    flex-shrink: 0;
+  }
+  .s2__wa-name { font-weight: 600; font-size: 13px; }
+  .s2__wa-msg { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .s2__lock-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    color: #fff;
+    animation: fadeIn 1s ease-out 1s both;
+  }
+  .s2__lock-icon {
+    font-size: 64px;
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+  .s2__lock-text {
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    max-width: 320px;
+    line-height: 1.4;
+  }
+  .s2__lock-sub {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body data-stage="video" data-duration="7500">
+  <div class="stage s2">
+    <div class="s2__left">
+      <div class="s2__eyebrow">⚠ The problem</div>
+      <div class="s2__h">Your WhatsApp Web data <span>is trapped.</span></div>
+      <div class="s2__pain-list">
+        <div class="s2__pain delay-1"><div class="s2__pain-dot">×</div>No native export</div>
+        <div class="s2__pain delay-2"><div class="s2__pain-dot">×</div>Hours of scrolling and copy-pasting</div>
+        <div class="s2__pain delay-3"><div class="s2__pain-dot">×</div>Zero AI to help with replies</div>
+      </div>
+    </div>
+    <div class="s2__right">
+      <div class="s2__wa-bar">
+        <span style="font-size: 18px;">💬</span>
+        WhatsApp Web
+      </div>
+      <div class="s2__wa-row">
+        <div class="s2__avatar"></div>
+        <div>
+          <div class="s2__wa-name">Müşteri • Ahmet</div>
+          <div class="s2__wa-msg">Yarın saat 14:30'da uygun musunuz?</div>
+        </div>
+      </div>
+      <div class="s2__wa-row">
+        <div class="s2__avatar" style="background: linear-gradient(135deg, #4A8BFF, #015AFF);"></div>
+        <div>
+          <div class="s2__wa-name">Tedarikçi Grubu</div>
+          <div class="s2__wa-msg">Fiyat listesi güncellendi mi?</div>
+        </div>
+      </div>
+      <div class="s2__wa-row">
+        <div class="s2__avatar" style="background: linear-gradient(135deg, #C084FC, #9333EA);"></div>
+        <div>
+          <div class="s2__wa-name">Aile Grubu</div>
+          <div class="s2__wa-msg">Hafta sonu plan?</div>
+        </div>
+      </div>
+      <div class="s2__wa-row">
+        <div class="s2__avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706);"></div>
+        <div>
+          <div class="s2__wa-name">Banka Bildirimleri</div>
+          <div class="s2__wa-msg">Hesabınıza ödeme yapıldı.</div>
+        </div>
+      </div>
+      <div class="s2__lock-overlay">
+        <div class="s2__lock-icon">🔒</div>
+        <div class="s2__lock-text">No export. No AI. No automation.</div>
+        <div class="s2__lock-sub">Until now.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

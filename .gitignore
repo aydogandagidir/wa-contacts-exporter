@@ -24,5 +24,9 @@ docs/demo/*.webm
 landing/assets/demo.mp4
 landing/assets/demo.webm
 
+# Gumroad marketing pipeline — intermediate scene parts only.
+# Final outputs (PNGs + wa-contacts-pro-demo.mp4) ARE committed as snapshots.
+marketing/gumroad/out/_scenes/
+
 # Claude Code session data
 .claude/
