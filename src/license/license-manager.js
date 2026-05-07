@@ -40,7 +40,7 @@ const MAX_DEVICES = 2;
 const DEFAULT_PRODUCT_ID = "rOoFYYtVnWcoKdWKYxkuPQ=="; // Bluedev Gumroad product_id (WA Contacts Exporter Pro)
 const PRODUCT_ID_OVERRIDE_KEY = "wa_pro_product_id";
 
-const PURCHASE_URL = "https://bluedev.dev/products/wa-contacts-exporter"; // canonical landing → Gumroad CTA
+const PURCHASE_URL = "https://bluedev.gumroad.com/l/wa-contacts-exporter"; // direct Gumroad checkout — one click from popup to buy
 
 export async function getProductId() {
   try {

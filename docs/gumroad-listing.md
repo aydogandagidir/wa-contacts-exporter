@@ -127,10 +127,10 @@ delivers it plus the unique license key by email automatically.
 
 ## Pre-launch checklist (before going public)
 
-- [ ] Replace `DEFAULT_PRODUCT_ID` in `src/license/license-manager.js` with the real Gumroad product_id (find it in Gumroad URL: `gumroad.com/products/<id>/edit`)
-- [ ] Replace `PURCHASE_URL` in `src/license/license-manager.js` with the real product link
+- [x] Replace `DEFAULT_PRODUCT_ID` in `src/license/license-manager.js` — set to `rOoFYYtVnWcoKdWKYxkuPQ==` (commit 923a874)
+- [x] Replace `PURCHASE_URL` in `src/license/license-manager.js` — set to `https://bluedev.gumroad.com/l/wa-contacts-exporter`
+- [x] Update landing page Buy CTAs to the real Gumroad URL — `landing/index.html:327` + `marketing/gumroad/scenes/08-cta.html:106`
 - [ ] Test purchase with your own card while listing is "Unlisted"
-- [ ] Verify the activation flow end-to-end with the test key
-- [ ] Update landing page Buy CTAs to the real Gumroad URL
+- [ ] Verify the activation flow end-to-end with the test key (rebuild zip with real product_id, sideload, paste test key)
 - [ ] Flip listing from "Unlisted" → "Public"
 - [ ] Optional: add Gumroad embed widget to landing page (`<script src="https://gumroad.com/js/gumroad.js"></script>`)
