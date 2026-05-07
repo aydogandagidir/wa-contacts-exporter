@@ -21,7 +21,7 @@ import {
   getAutoReply, setAutoReply, appendAutoReplyHistory,
 } from "../utils/storage.js";
 import { initLicenseTab, requirePro, refreshLicenseTab } from "./license-tab.js";
-import { effectiveMessageLimit, FREE_MSG_LIMIT_PER_CHAT } from "../license/license-manager.js";
+import { effectiveMessageLimit, FREE_MSG_LIMIT_PER_CHAT, isPro } from "../license/license-manager.js";
 
 const $ = (id) => document.getElementById(id);
 const dot = $("status-dot");
@@ -331,7 +331,17 @@ function bindEvents() {
   });
 }
 
-function switchTab(key) {
+// Tabs that need an active Pro license to open. Free users get bounced
+// to the license tab so the upsell + activation form is one click away.
+// The lock glyph on these tab buttons is maintained by refreshLicenseTab
+// (license-tab.js) — it already runs whenever Pro state can change.
+const PRO_GATED_TABS = new Set(["ai", "autoreply"]);
+
+async function switchTab(key) {
+  if (PRO_GATED_TABS.has(key) && !await isPro()) {
+    return switchTab("license");
+  }
+
   activeTabKey = key;
   tabsNav.querySelectorAll(".tab").forEach((btn) => {
     const isActive = btn.dataset.tab === key;

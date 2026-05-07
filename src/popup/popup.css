@@ -364,6 +364,12 @@ body {
   color: var(--c-primary);
   border-bottom-color: var(--c-primary);
 }
+.tab.is-locked::after {
+  content: " 🔒";
+  font-size: 11px;
+  opacity: 0.7;
+  margin-left: 2px;
+}
 
 /* Tab panel: reuse data-card layout, pull up against tabs nav */
 .tab-panel {

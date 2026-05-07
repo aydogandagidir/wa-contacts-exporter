@@ -37,6 +37,13 @@ export async function refreshLicenseTab() {
   const tabBtn = document.querySelector('.tab[data-tab="license"]');
   if (tabBtn) tabBtn.classList.toggle("is-pro", tier === "pro");
 
+  // Sync the lock indicators on Pro-gated tabs (AI / Auto-Reply) so they
+  // flip on/off the moment activation succeeds or grace expires.
+  for (const key of ["ai", "autoreply"]) {
+    const t = document.querySelector(`.tab[data-tab="${key}"]`);
+    if (t) t.classList.toggle("is-locked", tier !== "pro");
+  }
+
   const pill = $("license-status-pill");
   if (pill) {
     pill.textContent = tier === "pro" ? (status.reason === "grace" ? "Pro · grace" : "Pro ✓") : "Free";
