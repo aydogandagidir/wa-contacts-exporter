@@ -21,7 +21,7 @@ export class GumroadApiError extends Error {
     this.name = "GumroadApiError";
     this.status = status || null;
     this.body = body || null;
-    this.kind = kind || "unknown"; // "network" | "invalid" | "refunded" | "server" | "unknown"
+    this.kind = kind || "unknown"; // "network" | "invalid" | "refunded" | "server" | "max-devices" | "unknown"
   }
 }
 

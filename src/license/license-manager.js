@@ -27,6 +27,13 @@ import { verifyLicense, GumroadApiError } from "./gumroad-api.js";
 const STORAGE_KEY = "wa_pro_license";
 const GRACE_PERIOD_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
+// Max devices per license. Gumroad's uses counter increments once per
+// activate() call. We refuse a fresh activation when uses already meets
+// or exceeds this limit — buyer can email support to free a slot.
+// Picked 5 to comfortably cover laptop + desktop + work machine + spares
+// without making key-sharing economic.
+const MAX_DEVICES = 5;
+
 // Keep the product id ConfigurablE without a build-time secret. Set this
 // to your Gumroad product_id once the listing is created, or override at
 // runtime via chrome.storage. Until set, activation always fails fast.
@@ -120,6 +127,18 @@ export async function activate({ key, email }) {
   if (!productId) {
     throw new Error("Ürün kimliği tanımlı değil. Lütfen daha sonra tekrar deneyin.");
   }
+
+  // Preflight: peek at the uses counter without bumping it. If the buyer
+  // has already activated MAX_DEVICES times, refuse before we increment —
+  // otherwise a refused activation would still burn a slot.
+  const preflight = await verifyLicense({ productId, licenseKey: key, incrementUsesCount: false });
+  if (preflight.uses != null && preflight.uses >= MAX_DEVICES) {
+    throw new GumroadApiError(
+      `Bu lisans zaten ${MAX_DEVICES} cihazda aktif. Yeni cihaz eklemek için support@bluedev.dev adresine satın alma e-postanı yazıp eski cihazlardan birinin sıfırlanmasını isteyebilirsin.`,
+      { kind: "max-devices" }
+    );
+  }
+
   const result = await verifyLicense({ productId, licenseKey: key, incrementUsesCount: true });
   const now = Date.now();
   const stored = {

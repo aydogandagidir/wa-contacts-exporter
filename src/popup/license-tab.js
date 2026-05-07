@@ -116,6 +116,7 @@ async function onActivateClick() {
     if (err instanceof GumroadApiError) {
       if (err.kind === "invalid") msg = "Geçersiz lisans anahtarı. Lütfen Gumroad e-postanızdaki anahtarı kontrol edin.";
       else if (err.kind === "refunded") msg = err.message;
+      else if (err.kind === "max-devices") msg = err.message;
       else if (err.kind === "network") msg = "Ağ hatası: internet bağlantınızı kontrol edin.";
       else if (err.kind === "server") msg = "Gumroad sunucu hatası. Birkaç dakika sonra tekrar deneyin.";
     }

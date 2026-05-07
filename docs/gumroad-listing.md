@@ -68,7 +68,7 @@ About the AI side: I don't run any AI servers and Pro doesn't charge per request
 
 Activating it takes about a minute. You install the free extension from bluedev.dev/products/wa-contacts-exporter, open the Pro tab inside the popup, paste your purchase email and license key, hit Activate. Same binary as the free version — your key just flips Pro on.
 
-The price is $29, paid once. That's the lifetime license. All future Pro updates are included, no subscription, no future charges. You can install it on your personal devices (laptop, desktop, etc.) and activate Pro on each — same key works across them. Refunds within 30 days through Gumroad, no questions.
+The price is $29, paid once. That's the lifetime license. All future Pro updates are included, no subscription, no future charges. The same key activates on up to 5 of your personal devices — laptop, desktop, work machine, whatever. If you replace a machine and run out of slots, email support@bluedev.dev with your purchase email and I'll free one up. Refunds within 30 days through Gumroad, no questions.
 
 
 A few things people often ask.
