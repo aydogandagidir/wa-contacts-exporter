@@ -519,7 +519,7 @@ async function compositeShot(rawPath, outPath, scenario) {
     <text x="0" y="${110 + bodyLines.length * 28 + 60}"
           font-family="-apple-system, Segoe UI, Inter, sans-serif"
           font-size="13" fill="#6B7280" font-weight="500">
-      bluedev.dev/wa-contacts-exporter
+      bluedev.dev/products/wa-contacts-exporter
     </text>
   </g>
 </svg>`;

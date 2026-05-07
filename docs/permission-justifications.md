@@ -129,7 +129,7 @@ CWS submission'da her permission için "neden gerekli?" açıklaması istenir. B
 ## Privacy practices URL
 
 CWS form'da **Privacy policy URL** istenir:
-- `https://bluedev.dev/wa-contacts-exporter/privacy`
+- `https://bluedev.dev/products/wa-contacts-exporter/privacy`
 
 (Henüz live değilse alternatif: GitHub'daki `PRIVACY.md` raw URL'si — ama private repo olduğu için bunu kullanamıyoruz. Landing page deploy edildikten sonra resmi URL kullanılır.)
 

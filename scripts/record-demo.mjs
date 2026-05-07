@@ -604,7 +604,7 @@ function buildWrapperHtml() {
 
     <div id="caption" class="caption">caption</div>
 
-    <div class="footer-url">bluedev.dev/wa-contacts-exporter</div>
+    <div class="footer-url">bluedev.dev/products/wa-contacts-exporter</div>
   </div>
 
   <!-- Hero (intro) overlay — visible by default, hidden after scene 1 -->
@@ -623,7 +623,7 @@ function buildWrapperHtml() {
       WhatsApp Web verilerinizi yerel olarak dışa aktarın, AI ile yönetin.
       KVKK uyumlu — veri tarayıcınızdan çıkmaz.
     </div>
-    <div class="outro-cta">bluedev.dev/wa-contacts-exporter</div>
+    <div class="outro-cta">bluedev.dev/products/wa-contacts-exporter</div>
   </div>
 
   <!-- Persistent Bluedev wordmark (always visible, above hero/outro) -->

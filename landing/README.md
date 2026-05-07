@@ -22,7 +22,7 @@ Veya **GitHub entegrasyonuyla** (sürekli deploy):
 4. Framework Preset: **Other** (statik)
 5. Deploy
 
-Custom domain için: Project Settings → Domains → `bluedev.dev/wa-contacts-exporter` ekle.
+Custom domain için: Project Settings → Domains → `bluedev.dev/products/wa-contacts-exporter` ekle.
 
 `vercel.json` dosyası zaten hazır — cache headers + güvenlik header'ları içerir.
 
@@ -65,7 +65,7 @@ URL: `https://aydogandagidir.github.io/wa-contacts-exporter/`
 ## bluedev.dev altında
 
 Eğer `bluedev.dev` zaten Vercel/Netlify'de host ediliyorsa:
-- Aynı projeye bu repo'yu **subpath** olarak ekle: `bluedev.dev/wa-contacts-exporter`
+- Aynı projeye bu repo'yu **subpath** olarak ekle: `bluedev.dev/products/wa-contacts-exporter`
 - Veya **subdomain**: `wa.bluedev.dev`
 
 ## Deploy sonrası verification checklist

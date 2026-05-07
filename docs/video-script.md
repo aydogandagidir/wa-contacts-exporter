@@ -127,7 +127,7 @@ Resolution: 1920×1080
 **Görsel**:
 - Bluedev logo (büyük, ortada)
 - Alt başlık: "Yerel ya da bulut AI · veriler cihazda · KVKK uyumlu"
-- CTA: "bluedev.dev/wa-contacts-exporter"
+- CTA: "bluedev.dev/products/wa-contacts-exporter"
 - Fade-out 0.5 sn
 
 ---

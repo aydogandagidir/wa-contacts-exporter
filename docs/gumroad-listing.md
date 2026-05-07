@@ -57,7 +57,7 @@ Lifetime Pro license: AI summaries, smart auto-reply, and 5000-message exports f
 
 ### What is it?
 
-[WA Contacts Exporter](https://chromewebstore.google.com/detail/wa-contacts-exporter) is a free Chrome extension that exports your WhatsApp Web data (chats, contacts, groups, messages) to CSV, XLSX, or VCard. Everything stays local — nothing ever uploads to a server.
+[WA Contacts Exporter](https://bluedev.dev/products/wa-contacts-exporter) is a free Chrome extension that exports your WhatsApp Web data (chats, contacts, groups, messages) to CSV, XLSX, or VCard. Everything stays local — nothing ever uploads to a server.
 
 **This Pro license unlocks the AI features inside the same extension:**
 
@@ -145,7 +145,7 @@ A: No. This is an independent third-party tool. WhatsApp™ is a trademark of Wh
 ### Support
 
 - 📧 Email: destek@bluedev.dev (Pro priority — response within 1 business day)
-- 🌐 Web: bluedev.dev/wa-contacts-exporter
+- 🌐 Web: bluedev.dev/products/wa-contacts-exporter
 - 🐛 Bug reports: extension popup → "Hata raporu kopyala" button → paste in email
 
 ### Legal

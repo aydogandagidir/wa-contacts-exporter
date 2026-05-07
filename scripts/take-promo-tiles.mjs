@@ -171,7 +171,7 @@ function largeTile(w, h) {
   <text x="48" y="${h - 32}"
         font-family="-apple-system, Segoe UI, sans-serif"
         font-weight="700" font-size="14" fill="${COLORS.muted}"
-        letter-spacing="1">bluedev.dev/wa-contacts-exporter</text>
+        letter-spacing="1">bluedev.dev/products/wa-contacts-exporter</text>
 </svg>`;
 }
 
@@ -257,7 +257,7 @@ function marqueeTile(w, h) {
   <text x="60" y="${h - 36}"
         font-family="-apple-system, Segoe UI, sans-serif"
         font-weight="700" font-size="14" fill="${COLORS.muted}"
-        letter-spacing="1">bluedev.dev/wa-contacts-exporter</text>
+        letter-spacing="1">bluedev.dev/products/wa-contacts-exporter</text>
 </svg>`;
 }
 
