@@ -158,9 +158,9 @@ Bu eklenti, kullanıcının kendi WhatsApp Web verilerini (sohbetler, mesajlar, 
 
 ## Privacy practices URL
 
-`https://bluedev.dev/wa-contacts-exporter/privacy`
+✅ **LIVE**: `https://bluedev.dev/wa-contacts-exporter/privacy`
 
-> Geçici alternatif (landing page yayınlanana kadar): eklenti popup'ı içindeki `chrome-extension://[id]/src/popup/privacy.html` (lokal olduğu için CWS bunu kabul etmez — landing page'in `/privacy` yolu zorunlu).
+Bluedev ana sitesi içinde Next.js page olarak yayında, KVKK + GDPR (TR + EN) içerik. CWS submission'da bu URL'i Step 5 "Privacy practices URL" alanına yapıştır.
 
 ---
 

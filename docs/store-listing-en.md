@@ -158,9 +158,9 @@ This extension is designed to export the user's own WhatsApp Web data (chats, me
 
 ## Privacy practices URL
 
-`https://bluedev.dev/wa-contacts-exporter/privacy`
+✅ **LIVE**: `https://bluedev.dev/wa-contacts-exporter/privacy`
 
-> Temporary alternative (until landing page is live): the extension popup's local `chrome-extension://[id]/src/popup/privacy.html` (CWS will not accept local URLs — the landing page's `/privacy` route is mandatory).
+Hosted as a Next.js page within the Bluedev main site, with KVKK + GDPR (TR + EN) content. Paste this URL into the CWS submission's Step 5 "Privacy practices URL" field.
 
 ---
 
