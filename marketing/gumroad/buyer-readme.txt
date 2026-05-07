@@ -86,8 +86,8 @@ License terms in plain language
 One-time payment, lifetime use, all future Pro updates included.
 No subscription, no future charges.
 
-You can activate the same key on up to 5 of your personal
-devices (laptop, desktop, work machine, etc.). The extension
+You can activate the same key on up to 2 of your personal
+devices — typically a laptop and a desktop. The extension
 counts a slot the first time you hit Activate on each device.
 If you replace a machine or lose access to an old one and run
 out of slots, write to support@bluedev.dev with your purchase

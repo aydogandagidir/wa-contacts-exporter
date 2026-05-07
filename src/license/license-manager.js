@@ -30,9 +30,9 @@ const GRACE_PERIOD_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 // Max devices per license. Gumroad's uses counter increments once per
 // activate() call. We refuse a fresh activation when uses already meets
 // or exceeds this limit — buyer can email support to free a slot.
-// Picked 5 to comfortably cover laptop + desktop + work machine + spares
-// without making key-sharing economic.
-const MAX_DEVICES = 5;
+// Picked 2 so a buyer can run on a laptop + desktop, but key-sharing
+// in forums or marketplaces stops working past the second activation.
+const MAX_DEVICES = 2;
 
 // Keep the product id ConfigurablE without a build-time secret. Set this
 // to your Gumroad product_id once the listing is created, or override at
