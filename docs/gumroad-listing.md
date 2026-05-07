@@ -50,117 +50,53 @@ Lifetime Pro license: AI summaries, smart auto-reply, and 5000-message exports f
 
 ## Product description (paste into Gumroad description editor)
 
-### Headline
+> Plain paragraphs only. Gumroad's rich-text editor doesn't render markdown
+> tables / `###` headers, and a wall of bullet points reads like ad copy.
+> Below is the human-tone version. Paste as-is, or run it through the
+> Bold (B) toolbar button on the section openers if you want emphasis.
 
-> **Activate AI superpowers for the free WA Contacts Exporter Chrome extension.**
-> Lifetime license. One payment. All future updates included.
+```
+WhatsApp Web has no export button. If you've ever needed to back up your contacts, hand a chat history to a client, or pull a group's member list out, you know how painful that is.
 
-### What is it?
+I built WA Contacts Exporter to fix that for myself, then put the free version on the Chrome Web Store. It runs entirely in your browser and exports to CSV, XLSX, or VCard. Your data never touches a server.
 
-[WA Contacts Exporter](https://bluedev.dev/products/wa-contacts-exporter) is a free Chrome extension that exports your WhatsApp Web data (chats, contacts, groups, messages) to CSV, XLSX, or VCard. Everything stays local — nothing ever uploads to a server.
+This Pro license unlocks the AI features inside the same extension.
 
-**This Pro license unlocks the AI features inside the same extension:**
+What you get with Pro: chat summaries, reply suggestions written in your own style, smart auto-reply with quiet hours and rate limits, and an inbox triage that ranks your chats by how urgently they need an answer. Pro also raises the message export ceiling from 500 to 5,000 per chat.
 
-| Feature | Free | **Pro (this purchase)** |
-|---|:---:|:---:|
-| CSV / XLSX / VCard export | ✅ | ✅ |
-| Chats, contacts, groups, labels | ✅ | ✅ |
-| Messages per chat | 500 | **5,000** |
-| AI chat summarization | ❌ | ✅ |
-| AI reply suggestions (iterative) | ❌ | ✅ |
-| AI inbox triage | ❌ | ✅ |
-| Smart auto-reply (draft + auto modes) | ❌ | ✅ |
-| 6 AI provider support | ❌ | ✅ |
-| Lifetime updates | ✅ | ✅ |
-| Priority email support | ❌ | ✅ |
+About the AI side: I don't run any AI servers and Pro doesn't charge per request. You bring your own provider. Run Ollama or LM Studio locally for free, or use Claude, ChatGPT, Gemini, or Groq with your own API key. Most of the cloud options have a free tier that covers personal use comfortably.
 
-### How AI works
+Activating it takes about a minute. You install the free extension from bluedev.dev/products/wa-contacts-exporter, open the Pro tab inside the popup, paste your purchase email and license key, hit Activate. Same binary as the free version — your key just flips Pro on.
 
-You bring your own AI provider — six options, your choice:
+The price is $29, paid once. That's the lifetime license. All future Pro updates are included, no subscription, no future charges. You can install it on your personal devices (laptop, desktop, etc.) and activate Pro on each — same key works across them. Refunds within 30 days through Gumroad, no questions.
 
-- 🟢 **Local & free** — Ollama or LM Studio on your machine (zero data leaves your computer)
-- ☁️ **Cloud** — Anthropic Claude, OpenAI ChatGPT, Google Gemini (free tier!), or Groq (free tier!)
 
-Pro doesn't charge per AI request. You pay your AI provider directly (or run locally for free). We only charge for the lifetime Pro license — once.
+A few things people often ask.
 
-### Privacy
+Do I need to install something extra after I buy? No. You install the same free extension, then enter your key in the Pro tab. Same one binary; the key just turns the locked features on.
 
-- ✅ All data processing is local or via your chosen AI provider
-- ✅ Bluedev never sees your messages, API keys, or license activity
-- ✅ License verification is the only network call we make to Gumroad (to confirm your key)
-- ✅ KVKK / GDPR compliant — first-run consent gate, opt-in for unsaved contacts
+I lost my key. Resend it from your Gumroad library, or write to me at destek@bluedev.dev with the email you used at checkout.
 
-### What you get after purchase
+Will it still work if Bluedev disappears? License verification calls Gumroad directly, not my servers, and there's a 30-day offline grace window after each successful check. So even if my site went down for some reason, your install would keep working until the next re-verify failed.
 
-1. Instant license key (delivered to your email — usually within 1 minute)
-2. Step-by-step activation guide (in the included README)
-3. Activation works on multiple devices — install on your laptop + desktop, activate Pro on each
-4. Lifetime updates — every future Pro feature is included
+Does Bluedev see my WhatsApp data? No. The extension processes everything on your device. AI calls go from your browser straight to whatever provider you picked, with your own key. The only network call my code makes is to Gumroad to verify your license, and that request only contains your key — nothing about your messages, contacts, or anything else.
 
-### How to activate (3 steps)
+Is this affiliated with WhatsApp or Meta? No. Independent project. WhatsApp is their trademark.
 
-1. **Install the free extension** from Chrome Web Store *(link in your purchase email)*
-2. Click the **"Pro 🔑"** tab in the popup
-3. Paste your license key + email → "Activate" — done in 5 seconds
 
-### System requirements
+For support, write to destek@bluedev.dev. I aim for one business day on Pro support. Bug reports go faster if you click "Hata raporu kopyala" in the extension popup before emailing — that copies a JSON blob with the WA Web version, your OS, and the actual exception, which makes problems much faster to reproduce.
 
-- Chrome 111+ or any Chromium-based browser (Edge, Brave, Arc, Vivaldi)
-- WhatsApp Web account (paired with your phone)
-- For local AI: ~5–20 GB free disk space (Ollama model size)
-- For cloud AI: API key from your chosen provider
+GDPR, KVKK, CCPA: this tool gives you access to what's already in your own WhatsApp Web session. Whether you're allowed to export or process that data is on you, not on the tool.
 
-### Frequently asked questions
-
-**Q: Do I need to install anything separately?**
-A: No. Install the same extension from Chrome Web Store, then enter your license key in the "Pro" tab. Same binary — your key flips on the Pro features.
-
-**Q: How many devices can I use this on?**
-A: Multi-device. Personal use across your devices is fine. We discourage sharing keys with non-household users.
-
-**Q: What if I lose my key?**
-A: Resend it from the Gumroad library link in your purchase email, or contact us at destek@bluedev.dev with your purchase email.
-
-**Q: Is the license a subscription?**
-A: No — one-time payment, lifetime use, all updates included.
-
-**Q: Refunds?**
-A: 30-day no-questions-asked refund through Gumroad's standard process.
-
-**Q: Does Bluedev see my WhatsApp data?**
-A: No. The extension processes data on your device. AI requests go directly from your browser to your chosen provider (e.g. Claude, OpenAI). We never proxy traffic.
-
-**Q: Will my license still work if Bluedev disappears?**
-A: There's a 30-day offline grace period after every successful re-verify. License re-verification calls Gumroad's API directly — independent of Bluedev's infrastructure.
-
-**Q: Is this an official Meta / WhatsApp product?**
-A: No. This is an independent third-party tool. WhatsApp™ is a trademark of WhatsApp LLC.
-
-### Tech notes
-
-- **License protection**: Standard client-side verification with Gumroad's License API. We do not implement aggressive DRM — Pro is an honest-user license.
-- **Data lifetime**: Your license metadata stays in `chrome.storage.local`. Verified weekly. 30-day offline grace period if Gumroad is unreachable.
-- **Source code**: Closed-source extension with open dependency chain (papaparse, sheetjs).
-
-### Support
-
-- 📧 Email: destek@bluedev.dev (Pro priority — response within 1 business day)
-- 🌐 Web: bluedev.dev/products/wa-contacts-exporter
-- 🐛 Bug reports: extension popup → "Hata raporu kopyala" button → paste in email
-
-### Legal
-
-This extension is not affiliated with, endorsed by, or sponsored by WhatsApp LLC or Meta Platforms Inc. Compliance with GDPR / CCPA / KVKK / data-protection laws for any extracted data is the user's responsibility.
-
----
-
-Built by **Bluedev** · Lifetime license · One payment · No subscription
+Site: bluedev.dev/products/wa-contacts-exporter
+```
 
 ---
 
 ## Content delivered to buyer (Gumroad "Content" upload)
 
-Upload `dist/gumroad-bundle/README.txt` as the product file. Gumroad delivers this + the unique license key via email automatically.
+Upload `marketing/gumroad/buyer-readme.txt` as the product file. Gumroad
+delivers it plus the unique license key by email automatically.
 
 ## Gumroad settings checklist
 
@@ -177,17 +113,16 @@ Upload `dist/gumroad-bundle/README.txt` as the product file. Gumroad delivers th
   ```
   Lifetime Pro license for WA Contacts Exporter — unlocks AI summaries, smart auto-reply, and 5000-message exports. Free Chrome extension, paid AI features.
   ```
-- [ ] Content (file upload): `dist/gumroad-bundle/README.txt`
+- [ ] Content (file upload): `marketing/gumroad/buyer-readme.txt`
 - [ ] Custom thank-you message:
   ```
-  🎉 Welcome to Pro!
+  Thanks for buying. Your license key is in this email.
 
-  Your license key is in this email. To activate:
-  1. Install the free extension from Chrome Web Store: [link]
-  2. Open the extension → click the "Pro 🔑" tab
-  3. Paste your email + license key → "Activate"
+  To activate: install the free extension from bluedev.dev/products/wa-contacts-exporter, open WhatsApp Web, click the WA icon, then the Pro tab. Paste your email and key, hit Activate. Should take about a minute.
 
-  Need help? destek@bluedev.dev
+  If something goes wrong, write to destek@bluedev.dev with your purchase email.
+
+  Aydoğan
   ```
 
 ## Pre-launch checklist (before going public)
