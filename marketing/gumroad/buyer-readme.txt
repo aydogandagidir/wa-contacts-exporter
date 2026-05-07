@@ -90,10 +90,10 @@ You can install it on your personal devices (laptop, desktop,
 etc.) and activate Pro on each. Same key works across them.
 Just don't share or resell the key, please.
 
-The license verifies once when you activate, then re-checks
-weekly in the background. If you go offline, Pro stays active
-for 30 days from the last successful check, so traveling or
-patchy wifi won't lock you out.
+The license verifies once when you activate, and that's it.
+After activation the extension never contacts Gumroad again —
+no background checks, no online requirement, no surprise
+lock-outs if you travel or change networks.
 
 Refunds within 30 days, no questions, through Gumroad's normal
 flow.

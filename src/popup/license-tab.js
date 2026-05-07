@@ -3,12 +3,16 @@
 // Responsibilities:
 //   - Render free vs pro view based on license-manager.getStatus()
 //   - Activate flow: collect email + key, call license-manager.activate(), surface errors
-//   - Re-check + deactivate buttons
+//   - Deactivate button (this device only)
 //   - Tag the "Pro 🔑" tab with .is-pro when active (header indicator)
 //   - Provide a public requirePro() helper used by other tabs to gate features.
+//
+// One-time activation model: there is no manual re-check button, no grace
+// state, no periodic re-verify. Activation succeeds → Pro is on until the
+// user explicitly deactivates.
 
 import {
-  isPro, getStatus, activate, reverify, deactivate,
+  isPro, getStatus, activate, deactivate,
   getPurchaseUrl, getProductId,
 } from "../license/license-manager.js";
 import { GumroadApiError } from "../license/gumroad-api.js";
@@ -39,7 +43,7 @@ export async function refreshLicenseTab() {
 
   const pill = $("license-status-pill");
   if (pill) {
-    pill.textContent = tier === "pro" ? (status.reason === "grace" ? "Pro · grace" : "Pro ✓") : "Free";
+    pill.textContent = tier === "pro" ? "Pro ✓" : "Free";
     pill.classList.toggle("is-pro", tier === "pro");
   }
 
@@ -58,10 +62,6 @@ export async function refreshLicenseTab() {
       if (status.productName) parts.push(`<div>Ürün: <strong>${escapeHtml(status.productName)}</strong></div>`);
       parts.push(`<div>Anahtar: <strong>${escapeHtml(maskKey(status.key))}</strong></div>`);
       parts.push(`<div>Aktive edildi: <strong>${escapeHtml(fmtDate(status.activatedAt))}</strong></div>`);
-      parts.push(`<div>Son doğrulama: <strong>${escapeHtml(fmtDate(status.lastVerifiedAt))}</strong></div>`);
-      if (status.reason === "grace") {
-        parts.push(`<div style="color:var(--c-danger)">⚠ Çevrimdışı destek penceresi: ${escapeHtml(fmtDate(status.graceUntil))}</div>`);
-      }
       meta.innerHTML = parts.join("");
     }
   } else {
@@ -126,37 +126,10 @@ async function onActivateClick() {
   }
 }
 
-async function onRecheckClick() {
-  const btn = $("license-recheck-btn");
-  if (btn) btn.disabled = true;
-  try {
-    const res = await reverify();
-    if (res.ok) {
-      await refreshLicenseTab();
-      flashTabPill("Yenilendi ✓", "ok");
-    } else if (res.kind === "invalid" || res.kind === "refunded") {
-      await refreshLicenseTab();
-      flashTabPill(res.message || "Lisans geçersiz", "err");
-    } else {
-      flashTabPill("Çevrimdışı — sonra denenecek", null);
-    }
-  } finally {
-    if (btn) btn.disabled = false;
-  }
-}
-
 async function onDeactivateClick() {
   if (!confirm("Bu cihazda Pro'yu devre dışı bırakmak istediğinize emin misiniz? Aynı anahtarı yeniden aktive edebilirsiniz.")) return;
   await deactivate();
   await refreshLicenseTab();
-}
-
-function flashTabPill(text, kind) {
-  const pill = $("license-status-pill");
-  if (!pill) return;
-  const prev = pill.textContent;
-  pill.textContent = text;
-  setTimeout(() => { refreshLicenseTab(); }, 1500);
 }
 
 function escapeHtml(s) {
@@ -168,10 +141,8 @@ export function initLicenseTab() {
   if (initialized) return;
   initialized = true;
   const activateBtn = $("license-activate-btn");
-  const recheckBtn = $("license-recheck-btn");
   const deactivateBtn = $("license-deactivate-btn");
   if (activateBtn) activateBtn.addEventListener("click", onActivateClick);
-  if (recheckBtn) recheckBtn.addEventListener("click", onRecheckClick);
   if (deactivateBtn) deactivateBtn.addEventListener("click", onDeactivateClick);
   refreshLicenseTab();
 }

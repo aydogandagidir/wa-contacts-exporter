@@ -77,7 +77,7 @@ Do I need to install something extra after I buy? No. You install the same free 
 
 I lost my key. Resend it from your Gumroad library, or write to me at destek@bluedev.dev with the email you used at checkout.
 
-Will it still work if Bluedev disappears? License verification calls Gumroad directly, not my servers, and there's a 30-day offline grace window after each successful check. So even if my site went down for some reason, your install would keep working until the next re-verify failed.
+Will it still work if Bluedev disappears? Yes. License verification only happens once when you activate, and it calls Gumroad directly — not my servers. After activation the extension never re-checks. So once you're activated, you're activated for good, even if my site goes away.
 
 Does Bluedev see my WhatsApp data? No. The extension processes everything on your device. AI calls go from your browser straight to whatever provider you picked, with your own key. The only network call my code makes is to Gumroad to verify your license, and that request only contains your key — nothing about your messages, contacts, or anything else.
 
@@ -127,8 +127,8 @@ delivers it plus the unique license key by email automatically.
 
 ## Pre-launch checklist (before going public)
 
-- [ ] Replace `DEFAULT_PRODUCT_ID` in `src/license/license-manager.js` with the real Gumroad product_id (find it in Gumroad URL: `gumroad.com/products/<id>/edit`)
-- [ ] Replace `PURCHASE_URL` in `src/license/license-manager.js` with the real product link
+- [x] Replace `DEFAULT_PRODUCT_ID` in `src/license/license-manager.js` — set to `axfxg` (2026-05-07)
+- [x] Replace `PURCHASE_URL` in `src/license/license-manager.js` — set to `https://bluedev.gumroad.com/l/wa-contacts-exporter` (2026-05-07)
 - [ ] Test purchase with your own card while listing is "Unlisted"
 - [ ] Verify the activation flow end-to-end with the test key
 - [ ] Update landing page Buy CTAs to the real Gumroad URL
