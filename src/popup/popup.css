@@ -52,6 +52,21 @@ body {
 
 .brand-title { font-weight: 700; font-size: 15px; line-height: 1.1; }
 .brand-sub { font-size: 11px; color: var(--c-muted); margin-top: 2px; }
+.brand-text { flex: 1; }
+
+.locale-switcher {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 3px 6px;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  background: var(--c-bg);
+  color: var(--c-muted);
+  cursor: pointer;
+  max-width: 90px;
+}
+.locale-switcher:hover { color: var(--c-text); border-color: var(--c-muted); }
+.locale-switcher:focus { outline: 2px solid var(--c-primary-soft); outline-offset: 1px; }
 
 #app { flex: 1; padding: 14px 16px; }
 

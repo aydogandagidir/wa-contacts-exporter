@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="tr">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,35 +11,30 @@
       <div class="brand">
         <div class="brand-mark">WA</div>
         <div class="brand-text">
-          <div class="brand-title">Contacts Exporter</div>
-          <div class="brand-sub">Beta · Bluedev</div>
+          <div class="brand-title" data-i18n="brandTitle">Contacts Exporter</div>
+          <div class="brand-sub" data-i18n="brandSub">Beta · Bluedev</div>
         </div>
+        <select id="locale-switcher" class="locale-switcher" data-i18n-aria-label="localeSwitcherLabel">
+          <option value="auto" data-i18n="localeAuto">Auto</option>
+          <option value="en" data-i18n="localeEnglish">English</option>
+          <option value="tr" data-i18n="localeTurkish">Türkçe</option>
+        </select>
       </div>
     </header>
 
-    <!-- KVKK consent gate — first-run blocker. Hidden once user accepts. -->
+    <!-- Privacy / GDPR consent gate — first-run blocker. Hidden once user accepts. -->
     <section class="consent-gate" id="consent-gate" hidden>
       <div class="consent-gate__inner">
-        <div class="consent-title">KVKK / GDPR Onayı</div>
-        <p class="consent-body">
-          Bu eklenti yalnızca yerel olarak çalışır; çıkardığınız veriler
-          hiçbir sunucuya gönderilmez. Ancak çıkardığınız verilerin
-          (telefon numaraları, isimler, grup üyeleri vb.)
-          <strong>KVKK / GDPR uyumluluğu sizin sorumluluğunuzdadır</strong>.
-        </p>
-        <p class="consent-body">
-          Devam etmek için aşağıdaki onayı vermeniz gerekir:
-        </p>
+        <div class="consent-title" data-i18n="consentTitle">Privacy Consent</div>
+        <p class="consent-body" data-i18n-html="consentBodyP1"></p>
+        <p class="consent-body" data-i18n="consentBodyP2"></p>
         <label class="consent-check">
           <input type="checkbox" id="consent-checkbox" />
-          <span>
-            Bu aracı yalnızca yasal olarak işleme yetkim olan kişisel veriler
-            için kullanacağım.
-          </span>
+          <span data-i18n="consentCheckLabel"></span>
         </label>
         <div class="consent-actions">
-          <button class="btn btn--primary" id="consent-accept" disabled>Onaylıyorum, devam et</button>
-          <a class="consent-link" id="consent-privacy-link" href="#" target="_blank" rel="noopener">Aydınlatma metni</a>
+          <button class="btn btn--primary" id="consent-accept" data-i18n="consentAccept" disabled>I agree, continue</button>
+          <a class="consent-link" id="consent-privacy-link" href="#" target="_blank" rel="noopener" data-i18n="consentPrivacyLink">Privacy notice</a>
         </div>
       </div>
     </section>
@@ -47,12 +42,12 @@
     <main id="app">
       <section class="status-card" id="status-card">
         <div class="status-dot status-dot--idle" id="status-dot"></div>
-        <div class="status-text" id="status-text">WhatsApp Web aranıyor…</div>
+        <div class="status-text" id="status-text" data-i18n="statusSearching">Looking for WhatsApp Web…</div>
       </section>
 
       <section class="health-card" id="health-card" hidden>
         <button type="button" class="health-card__head" id="health-toggle" aria-expanded="false">
-          <span class="health-title">API Sağlık Kontrolü</span>
+          <span class="health-title" data-i18n="healthTitle">API Health Check</span>
           <span class="health-toggle__icon">▸</span>
         </button>
         <div class="health-body" id="health-body" hidden>
@@ -62,58 +57,53 @@
       </section>
 
       <nav class="tabs" id="tabs" hidden role="tablist">
-        <button type="button" class="tab is-active" data-tab="chats" role="tab" aria-selected="true">Sohbetler</button>
-        <button type="button" class="tab" data-tab="messages" role="tab" aria-selected="false">Mesajlar</button>
-        <button type="button" class="tab" data-tab="ai" role="tab" aria-selected="false">AI ✨</button>
-        <button type="button" class="tab" data-tab="autoreply" role="tab" aria-selected="false">Oto-Cevap 🤖</button>
-        <button type="button" class="tab" data-tab="groups" role="tab" aria-selected="false">Gruplar</button>
-        <button type="button" class="tab" data-tab="labels" role="tab" aria-selected="false">Etiketler</button>
-        <button type="button" class="tab" data-tab="contacts" role="tab" aria-selected="false">Tüm Kişiler</button>
-        <button type="button" class="tab tab--license" data-tab="license" role="tab" aria-selected="false">Pro 🔑</button>
+        <button type="button" class="tab is-active" data-tab="chats" role="tab" aria-selected="true" data-i18n="tabChats">Chats</button>
+        <button type="button" class="tab" data-tab="messages" role="tab" aria-selected="false" data-i18n="tabMessages">Messages</button>
+        <button type="button" class="tab" data-tab="ai" role="tab" aria-selected="false" data-i18n="tabAi">AI ✨</button>
+        <button type="button" class="tab" data-tab="autoreply" role="tab" aria-selected="false" data-i18n="tabAutoreply">Auto-Reply 🤖</button>
+        <button type="button" class="tab" data-tab="groups" role="tab" aria-selected="false" data-i18n="tabGroups">Groups</button>
+        <button type="button" class="tab" data-tab="labels" role="tab" aria-selected="false" data-i18n="tabLabels">Labels</button>
+        <button type="button" class="tab" data-tab="contacts" role="tab" aria-selected="false" data-i18n="tabContacts">All Contacts</button>
+        <button type="button" class="tab tab--license" data-tab="license" role="tab" aria-selected="false" data-i18n="tabLicense">Pro 🔑</button>
       </nav>
 
-      <!-- Sohbetler tab -->
+      <!-- Chats tab -->
       <section class="data-card tab-panel" id="panel-chats" data-tab="chats" hidden>
         <div class="data-card__head">
-          <div class="data-card__title">Sohbetler</div>
+          <div class="data-card__title" data-i18n="chatsTitle">Chats</div>
           <div class="data-card__count" id="chats-count">—</div>
         </div>
         <label class="opt-row">
           <input type="checkbox" id="include-unsaved" />
-          <span>Kayıtlı olmayan kişileri dahil et</span>
+          <span data-i18n="chatsIncludeUnsaved"></span>
         </label>
         <div class="data-card__actions">
-          <button class="btn btn--primary" id="extract-chats-btn">Sohbetleri Çıkar</button>
+          <button class="btn btn--primary" id="extract-chats-btn" data-i18n="chatsExtractBtn">Extract Chats</button>
         </div>
         <div class="preview" id="chats-preview" hidden>
           <table class="preview-table">
-            <thead><tr><th>İsim</th><th>Telefon</th><th>Tip</th><th>Son mesaj</th></tr></thead>
+            <thead><tr><th data-i18n="chatsCol1Name">Name</th><th data-i18n="chatsCol2Phone">Phone</th><th data-i18n="chatsCol3Type">Type</th><th data-i18n="chatsCol4Last">Last message</th></tr></thead>
             <tbody id="chats-tbody"></tbody>
           </table>
           <div class="preview-note" id="chats-note"></div>
         </div>
         <div class="export-row" id="chats-export-row" hidden>
-          <button class="btn" id="chats-export-csv">CSV indir</button>
-          <button class="btn" id="chats-export-xlsx">XLSX</button>
-          <button class="btn" id="chats-export-vcard">VCard</button>
+          <button class="btn" id="chats-export-csv" data-i18n="exportCsvBtn">CSV download</button>
+          <button class="btn" id="chats-export-xlsx" data-i18n="exportXlsxBtn">XLSX</button>
+          <button class="btn" id="chats-export-vcard" data-i18n="exportVcardBtn">VCard</button>
         </div>
       </section>
 
-      <!-- Mesajlar tab -->
+      <!-- Messages tab -->
       <section class="data-card tab-panel" id="panel-messages" data-tab="messages" hidden>
         <div class="data-card__head">
-          <div class="data-card__title">Mesajlar</div>
+          <div class="data-card__title" data-i18n="messagesTitle">Messages</div>
           <div class="data-card__count" id="messages-count">—</div>
         </div>
-        <div class="msg-info">
-          WhatsApp Web'in hâlâ hafızasında olan mesajları çıkarır. Daha eski
-          mesajlar için <strong>her sohbeti açıp yukarıya doğru kaydırın</strong>,
-          sonra Çıkar'a basın. KVKK: mesaj içerikleri yerel olarak işlenir,
-          sunucuya gönderilmez.
-        </div>
+        <div class="msg-info" data-i18n-html="messagesInfo"></div>
         <div class="opt-row">
           <label class="opt-row__inner">
-            <span>Sohbet başına en fazla:</span>
+            <span data-i18n="messagesPerChatLabel"></span>
             <select id="messages-per-chat-limit">
               <option value="100">100</option>
               <option value="500" selected>500</option>
@@ -124,170 +114,150 @@
         </div>
         <div class="opt-row">
           <label class="opt-row__inner">
-            <span>Eski mesaj yükleme turu (yavaş):</span>
+            <span data-i18n="messagesLoadEarlierLabel"></span>
             <select id="messages-load-earlier">
-              <option value="0" selected>0 (sadece hafızadakiler)</option>
-              <option value="2">2 tur</option>
-              <option value="5">5 tur</option>
-              <option value="10">10 tur</option>
+              <option value="0" selected data-i18n="messagesLoadEarlier0">0 (memory only)</option>
+              <option value="2" data-i18n="messagesLoadEarlier2">2 rounds</option>
+              <option value="5" data-i18n="messagesLoadEarlier5">5 rounds</option>
+              <option value="10" data-i18n="messagesLoadEarlier10">10 rounds</option>
             </select>
           </label>
         </div>
         <div class="data-card__actions">
-          <button class="btn btn--primary" id="extract-messages-btn">Mesajları Çıkar</button>
+          <button class="btn btn--primary" id="extract-messages-btn" data-i18n="messagesExtractBtn">Extract Messages</button>
         </div>
         <div class="preview" id="messages-preview" hidden>
           <table class="preview-table">
-            <thead><tr><th>Sohbet</th><th>Gönderen</th><th>Mesaj</th><th>Zaman</th></tr></thead>
+            <thead><tr><th data-i18n="messagesCol1Chat">Chat</th><th data-i18n="messagesCol2Sender">Sender</th><th data-i18n="messagesCol3Body">Message</th><th data-i18n="messagesCol4Time">Time</th></tr></thead>
             <tbody id="messages-tbody"></tbody>
           </table>
           <div class="preview-note" id="messages-note"></div>
         </div>
         <div class="export-row" id="messages-export-row" hidden>
-          <button class="btn" id="messages-export-csv">CSV indir</button>
-          <button class="btn" id="messages-export-xlsx">XLSX</button>
+          <button class="btn" id="messages-export-csv" data-i18n="exportCsvBtn">CSV download</button>
+          <button class="btn" id="messages-export-xlsx" data-i18n="exportXlsxBtn">XLSX</button>
         </div>
       </section>
 
       <!-- AI tab -->
       <section class="data-card tab-panel" id="panel-ai" data-tab="ai" hidden>
         <div class="data-card__head">
-          <div class="data-card__title">AI Asistan ✨</div>
+          <div class="data-card__title" data-i18n="aiTitle">AI Assistant ✨</div>
           <div class="data-card__count" id="ai-status">—</div>
         </div>
 
         <!-- One-shot migration banner: shown when default model was bumped -->
         <div class="ai-banner" id="ai-migration-banner" hidden>
           <div class="ai-banner__body" id="ai-migration-body"></div>
-          <button type="button" class="ai-banner__close" id="ai-migration-close" aria-label="Kapat">×</button>
+          <button type="button" class="ai-banner__close" id="ai-migration-close" data-i18n-aria-label="aiBannerCloseAria">×</button>
         </div>
 
         <div class="ai-info" id="ai-info"></div>
 
         <details class="ai-config" id="ai-config">
-          <summary>Sağlayıcı ayarları</summary>
+          <summary data-i18n="aiConfigSummary">Provider settings</summary>
           <div class="ai-config__body">
             <label class="ai-row">
-              <span>Sağlayıcı</span>
+              <span data-i18n="aiProviderLabel">Provider</span>
               <select id="ai-provider">
-                <optgroup label="Yerel (ücretsiz)">
-                  <option value="ollama">Ollama</option>
-                  <option value="openai_compat">OpenAI uyumlu (LM Studio / llama.cpp)</option>
+                <optgroup data-i18n-label-key="aiProviderGroupLocal" label="Local (free)">
+                  <option value="ollama" data-i18n="aiProviderOllama">Ollama</option>
+                  <option value="openai_compat" data-i18n="aiProviderOpenAiCompat">OpenAI-compatible (LM Studio / llama.cpp)</option>
                 </optgroup>
-                <optgroup label="Cloud (API anahtarı gerekir)">
-                  <option value="anthropic">Anthropic Claude</option>
-                  <option value="openai">OpenAI ChatGPT</option>
-                  <option value="gemini">Google Gemini</option>
-                  <option value="groq">Groq (hızlı)</option>
+                <optgroup data-i18n-label-key="aiProviderGroupCloud" label="Cloud (API key required)">
+                  <option value="anthropic" data-i18n="aiProviderAnthropic">Anthropic Claude</option>
+                  <option value="openai" data-i18n="aiProviderOpenAi">OpenAI ChatGPT</option>
+                  <option value="gemini" data-i18n="aiProviderGemini">Google Gemini</option>
+                  <option value="groq" data-i18n="aiProviderGroq">Groq (fast)</option>
                 </optgroup>
               </select>
             </label>
             <label class="ai-row" id="ai-baseurl-row">
-              <span>Sunucu URL</span>
+              <span data-i18n="aiBaseUrlLabel">Server URL</span>
               <input type="text" id="ai-baseurl" placeholder="http://localhost:11434/v1" />
             </label>
             <label class="ai-row" id="ai-apikey-row" hidden>
-              <span>API Anahtarı</span>
+              <span data-i18n="aiApiKeyLabel">API Key</span>
               <input type="password" id="ai-api-key" placeholder="sk-ant-..." autocomplete="off" />
             </label>
             <label class="ai-row">
-              <span>Model</span>
+              <span data-i18n="aiModelLabel">Model</span>
               <select id="ai-model-select"></select>
-              <input type="text" id="ai-model" placeholder="aya-expanse:8b" hidden />
+              <input type="text" id="ai-model" data-i18n-placeholder="aiModelManualPlaceholder" placeholder="aya-expanse:8b" hidden />
             </label>
             <div class="ai-model-info" id="ai-model-info" hidden></div>
             <div class="ai-row__actions">
-              <button class="btn btn--primary" id="ai-save-key">Kaydet</button>
-              <button class="btn btn--ghost" id="ai-test-key">Bağlantıyı test et</button>
-              <a href="#" target="_blank" rel="noopener" class="ai-link" id="ai-help-link">Kurulum rehberi</a>
+              <button class="btn btn--primary" id="ai-save-key" data-i18n="aiSaveBtn">Save</button>
+              <button class="btn btn--ghost" id="ai-test-key" data-i18n="aiTestBtn">Test connection</button>
+              <a href="#" target="_blank" rel="noopener" class="ai-link" id="ai-help-link" data-i18n="aiHelpLinkSetup">Setup guide</a>
             </div>
-            <div class="ai-config__note" id="ai-provider-help">
-              <strong>Ollama (önerilen, ücretsiz):</strong> ollama.com'dan indir,
-              <code>ollama pull llama3.2</code> ile model yükle, sonra
-              <code>OLLAMA_ORIGINS=chrome-extension://* ollama serve</code>
-              ile çalıştır (eklentiden bağlanabilmesi için).
-            </div>
+            <div class="ai-config__note" id="ai-provider-help" data-i18n-html="aiProviderHelpOllama"></div>
           </div>
         </details>
 
         <div class="ai-actions">
           <div class="ai-action-card">
-            <div class="ai-action-card__title">📋 Sohbet özetle / 💬 Cevap öner</div>
-            <div class="ai-action-card__body">
-              Önce <strong>Mesajlar</strong> sekmesinden ilgili sohbetin
-              mesajlarını çıkarın. Sonra burada o sohbeti seçip Özet veya
-              Öneri üretin.
-            </div>
+            <div class="ai-action-card__title" data-i18n="aiActionSummarizeTitle">📋 Summarize chat / 💬 Suggest reply</div>
+            <div class="ai-action-card__body" data-i18n-html="aiActionSummarizeBody"></div>
             <details class="info-details info-details--inline">
-              <summary>Parantez içindeki "(X mesaj)" sayısı ne demek?</summary>
-              <div class="info-details__body">
-                Bu sayı, sadece <strong>Mesajlar sekmesinden çıkardığınız</strong>
-                mesajları gösterir — sohbetin tam geçmişi DEĞİL. WhatsApp Web her
-                sohbet için yalnızca son 1–50 mesajı RAM'de tutar. Daha fazla
-                mesaj için <strong>Mesajlar → "Eski mesaj yükleme turu"</strong>
-                ayarını <strong>5+</strong> yapıp yeniden çıkarın.
-                Düşük sayı (⚠️ az veri / üslup yetersiz) işaretli sohbetlerde AI
-                önerileri kalitesiz olabilir.
-              </div>
+              <summary data-i18n="aiActionWhatIsCount"></summary>
+              <div class="info-details__body" data-i18n-html="aiActionCountExplain"></div>
             </details>
             <select id="ai-chat-select" class="ai-select">
-              <option value="">— Sohbet seç —</option>
+              <option value="" data-i18n="aiChatSelectPlaceholder">— Pick a chat —</option>
             </select>
             <textarea id="ai-chat-instructions"
                       class="ai-instructions"
                       rows="2"
-                      placeholder="(opsiyonel) Bu sohbete özel talimat — ör: 'Kısa ve samimi ton kullan', 'Cevaplara saat ve yer detayı ekle', 'İş gündemine odaklan'"></textarea>
+                      data-i18n-placeholder="aiInstructionsPlaceholder"></textarea>
             <div class="ai-instructions__row">
-              <button class="btn btn--ghost ai-instructions__save" id="ai-instructions-save">Talimatı kaydet</button>
+              <button class="btn btn--ghost ai-instructions__save" id="ai-instructions-save" data-i18n="aiInstructionsSaveBtn">Save instructions</button>
               <span class="ai-instructions__hint" id="ai-instructions-hint"></span>
             </div>
             <div class="ai-action-buttons">
-              <button class="btn btn--primary" id="ai-summarize-btn" disabled>Özet üret</button>
-              <button class="btn btn--primary" id="ai-followups-btn" disabled>Öneri üret</button>
+              <button class="btn btn--primary" id="ai-summarize-btn" data-i18n="aiSummarizeBtn" disabled>Generate summary</button>
+              <button class="btn btn--primary" id="ai-followups-btn" data-i18n="aiFollowupsBtn" disabled>Generate suggestion</button>
             </div>
           </div>
 
           <div class="ai-action-card">
-            <div class="ai-action-card__title">🎯 Sohbet önceliklendir</div>
-            <div class="ai-action-card__body">
-              Tüm sohbetlerinizi acil cevap gerektirenden başlayarak sıralar
-              (Sohbetler sekmesinde "Çıkar" yapmış olmanız gerekir).
-            </div>
-            <button class="btn btn--primary" id="ai-triage-btn" disabled>Sıralamayı üret</button>
+            <div class="ai-action-card__title" data-i18n="aiActionTriageTitle">🎯 Prioritize chats</div>
+            <div class="ai-action-card__body" data-i18n="aiActionTriageBody"></div>
+            <button class="btn btn--primary" id="ai-triage-btn" data-i18n="aiTriageBtnIdle" disabled>Generate ranking</button>
           </div>
         </div>
 
         <div class="ai-output" id="ai-output" hidden>
           <div class="ai-output__head">
-            <div class="ai-output__title" id="ai-output-title">Sonuç</div>
-            <button class="btn btn--ghost ai-output__copy" id="ai-output-copy">Kopyala</button>
+            <div class="ai-output__title" id="ai-output-title" data-i18n="aiOutputResult">Result</div>
+            <button class="btn btn--ghost ai-output__copy" id="ai-output-copy" data-i18n="aiOutputCopyBtn">Copy</button>
           </div>
           <pre class="ai-output__body" id="ai-output-body"></pre>
           <div class="ai-output__meta" id="ai-output-meta"></div>
         </div>
 
-        <!-- Tek-öneri iteratif sistem (cevap/takip için) -->
+        <!-- Single-suggestion iterative card (reply / follow-up) -->
         <div class="suggestion-card" id="suggestion-card" hidden>
           <div class="suggestion-card__head">
-            <div class="suggestion-card__title" id="suggestion-title">Öneri</div>
-            <button type="button" class="copy-btn" id="suggestion-copy" title="Kopyala" aria-label="Kopyala"></button>
+            <div class="suggestion-card__title" id="suggestion-title" data-i18n="suggestionTitleSuggestion">Suggestion</div>
+            <button type="button" class="copy-btn" id="suggestion-copy" data-i18n-title="aiOutputCopyBtn" data-i18n-aria-label="aiOutputCopyBtn"></button>
           </div>
           <div class="suggestion-target" id="suggestion-target"></div>
           <div class="suggestion-body" id="suggestion-body"></div>
           <div class="suggestion-meta" id="suggestion-meta"></div>
           <div class="suggestion-actions" id="suggestion-actions">
-            <button class="btn btn--ghost" id="suggestion-refresh">↻ Yenile</button>
-            <button class="btn btn--ghost" id="suggestion-feedback">✎ Düzelt</button>
+            <button class="btn btn--ghost" id="suggestion-refresh" data-i18n="suggestionRefreshBtn">↻ Refresh</button>
+            <button class="btn btn--ghost" id="suggestion-feedback" data-i18n="suggestionRefineBtn">✎ Refine</button>
           </div>
           <div class="suggestion-feedback" id="suggestion-feedback-row" hidden>
-            <textarea id="suggestion-feedback-text" rows="2" placeholder="Ne değişmesini istersin? (örn: 'daha kısa', 'daha resmi', 'soruyu farklı sor')"></textarea>
+            <textarea id="suggestion-feedback-text" rows="2" data-i18n-placeholder="suggestionFeedbackPlaceholder"></textarea>
             <div class="suggestion-feedback__actions">
-              <button class="btn btn--primary" id="suggestion-feedback-apply">Geri bildirimle yenile</button>
-              <button class="btn btn--ghost" id="suggestion-feedback-cancel">İptal</button>
+              <button class="btn btn--primary" id="suggestion-feedback-apply" data-i18n="suggestionApplyBtn">Refresh with feedback</button>
+              <button class="btn btn--ghost" id="suggestion-feedback-cancel" data-i18n="suggestionCancelBtn">Cancel</button>
             </div>
           </div>
           <div class="suggestion-history" id="suggestion-history" hidden>
-            <div class="suggestion-history__title">Reddedilen öneriler</div>
+            <div class="suggestion-history__title" data-i18n="suggestionRejectedTitle">Rejected suggestions</div>
             <ul class="suggestion-history__list" id="suggestion-history-list"></ul>
           </div>
         </div>
@@ -295,8 +265,8 @@
         <!-- Triage gets its own structured render with verification badges -->
         <div class="ai-output" id="ai-triage-output" hidden>
           <div class="ai-output__head">
-            <div class="ai-output__title">Öncelik sıralaması</div>
-            <button class="btn btn--ghost ai-output__copy" id="ai-triage-copy">Kopyala</button>
+            <div class="ai-output__title" data-i18n="triageOutputTitle">Priority ranking</div>
+            <button class="btn btn--ghost ai-output__copy" id="ai-triage-copy" data-i18n="aiOutputCopyBtn">Copy</button>
           </div>
           <ol class="triage-list" id="ai-triage-list"></ol>
           <div class="triage-stats" id="ai-triage-stats"></div>
@@ -304,250 +274,231 @@
         </div>
       </section>
 
-      <!-- Otomatik Cevap tab -->
+      <!-- Auto-Reply tab -->
       <section class="data-card tab-panel" id="panel-autoreply" data-tab="autoreply" hidden>
         <div class="data-card__head">
-          <div class="data-card__title">Otomatik Cevap 🤖</div>
-          <div class="data-card__count" id="autoreply-status">Kapalı</div>
+          <div class="data-card__title" data-i18n="autoreplyTitle">Auto-Reply 🤖</div>
+          <div class="data-card__count" id="autoreply-status" data-i18n="autoreplyOff">Off</div>
         </div>
 
         <details class="info-details">
-          <summary>Nasıl çalışır?</summary>
-          <div class="info-details__body">
-            Varsayılan mod <strong>Taslak</strong>: AI cevap üretir, sen
-            onaylayınca gönderilir. Otomatik gönderim için her sohbeti tek
-            tek aktif et; oran limiti ve sessiz saatleri kontrol et.
-          </div>
+          <summary data-i18n="autoreplyHowSummary">How does it work?</summary>
+          <div class="info-details__body" data-i18n-html="autoreplyHowBody"></div>
         </details>
 
         <div class="ar-master">
           <label class="opt-row">
             <input type="checkbox" id="ar-master-enabled" />
-            <span><strong>Ana anahtar</strong> — yeni mesaj dinlemeyi başlat</span>
+            <span data-i18n-html="autoreplyMasterLabel"></span>
           </label>
           <label class="opt-row">
-            <span>Mod:</span>
+            <span data-i18n="autoreplyModeLabel"></span>
             <select id="ar-mode">
-              <option value="draft">Taslak (önce göster, sonra gönder)</option>
-              <option value="auto">Otomatik (anında gönder — dikkat)</option>
+              <option value="draft" data-i18n="autoreplyModeDraft">Draft (preview, then send)</option>
+              <option value="auto" data-i18n="autoreplyModeAuto">Automatic (send instantly — careful)</option>
             </select>
           </label>
           <div class="ar-grid">
             <label class="opt-row">
-              <span>Saat başına max:</span>
+              <span data-i18n="autoreplyMaxHourLabel"></span>
               <input type="number" id="ar-max-hour" min="1" max="100" value="10" />
             </label>
             <label class="opt-row">
-              <span>Gün başına max:</span>
+              <span data-i18n="autoreplyMaxDayLabel"></span>
               <input type="number" id="ar-max-day" min="1" max="500" value="50" />
             </label>
           </div>
           <label class="opt-row">
             <input type="checkbox" id="ar-quiet-enabled" />
-            <span>Sessiz saatler:</span>
+            <span data-i18n="autoreplyQuietLabel"></span>
             <input type="number" id="ar-quiet-start" min="0" max="23" value="22" style="width:50px"/>
-            <span>– </span>
+            <span data-i18n="autoreplyQuietDash">– </span>
             <input type="number" id="ar-quiet-end" min="0" max="23" value="8" style="width:50px"/>
           </label>
         </div>
 
         <div class="ar-section">
-          <div class="ar-section__title">Sohbet seç ve etkinleştir</div>
+          <div class="ar-section__title" data-i18n="autoreplySectionPick">Pick a chat and enable</div>
           <select id="ar-chat-select" class="ai-select">
-            <option value="">— Önce Sohbetler sekmesinden çıkar —</option>
+            <option value="" data-i18n="autoreplyChatSelectPlaceholderInit">— Extract chats from the Chats tab first —</option>
           </select>
-          <textarea id="ar-instructions" rows="2" placeholder="(opsiyonel) Bu sohbete özel talimat — ör: 'Toplantı önerilerini onayla', 'Kısa ve profesyonel ol', 'Detay sorulduğunda nazikçe ertele'"></textarea>
+          <textarea id="ar-instructions" rows="2" data-i18n-placeholder="autoreplyInstructionsPlaceholder"></textarea>
           <label class="opt-row">
             <input type="checkbox" id="ar-chat-enabled" />
-            <span>Bu sohbet için otomatik cevap aktif</span>
+            <span data-i18n="autoreplyChatEnabledLabel"></span>
           </label>
-          <button class="btn btn--primary" id="ar-save-chat">Sohbet ayarını kaydet</button>
+          <button class="btn btn--primary" id="ar-save-chat" data-i18n="autoreplySaveChatBtn">Save chat settings</button>
         </div>
 
         <div class="ar-section">
-          <div class="ar-section__title">Bekleyen taslaklar</div>
+          <div class="ar-section__title" data-i18n="autoreplySectionPending">Pending drafts</div>
           <div id="ar-pending-list" class="ar-pending"></div>
-          <div class="preview-note" id="ar-pending-empty">Henüz taslak yok. Yeni mesaj geldiğinde burada görünecek.</div>
+          <div class="preview-note" id="ar-pending-empty" data-i18n="autoreplyPendingEmpty">No drafts yet. New incoming messages will appear here.</div>
         </div>
 
         <div class="ar-section">
-          <div class="ar-section__title">Geçmiş (son 20)</div>
+          <div class="ar-section__title" data-i18n="autoreplySectionHistory">History (last 20)</div>
           <div id="ar-history-list" class="ar-history"></div>
         </div>
       </section>
 
-      <!-- Gruplar tab -->
+      <!-- Groups tab -->
       <section class="data-card tab-panel" id="panel-groups" data-tab="groups" hidden>
         <div class="data-card__head">
-          <div class="data-card__title">Gruplar</div>
+          <div class="data-card__title" data-i18n="groupsTitle">Groups</div>
           <div class="data-card__count" id="groups-count">—</div>
         </div>
         <details class="info-details">
-          <summary>Üye satırları nasıl çıkıyor?</summary>
-          <div class="info-details__body">
-            Telefonunuzda kayıtlı üyelerin <strong>isim ve telefon</strong>'u gelir.
-            <strong>+905…</strong> formatındaki üyeler ise telefonunuzda kayıtlı
-            <strong>olmayan</strong> kişilerdir; WA Web onların yalnızca telefon
-            numarasını paylaşır.
-          </div>
+          <summary data-i18n="groupsHowSummary">How are member rows produced?</summary>
+          <div class="info-details__body" data-i18n-html="groupsHowBody"></div>
         </details>
         <label class="opt-row">
           <input type="checkbox" id="groups-include-unsaved" />
-          <span>Kayıtlı olmayan üyeleri dahil et</span>
+          <span data-i18n="groupsIncludeUnsavedLabel"></span>
         </label>
         <div class="data-card__actions">
-          <button class="btn btn--primary" id="extract-groups-btn">Grupları Çıkar</button>
+          <button class="btn btn--primary" id="extract-groups-btn" data-i18n="groupsExtractBtn">Extract Groups</button>
         </div>
         <div class="preview" id="groups-preview" hidden>
           <table class="preview-table">
-            <thead><tr><th>Grup adı</th><th>Üye</th><th>Son mesaj</th></tr></thead>
+            <thead><tr><th data-i18n="groupsCol1Name">Group name</th><th data-i18n="groupsCol2Members">Members</th><th data-i18n="groupsCol3Last">Last message</th></tr></thead>
             <tbody id="groups-tbody"></tbody>
           </table>
           <div class="preview-note" id="groups-note"></div>
         </div>
         <div class="export-row" id="groups-export-row" hidden>
-          <button class="btn" id="groups-export-csv">CSV indir</button>
-          <button class="btn" id="groups-export-xlsx">XLSX</button>
-          <button class="btn" id="groups-export-vcard">VCard</button>
+          <button class="btn" id="groups-export-csv" data-i18n="exportCsvBtn">CSV download</button>
+          <button class="btn" id="groups-export-xlsx" data-i18n="exportXlsxBtn">XLSX</button>
+          <button class="btn" id="groups-export-vcard" data-i18n="exportVcardBtn">VCard</button>
         </div>
       </section>
 
-      <!-- Etiketler tab -->
+      <!-- Labels tab -->
       <section class="data-card tab-panel" id="panel-labels" data-tab="labels" hidden>
         <div class="data-card__head">
-          <div class="data-card__title">Etiketler</div>
+          <div class="data-card__title" data-i18n="labelsTitle">Labels</div>
           <div class="data-card__count" id="labels-count">—</div>
         </div>
         <label class="opt-row">
           <input type="checkbox" id="labels-include-system" />
-          <span>Sistem filtrelerini de göster (Unread, Favorites, Groups…)</span>
+          <span data-i18n="labelsIncludeSystemLabel"></span>
         </label>
         <div class="data-card__actions">
-          <button class="btn btn--primary" id="extract-labels-btn">Etiketleri Çıkar</button>
+          <button class="btn btn--primary" id="extract-labels-btn" data-i18n="labelsExtractBtn">Extract Labels</button>
         </div>
         <div class="preview" id="labels-preview" hidden>
           <table class="preview-table">
-            <thead><tr><th>Etiket</th><th>Renk</th><th>Sohbet sayısı</th></tr></thead>
+            <thead><tr><th data-i18n="labelsCol1Label">Label</th><th data-i18n="labelsCol2Color">Color</th><th data-i18n="labelsCol3Count">Chat count</th></tr></thead>
             <tbody id="labels-tbody"></tbody>
           </table>
           <div class="preview-note" id="labels-note"></div>
         </div>
         <div class="export-row" id="labels-export-row" hidden>
-          <button class="btn" id="labels-export-csv">CSV indir</button>
-          <button class="btn" id="labels-export-xlsx">XLSX</button>
+          <button class="btn" id="labels-export-csv" data-i18n="exportCsvBtn">CSV download</button>
+          <button class="btn" id="labels-export-xlsx" data-i18n="exportXlsxBtn">XLSX</button>
         </div>
       </section>
 
-      <!-- Tüm Kişiler tab -->
+      <!-- All Contacts tab -->
       <section class="data-card tab-panel" id="panel-contacts" data-tab="contacts" hidden>
         <div class="data-card__head">
-          <div class="data-card__title">Tüm Kişiler</div>
+          <div class="data-card__title" data-i18n="contactsTitle">All Contacts</div>
           <div class="data-card__count" id="contacts-count">—</div>
         </div>
         <label class="opt-row">
           <input type="checkbox" id="contacts-include-unsaved" />
-          <span>Kayıtlı olmayan kişileri dahil et</span>
+          <span data-i18n="contactsIncludeUnsavedLabel"></span>
         </label>
         <div class="data-card__actions">
-          <button class="btn btn--primary" id="extract-contacts-btn">Kişileri Çıkar</button>
+          <button class="btn btn--primary" id="extract-contacts-btn" data-i18n="contactsExtractBtn">Extract Contacts</button>
         </div>
         <div class="preview" id="contacts-preview" hidden>
           <table class="preview-table">
-            <thead><tr><th>İsim</th><th>Telefon</th><th>Tip</th></tr></thead>
+            <thead><tr><th data-i18n="contactsCol1Name">Name</th><th data-i18n="contactsCol2Phone">Phone</th><th data-i18n="contactsCol3Type">Type</th></tr></thead>
             <tbody id="contacts-tbody"></tbody>
           </table>
           <div class="preview-note" id="contacts-note"></div>
         </div>
         <div class="export-row" id="contacts-export-row" hidden>
-          <button class="btn" id="contacts-export-csv">CSV indir</button>
-          <button class="btn" id="contacts-export-xlsx">XLSX</button>
-          <button class="btn" id="contacts-export-vcard">VCard</button>
+          <button class="btn" id="contacts-export-csv" data-i18n="exportCsvBtn">CSV download</button>
+          <button class="btn" id="contacts-export-xlsx" data-i18n="exportXlsxBtn">XLSX</button>
+          <button class="btn" id="contacts-export-vcard" data-i18n="exportVcardBtn">VCard</button>
         </div>
       </section>
 
-      <!-- Lisans / Pro tab -->
+      <!-- License / Pro tab -->
       <section class="data-card tab-panel" id="panel-license" data-tab="license" hidden>
         <div class="data-card__head">
-          <div class="data-card__title">Pro Lisans 🔑</div>
-          <div class="data-card__count" id="license-status-pill">Free</div>
+          <div class="data-card__title" data-i18n="licenseTitle">Pro License 🔑</div>
+          <div class="data-card__count" id="license-status-pill" data-i18n="licenseStatusFree">Free</div>
         </div>
 
         <div class="license-info" id="license-info-free">
-          <div class="license-info__title">Şu an <strong>Free</strong> sürümü kullanıyorsunuz.</div>
-          <p>Pro ile şunlar açılır:</p>
+          <div class="license-info__title" data-i18n-html="licenseFreeTitle"></div>
+          <p data-i18n="licenseFreeBody">Pro unlocks:</p>
           <ul class="license-features">
-            <li>✨ AI Asistan (özetleme, cevap önerileri, sohbet önceliklendirme — 6 sağlayıcı)</li>
-            <li>🤖 Akıllı Oto-Cevap (taslak veya otomatik)</li>
-            <li>📈 Sohbet başına <strong>5000 mesaja</strong> kadar export (Free: 500)</li>
-            <li>♾️ Lifetime — tek seferlik ödeme, ömür boyu güncellemeler</li>
+            <li data-i18n-html="licenseFeature1"></li>
+            <li data-i18n-html="licenseFeature2"></li>
+            <li data-i18n-html="licenseFeature3"></li>
+            <li data-i18n-html="licenseFeature4"></li>
           </ul>
-          <a class="btn btn--primary license-buy" id="license-buy-btn" href="#" target="_blank" rel="noopener">Gumroad'da Pro'yu Al →</a>
+          <a class="btn btn--primary license-buy" id="license-buy-btn" href="#" target="_blank" rel="noopener" data-i18n="licenseBuyBtn">Get Pro on Gumroad →</a>
         </div>
 
         <div class="license-info license-info--pro" id="license-info-pro" hidden>
-          <div class="license-info__title">✓ <strong>Pro aktif</strong></div>
+          <div class="license-info__title" data-i18n-html="licenseProActiveTitle"></div>
           <div class="license-info__meta" id="license-info-meta"></div>
           <div class="license-info__actions">
-            <button class="btn btn--ghost" id="license-deactivate-btn">Bu cihazda devre dışı bırak</button>
+            <button class="btn btn--ghost" id="license-deactivate-btn" data-i18n="licenseDeactivateBtn">Deactivate on this device</button>
           </div>
         </div>
 
         <details class="license-activate" id="license-activate">
-          <summary>Lisans anahtarını gir</summary>
+          <summary data-i18n="licenseActivateSummary">Enter your license key</summary>
           <div class="license-activate__body">
             <label class="ai-row">
-              <span>E-posta (Gumroad satın alımı)</span>
-              <input type="email" id="license-email" placeholder="ornek@mail.com" autocomplete="email" />
+              <span data-i18n="licenseEmailLabel">Email (Gumroad purchase)</span>
+              <input type="email" id="license-email" data-i18n-placeholder="licenseEmailPlaceholder" placeholder="you@example.com" autocomplete="email" />
             </label>
             <label class="ai-row">
-              <span>Lisans anahtarı</span>
-              <input type="text" id="license-key" placeholder="ABCD-1234-EFGH-5678" autocomplete="off" />
+              <span data-i18n="licenseKeyLabel">License key</span>
+              <input type="text" id="license-key" data-i18n-placeholder="licenseKeyPlaceholder" placeholder="ABCD-1234-EFGH-5678" autocomplete="off" />
             </label>
             <div class="ai-row__actions">
-              <button class="btn btn--primary" id="license-activate-btn">Aktive et</button>
+              <button class="btn btn--primary" id="license-activate-btn" data-i18n="licenseActivateBtn">Activate</button>
               <span class="license-activate__hint" id="license-activate-hint"></span>
             </div>
-            <p class="license-activate__note">
-              Anahtar Gumroad'dan satın alma sonrası e-postanızla gelir.
-              Aktivasyon, anahtarı bu cihazda saklar; verifikasyon haftada bir
-              otomatik yenilenir.
-            </p>
+            <p class="license-activate__note" data-i18n="licenseActivateNote"></p>
           </div>
         </details>
       </section>
 
       <!-- VCard import help — appears after a successful VCard download -->
       <section class="vcard-help" id="vcard-help" hidden>
-        <div class="vcard-help__title">VCard indirildi ✓</div>
-        <p class="vcard-help__body">
-          Windows'ta <strong>Yeni Outlook</strong> .vcf import desteklemez. Bu
-          platformlardan birini deneyin:
-        </p>
+        <div class="vcard-help__title" data-i18n="vcardHelpTitle">VCard downloaded ✓</div>
+        <p class="vcard-help__body" data-i18n-html="vcardHelpBody"></p>
         <ul class="vcard-help__list">
-          <li><a href="https://contacts.google.com" target="_blank" rel="noopener">Google Contacts</a> → "Import" → dosyayı seç</li>
-          <li><a href="https://www.icloud.com/contacts" target="_blank" rel="noopener">iCloud Contacts</a> → ⚙ → "Import vCard"</li>
-          <li><strong>Android / iPhone:</strong> dosyayı telefonda aç → rehbere ekle</li>
-          <li><strong>Klasik Outlook (Windows):</strong> File → Open → Import</li>
+          <li data-i18n-html="vcardHelpItem1"></li>
+          <li data-i18n-html="vcardHelpItem2"></li>
+          <li data-i18n-html="vcardHelpItem3"></li>
+          <li data-i18n-html="vcardHelpItem4"></li>
         </ul>
         <div class="vcard-help__actions">
-          <button class="btn btn--ghost" id="vcard-copy-btn">VCard içeriğini panoya kopyala</button>
-          <button class="btn btn--ghost" id="vcard-help-close">Kapat</button>
+          <button class="btn btn--ghost" id="vcard-copy-btn" data-i18n="vcardCopyBtn">Copy VCard contents to clipboard</button>
+          <button class="btn btn--ghost" id="vcard-help-close" data-i18n="vcardHelpCloseBtn">Close</button>
         </div>
       </section>
 
       <section class="cta-row" id="cta-row" hidden>
-        <button class="btn btn--ghost" id="refresh-btn">Yenile</button>
-        <button class="btn btn--ghost" id="copy-debug-btn">Hata raporu kopyala</button>
+        <button class="btn btn--ghost" id="refresh-btn" data-i18n="ctaRefreshBtn">Refresh</button>
+        <button class="btn btn--ghost" id="copy-debug-btn" data-i18n="ctaErrorReportBtn">Copy error report</button>
       </section>
 
-      <p class="disclaimer">
-        KVKK/GDPR uyumu kullanıcı sorumluluğundadır.
-        <a href="#" id="footer-privacy-link" target="_blank" rel="noopener">Aydınlatma metni</a>
-      </p>
+      <p class="disclaimer" data-i18n-html="disclaimerText"></p>
     </main>
 
     <footer class="app-footer">
-      <span>Made by <a href="https://bluedev.dev" target="_blank" rel="noopener">Bluedev</a></span>
+      <span><span data-i18n="footerMadeBy">Made by</span> <a href="https://bluedev.dev" target="_blank" rel="noopener">Bluedev</a></span>
     </footer>
 
     <script type="module" src="./popup.js"></script>

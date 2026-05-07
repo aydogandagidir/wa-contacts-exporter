@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "WA Contacts Exporter",
+  "default_locale": "en",
+  "name": "__MSG_extName__",
   "version": "1.0.0",
-  "description": "WhatsApp Web sohbet, kişi ve mesajlarınızı dışa aktarın (CSV/XLSX/VCard). Yerel veya bulut AI ile özet ve cevap önerisi üretin.",
+  "description": "__MSG_extDescription__",
   "action": {
     "default_popup": "src/popup/popup.html",
-    "default_title": "WA Contacts Exporter"
+    "default_title": "__MSG_extName__"
   },
   "background": {
     "service_worker": "src/background.js",

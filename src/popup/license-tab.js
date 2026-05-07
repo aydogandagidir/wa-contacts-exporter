@@ -16,14 +16,22 @@ import {
   getPurchaseUrl, getProductId,
 } from "../license/license-manager.js";
 import { GumroadApiError } from "../license/gumroad-api.js";
+import { t, getCurrentLocale } from "./i18n.js";
 
 const $ = (id) => document.getElementById(id);
 
 let initialized = false;
 
+function localeTag() {
+  const cur = getCurrentLocale();
+  if (cur === "tr") return "tr-TR";
+  if (cur === "en") return "en-US";
+  return undefined;
+}
+
 function fmtDate(ms) {
   if (!ms) return "—";
-  try { return new Date(ms).toLocaleString("tr-TR", { dateStyle: "medium", timeStyle: "short" }); }
+  try { return new Date(ms).toLocaleString(localeTag(), { dateStyle: "medium", timeStyle: "short" }); }
   catch { return new Date(ms).toISOString(); }
 }
 
@@ -43,7 +51,7 @@ export async function refreshLicenseTab() {
 
   const pill = $("license-status-pill");
   if (pill) {
-    pill.textContent = tier === "pro" ? "Pro ✓" : "Free";
+    pill.textContent = tier === "pro" ? t("licenseStatusPro") : t("licenseStatusFree");
     pill.classList.toggle("is-pro", tier === "pro");
   }
 
@@ -58,10 +66,10 @@ export async function refreshLicenseTab() {
     const meta = $("license-info-meta");
     if (meta) {
       const parts = [];
-      if (status.email) parts.push(`<div>E-posta: <strong>${escapeHtml(status.email)}</strong></div>`);
-      if (status.productName) parts.push(`<div>Ürün: <strong>${escapeHtml(status.productName)}</strong></div>`);
-      parts.push(`<div>Anahtar: <strong>${escapeHtml(maskKey(status.key))}</strong></div>`);
-      parts.push(`<div>Aktive edildi: <strong>${escapeHtml(fmtDate(status.activatedAt))}</strong></div>`);
+      if (status.email) parts.push(`<div>${escapeHtml(t("licenseEmailField"))} <strong>${escapeHtml(status.email)}</strong></div>`);
+      if (status.productName) parts.push(`<div>${escapeHtml(t("licenseProductField"))} <strong>${escapeHtml(status.productName)}</strong></div>`);
+      parts.push(`<div>${escapeHtml(t("licenseKeyField"))} <strong>${escapeHtml(maskKey(status.key))}</strong></div>`);
+      parts.push(`<div>${escapeHtml(t("licenseActivatedAtField"))} <strong>${escapeHtml(fmtDate(status.activatedAt))}</strong></div>`);
       meta.innerHTML = parts.join("");
     }
   } else {
@@ -91,33 +99,33 @@ async function onActivateClick() {
   const key = keyEl ? keyEl.value.trim() : "";
 
   if (!key) {
-    setHint(hint, "Lisans anahtarı boş olamaz.", "err");
+    setHint(hint, t("licenseEmptyKeyError"), "err");
     return;
   }
   const productId = await getProductId();
   if (!productId) {
-    setHint(hint, "Henüz aktivasyon hizmeti yapılandırılmadı. Lütfen daha sonra deneyin.", "err");
+    setHint(hint, t("licenseProductIdMissingError"), "err");
     return;
   }
 
   btn.disabled = true;
   const originalText = btn.textContent;
-  btn.textContent = "Doğrulanıyor…";
-  setHint(hint, "Gumroad'a bağlanılıyor…", null);
+  btn.textContent = t("licenseVerifyingBtn");
+  setHint(hint, t("licenseConnectingHint"), null);
 
   try {
     await activate({ key, email });
-    setHint(hint, "Aktivasyon başarılı ✓", "ok");
+    setHint(hint, t("licenseActivatedHint"), "ok");
     if (keyEl) keyEl.value = "";
     if (emailEl) emailEl.value = "";
     await refreshLicenseTab();
   } catch (err) {
-    let msg = err && err.message ? err.message : "Bilinmeyen hata.";
+    let msg = err && err.message ? err.message : t("licenseUnknownError");
     if (err instanceof GumroadApiError) {
-      if (err.kind === "invalid") msg = "Geçersiz lisans anahtarı. Lütfen Gumroad e-postanızdaki anahtarı kontrol edin.";
+      if (err.kind === "invalid") msg = t("licenseInvalidError");
       else if (err.kind === "refunded") msg = err.message;
-      else if (err.kind === "network") msg = "Ağ hatası: internet bağlantınızı kontrol edin.";
-      else if (err.kind === "server") msg = "Gumroad sunucu hatası. Birkaç dakika sonra tekrar deneyin.";
+      else if (err.kind === "network") msg = t("licenseNetworkError");
+      else if (err.kind === "server") msg = t("licenseServerError");
     }
     setHint(hint, msg, "err");
   } finally {
@@ -127,7 +135,7 @@ async function onActivateClick() {
 }
 
 async function onDeactivateClick() {
-  if (!confirm("Bu cihazda Pro'yu devre dışı bırakmak istediğinize emin misiniz? Aynı anahtarı yeniden aktive edebilirsiniz.")) return;
+  if (!confirm(t("licenseDeactivateConfirm"))) return;
   await deactivate();
   await refreshLicenseTab();
 }
@@ -151,9 +159,10 @@ export function initLicenseTab() {
 // Returns true if Pro is active. Otherwise switches to the License tab,
 // shows an inline prompt under the requesting button (if anchorEl given),
 // and returns false.
-export async function requirePro({ feature = "Bu özellik", anchorEl = null } = {}) {
+export async function requirePro({ feature, anchorEl = null } = {}) {
   if (await isPro()) return true;
-  showProPrompt({ feature, anchorEl });
+  const featureLabel = feature || t("licenseFeatureGeneric");
+  showProPrompt({ feature: featureLabel, anchorEl });
   return false;
 }
 
@@ -168,11 +177,11 @@ function showProPrompt({ feature, anchorEl }) {
       anchorEl.parentElement.insertBefore(prompt, anchorEl.nextSibling);
     }
     prompt.innerHTML = `
-      <div class="pro-prompt__title">🔒 ${escapeHtml(feature)} Pro özelliğidir</div>
-      <div>Pro ile AI Asistan, Otomatik Cevap ve uzatılmış mesaj limiti açılır.</div>
+      <div class="pro-prompt__title">${t("licenseProPromptTitle", [escapeHtml(feature)])}</div>
+      <div>${escapeHtml(t("licenseProPromptBody"))}</div>
       <div class="pro-prompt__actions">
-        <button class="btn btn--primary" data-pp-action="open-license">Pro'yu aç</button>
-        <button class="btn btn--ghost" data-pp-action="dismiss">Kapat</button>
+        <button class="btn btn--primary" data-pp-action="open-license">${escapeHtml(t("licenseProPromptOpenBtn"))}</button>
+        <button class="btn btn--ghost" data-pp-action="dismiss">${escapeHtml(t("licenseProPromptDismissBtn"))}</button>
       </div>
     `;
     prompt.querySelector('[data-pp-action="open-license"]').addEventListener("click", () => {

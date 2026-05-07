@@ -22,6 +22,7 @@ import {
 } from "../utils/storage.js";
 import { initLicenseTab, requirePro, refreshLicenseTab } from "./license-tab.js";
 import { effectiveMessageLimit, FREE_MSG_LIMIT_PER_CHAT } from "../license/license-manager.js";
+import { t, initI18n, setLocale, getCurrentLocale } from "./i18n.js";
 
 const $ = (id) => document.getElementById(id);
 const dot = $("status-dot");
@@ -129,7 +130,7 @@ const labelsExportRow = $("labels-export-row");
 const labelsExportCsv = $("labels-export-csv");
 const labelsExportXlsx = $("labels-export-xlsx");
 
-// Tüm Kişiler tab
+// All Contacts tab
 const contactsIncludeUnsavedCb = $("contacts-include-unsaved");
 const extractContactsBtn = $("extract-contacts-btn");
 const contactsCount = $("contacts-count");
@@ -141,28 +142,31 @@ const contactsExportCsv = $("contacts-export-csv");
 const contactsExportXlsx = $("contacts-export-xlsx");
 const contactsExportVcard = $("contacts-export-vcard");
 
-const MODULE_LABELS = {
-  Chat: "Sohbetler",
-  GroupMetadata: "Grup üyeleri",
-  Label: "Etiketler",
-  LabelAssociation: "Etiket eşleşmeleri",
-  Contact: "Kişiler",
-  WidFactory: "WID yardımcısı",
+// Module key → i18n message key. Resolved at render time so locale switches
+// (which trigger a reload) get the right translation immediately.
+const MODULE_LABEL_KEYS = {
+  Chat: "moduleChat",
+  GroupMetadata: "moduleGroupMetadata",
+  Label: "moduleLabel",
+  LabelAssociation: "moduleLabelAssociation",
+  Contact: "moduleContact",
+  WidFactory: "moduleWidFactory",
 };
 
 const REQUIRED_MODULES = new Set(["Chat"]);
 
-const REASON_MESSAGES = {
-  "not-yet-probed": "Modül taraması hâlâ sürüyor… birkaç saniye bekleyip Yenile'ye basın.",
-  "in-progress": "Modüller yükleniyor… eksik olanlar için biraz daha bekleyin.",
-  "interception-not-installed": "Eklenti çok geç yüklendi: WhatsApp modül sistemi yakalanamadı. Sayfayı yenileyin.",
-  "no-modules-captured": "Hiç modül kaydı yakalanamadı. Sayfayı yenileyip QR ile giriş yapın.",
-  "require-missing": "WhatsApp Web modül erişim fonksiyonu bulunamadı. WA Web sürümü uyumsuz olabilir.",
-  "modules-not-found": "Modüller tarandı ama hedef shape'ler bulunamadı. Eklenti güncellemesi bekleniyor.",
-  "partial-modules": "Modüllerin bir kısmı bulunamadı. Bazı özellikler kısıtlı çalışabilir.",
-  "webpack-missing": "WhatsApp Web yüklenmemiş görünüyor. Sayfayı yenileyip QR ile giriş yapın.",
-  "require-not-captured": "Modül kayıtçısı yakalanamadı. Sayfayı yenileyin.",
-  "timeout": "WhatsApp Web henüz hazır değil. Sayfayı yenileyin ve QR ile giriş yapın.",
+// reason key (from the WA health probe) → i18n message key
+const REASON_KEYS = {
+  "not-yet-probed": "reasonNotYetProbed",
+  "in-progress": "reasonInProgress",
+  "interception-not-installed": "reasonInterceptionNotInstalled",
+  "no-modules-captured": "reasonNoModulesCaptured",
+  "require-missing": "reasonRequireMissing",
+  "modules-not-found": "reasonModulesNotFound",
+  "partial-modules": "reasonPartialModules",
+  "webpack-missing": "reasonWebpackMissing",
+  "require-not-captured": "reasonRequireNotCaptured",
+  "timeout": "reasonTimeout",
 };
 
 let currentTab = null;        // active WA Web chrome tab
@@ -179,9 +183,14 @@ let lastError = null;
 let lastHealth = null;
 
 async function init() {
+  // Run i18n early so any DOM scan that follows uses the right locale strings.
+  await initI18n();
+  bindLocaleSwitcher();
+
   const privacyUrl = chrome.runtime.getURL("src/popup/privacy.html");
   const privacyLink = $("consent-privacy-link");
-  const footerPrivacyLink = $("footer-privacy-link");
+  // disclaimer is localized via data-i18n-html, but the inner anchor needs href
+  const footerPrivacyLink = document.getElementById("footer-privacy-link");
   if (privacyLink) privacyLink.href = privacyUrl;
   if (footerPrivacyLink) footerPrivacyLink.href = privacyUrl;
 
@@ -195,9 +204,18 @@ async function init() {
   includeUnsavedCb.checked = !!settings.includeUnsaved;
   groupsIncludeUnsavedCb.checked = !!settings.includeUnsaved;
   contactsIncludeUnsavedCb.checked = !!settings.includeUnsaved;
-  setStatus("idle", "WhatsApp Web aranıyor…");
+  setStatus("idle", t("statusSearching"));
   bindEvents();
   await refresh();
+}
+
+function bindLocaleSwitcher() {
+  const sel = document.getElementById("locale-switcher");
+  if (!sel) return;
+  sel.value = getCurrentLocale();
+  sel.addEventListener("change", () => {
+    setLocale(sel.value);
+  });
 }
 
 function showConsentGate() {
@@ -213,7 +231,7 @@ function showConsentGate() {
   acceptBtn.addEventListener("click", async () => {
     if (!checkbox.checked) return;
     acceptBtn.disabled = true;
-    acceptBtn.textContent = "Kaydediliyor…";
+    acceptBtn.textContent = t("consentSaving");
     await setConsent(true);
     gate.hidden = true;
     main.hidden = false;
@@ -222,7 +240,7 @@ function showConsentGate() {
     includeUnsavedCb.checked = !!settings.includeUnsaved;
     groupsIncludeUnsavedCb.checked = !!settings.includeUnsaved;
     contactsIncludeUnsavedCb.checked = !!settings.includeUnsaved;
-    setStatus("idle", "WhatsApp Web aranıyor…");
+    setStatus("idle", t("statusSearching"));
     bindEvents();
     await refresh();
   });
@@ -349,7 +367,7 @@ async function findWaTab() {
 }
 
 async function refresh({ reProbe = false } = {}) {
-  setStatus("idle", reProbe ? "Yeniden taranıyor…" : "WhatsApp Web aranıyor…");
+  setStatus("idle", reProbe ? t("statusReprobing") : t("statusSearching"));
   hide(healthCard);
   hide(tabsNav);
   document.querySelectorAll(".tab-panel").forEach((p) => (p.hidden = true));
@@ -358,7 +376,7 @@ async function refresh({ reProbe = false } = {}) {
 
   currentTab = await findWaTab();
   if (!currentTab) {
-    setStatus("err", "WhatsApp Web sekmesi bulunamadı. Lütfen https://web.whatsapp.com adresini açın.");
+    setStatus("err", t("statusNoTab"));
     show(ctaRow);
     refreshBtn.disabled = false;
     return;
@@ -373,7 +391,7 @@ async function refresh({ reProbe = false } = {}) {
   try {
     cached = await chrome.tabs.sendMessage(currentTab.id, { kind: "GET_HEALTH" });
   } catch (err) {
-    setStatus("err", "Content script'e ulaşılamadı. Sayfayı yenileyip tekrar deneyin.");
+    setStatus("err", t("statusContentUnreachable"));
     await logError("content-unreachable", err);
     show(ctaRow);
     refreshBtn.disabled = false;
@@ -386,9 +404,9 @@ async function refresh({ reProbe = false } = {}) {
     try {
       const reply = await chrome.tabs.sendMessage(currentTab.id, { kind: "WA_REQ", op: "get-health" });
       if (reply && reply.ok && reply.data) renderHealth(reply.data);
-      else setStatus("err", "Sağlık probu cevap vermedi. WhatsApp Web hazır olmayabilir.");
+      else setStatus("err", t("statusHealthNoReply"));
     } catch (err) {
-      setStatus("err", `Hata: ${err && err.message ? err.message : err}`);
+      setStatus("err", t("statusError", [err && err.message ? err.message : String(err)]));
       await logError("health-fetch", err);
     }
   }
@@ -399,11 +417,14 @@ async function refresh({ reProbe = false } = {}) {
 function renderHealth(health) {
   lastHealth = health;
   if (health.ok) {
-    setStatus("ok", "WhatsApp Web algılandı ✓");
+    setStatus("ok", t("statusReady"));
     show(tabsNav);
     document.querySelector(`.tab-panel[data-tab="${activeTabKey}"]`).hidden = false;
   } else {
-    const msg = REASON_MESSAGES[health.reason] || `Sağlık probu başarısız: ${health.reason || "bilinmeyen hata"}`;
+    const reasonKey = REASON_KEYS[health.reason];
+    const msg = reasonKey
+      ? t(reasonKey)
+      : t("reasonGenericFailed", [health.reason || t("reasonUnknown")]);
     setStatus("err", msg);
     hide(tabsNav);
     document.querySelectorAll(".tab-panel").forEach((p) => (p.hidden = true));
@@ -412,7 +433,7 @@ function renderHealth(health) {
   show(healthCard);
   healthList.replaceChildren();
   const modules = health.modules || {};
-  for (const [key, label] of Object.entries(MODULE_LABELS)) {
+  for (const [key, msgKey] of Object.entries(MODULE_LABEL_KEYS)) {
     const li = document.createElement("li");
     li.className = "health-item";
     const status = modules[key];
@@ -427,16 +448,22 @@ function renderHealth(health) {
     } else {
       icon = "—";
       cls = "health-pill health-pill--neutral";
-      suffix = " <span class=\"health-tag\">opsiyonel</span>";
+      suffix = ` <span class="health-tag">${esc(t("healthOptional"))}</span>`;
     }
-    li.innerHTML = `<span class="${cls}">${icon}</span><span class="health-label">${label}${suffix}</span><span class="health-key">${key}</span>`;
+    const label = t(msgKey);
+    li.innerHTML = `<span class="${cls}">${icon}</span><span class="health-label">${esc(label)}${suffix}</span><span class="health-key">${key}</span>`;
     healthList.appendChild(li);
   }
 
   const parts = [];
-  if (health.waVersion) parts.push(`WA sürümü: ${health.waVersion}`);
-  if (typeof health.moduleCount === "number") parts.push(`${health.moduleCount} modül taranıyor`);
-  if (health.ts) parts.push(`Son kontrol: ${new Date(health.ts).toLocaleTimeString("tr-TR")}`);
+  if (health.waVersion) parts.push(t("healthWaVersion", [health.waVersion]));
+  if (typeof health.moduleCount === "number") parts.push(t("healthModuleCount", [String(health.moduleCount)]));
+  if (health.ts) {
+    const localeTag = (getCurrentLocale() === "tr" ? "tr-TR"
+      : getCurrentLocale() === "en" ? "en-US"
+      : undefined);
+    parts.push(t("healthLastCheck", [new Date(health.ts).toLocaleTimeString(localeTag)]));
+  }
   healthMeta.textContent = parts.join(" · ");
 }
 
@@ -445,7 +472,7 @@ function renderHealth(health) {
 async function extractChats() {
   if (!currentTab) return;
   extractChatsBtn.disabled = true;
-  extractChatsBtn.textContent = "Çıkarılıyor…";
+  extractChatsBtn.textContent = t("chatsExtracting");
   hide(chatsPreview);
   hide(chatsExportRow);
 
@@ -459,29 +486,31 @@ async function extractChats() {
   } catch (err) {
     chatsCount.textContent = "—";
     chatsTbody.replaceChildren();
-    chatsNote.textContent = `Hata: ${err && err.message ? err.message : err}`;
+    chatsNote.textContent = t("statusError", [err && err.message ? err.message : String(err)]);
     show(chatsPreview);
     await logError("extract-chats", err);
   } finally {
     extractChatsBtn.disabled = false;
-    extractChatsBtn.textContent = "Yeniden Çıkar";
+    extractChatsBtn.textContent = t("chatsReextractBtn");
   }
 }
 
 function renderChatsPreview(chats) {
-  chatsCount.textContent = `${chats.length} sohbet`;
+  chatsCount.textContent = t("chatsCount", [String(chats.length)]);
   chatsTbody.replaceChildren();
   for (const c of chats.slice(0, 10)) {
     const tr = document.createElement("tr");
-    const name = c.contactName || c.formattedName || c.name || c.formattedTitle || "(isimsiz)";
+    const name = c.contactName || c.formattedName || c.name || c.formattedTitle || t("anonymous");
     const phone = c.phone || "—";
-    const type = c.isGroup ? "Grup" : "Birey";
+    const type = c.isGroup ? t("chatsTypeGroup") : t("chatsTypeIndividual");
     const lastMsgTs = c.lastMessage?.t || c.t;
-    const lastMsg = lastMsgTs ? new Date(lastMsgTs * 1000).toLocaleString("tr-TR") : "—";
-    tr.innerHTML = `<td>${esc(name)}</td><td>${esc(phone)}</td><td>${type}</td><td>${esc(lastMsg)}</td>`;
+    const lastMsg = lastMsgTs ? new Date(lastMsgTs * 1000).toLocaleString(localeTag()) : "—";
+    tr.innerHTML = `<td>${esc(name)}</td><td>${esc(phone)}</td><td>${esc(type)}</td><td>${esc(lastMsg)}</td>`;
     chatsTbody.appendChild(tr);
   }
-  chatsNote.textContent = chats.length > 10 ? `İlk 10 / ${chats.length} sohbet gösteriliyor.` : `${chats.length} sohbet listelendi.`;
+  chatsNote.textContent = chats.length > 10
+    ? t("chatsNoteFirstN", [String(chats.length)])
+    : t("chatsNoteListed", [String(chats.length)]);
   show(chatsPreview);
   show(chatsExportRow);
 }
@@ -489,24 +518,24 @@ function renderChatsPreview(chats) {
 async function exportChatsCsv() {
   if (!state.chats.extracted || state.chats.extracted.length === 0) return;
   chatsExportCsv.disabled = true;
-  chatsExportCsv.textContent = "Hazırlanıyor…";
+  chatsExportCsv.textContent = t("exportPreparingBtn");
   try {
     const includeUnsaved = includeUnsavedCb.checked;
     const { blob, rows } = chatsToCsvBlob(state.chats.extracted, { includeUnsaved });
     if (rows.length === 0) {
-      alert("Filtreden geçen kayıt yok. \"Kayıtlı olmayan kişileri dahil et\" işaretini deneyin.");
+      alert(t("exportEmpty"));
       return;
     }
     const dataUrl = await blobToDataUrl(blob);
     const filename = `wa-chats-${stamp()}.csv`;
     const reply = await chrome.runtime.sendMessage({ kind: "DOWNLOAD", filename, dataUrl });
-    if (!reply || !reply.ok) throw new Error(reply?.error || "indirme başarısız");
+    if (!reply || !reply.ok) throw new Error(reply?.error || t("exportDownloadFailed"));
   } catch (err) {
-    alert(`İndirme hatası: ${err && err.message ? err.message : err}`);
+    alert(t("exportDownloadErrorAlert", [err && err.message ? err.message : String(err)]));
     await logError("export-chats-csv", err);
   } finally {
     chatsExportCsv.disabled = false;
-    chatsExportCsv.textContent = "CSV indir";
+    chatsExportCsv.textContent = t("exportCsvBtn");
   }
 }
 
@@ -515,7 +544,7 @@ async function exportChatsCsv() {
 async function extractGroups() {
   if (!currentTab) return;
   extractGroupsBtn.disabled = true;
-  extractGroupsBtn.textContent = "Çıkarılıyor…";
+  extractGroupsBtn.textContent = t("chatsExtracting");
   hide(groupsPreview);
   hide(groupsExportRow);
   try {
@@ -526,31 +555,33 @@ async function extractGroups() {
   } catch (err) {
     groupsCount.textContent = "—";
     groupsTbody.replaceChildren();
-    groupsNote.textContent = `Hata: ${err && err.message ? err.message : err}`;
+    groupsNote.textContent = t("statusError", [err && err.message ? err.message : String(err)]);
     show(groupsPreview);
     await logError("extract-groups", err);
   } finally {
     extractGroupsBtn.disabled = false;
-    extractGroupsBtn.textContent = "Yeniden Çıkar";
+    extractGroupsBtn.textContent = t("groupsReextractBtn");
   }
 }
 
 function renderGroupsPreview(groups) {
   const totalParticipants = groups.reduce((s, g) => s + (g.participants?.length || 0), 0);
-  groupsCount.textContent = `${groups.length} grup · ${totalParticipants} üye`;
+  groupsCount.textContent = t("groupsCount", [String(groups.length), String(totalParticipants)]);
   groupsTbody.replaceChildren();
   for (const g of groups.slice(0, 10)) {
     const tr = document.createElement("tr");
-    const name = g.formattedTitle || g.name || "(isimsiz)";
+    const name = g.formattedTitle || g.name || t("anonymous");
     const memberCount = g.participants?.length || 0;
     const lastMsgTs = g.lastMessage?.t || g.t;
-    const lastMsg = lastMsgTs ? new Date(lastMsgTs * 1000).toLocaleString("tr-TR") : "—";
+    const lastMsg = lastMsgTs ? new Date(lastMsgTs * 1000).toLocaleString(localeTag()) : "—";
     tr.innerHTML = `<td>${esc(name)}</td><td>${memberCount}</td><td>${esc(lastMsg)}</td>`;
     groupsTbody.appendChild(tr);
   }
-  groupsNote.textContent = groups.length > 10 ? `İlk 10 / ${groups.length} grup gösteriliyor.` : `${groups.length} grup listelendi.`;
+  groupsNote.textContent = groups.length > 10
+    ? t("groupsNoteFirstN", [String(groups.length)])
+    : t("groupsNoteListed", [String(groups.length)]);
   if (totalParticipants === 0) {
-    groupsNote.textContent += " Üye listesi alınamadı (GroupMetadata modülü hazır olmayabilir — Yenile/QR sonrası tekrar deneyin).";
+    groupsNote.textContent += t("groupsNoteNoMembers");
   }
   show(groupsPreview);
   show(groupsExportRow);
@@ -560,24 +591,24 @@ async function exportGroupsCsv() {
   const groups = state.groups.extracted;
   if (!groups || groups.length === 0) return;
   groupsExportCsv.disabled = true;
-  groupsExportCsv.textContent = "Hazırlanıyor…";
+  groupsExportCsv.textContent = t("exportPreparingBtn");
   try {
     const includeUnsaved = groupsIncludeUnsavedCb.checked;
     const { blob, rows } = groupsToCsvBlob(groups, { includeUnsaved });
     if (rows.length === 0) {
-      alert("Filtreden geçen kayıt yok.");
+      alert(t("exportEmptyGeneric"));
       return;
     }
     const dataUrl = await blobToDataUrl(blob);
     const filename = `wa-groups-${stamp()}.csv`;
     const reply = await chrome.runtime.sendMessage({ kind: "DOWNLOAD", filename, dataUrl });
-    if (!reply || !reply.ok) throw new Error(reply?.error || "indirme başarısız");
+    if (!reply || !reply.ok) throw new Error(reply?.error || t("exportDownloadFailed"));
   } catch (err) {
-    alert(`İndirme hatası: ${err && err.message ? err.message : err}`);
+    alert(t("exportDownloadErrorAlert", [err && err.message ? err.message : String(err)]));
     await logError("export-groups-csv", err);
   } finally {
     groupsExportCsv.disabled = false;
-    groupsExportCsv.textContent = "CSV indir";
+    groupsExportCsv.textContent = t("exportCsvBtn");
   }
 }
 
@@ -586,7 +617,7 @@ async function exportGroupsCsv() {
 async function extractLabels() {
   if (!currentTab) return;
   extractLabelsBtn.disabled = true;
-  extractLabelsBtn.textContent = "Çıkarılıyor…";
+  extractLabelsBtn.textContent = t("chatsExtracting");
   hide(labelsPreview);
   hide(labelsExportRow);
   try {
@@ -597,12 +628,12 @@ async function extractLabels() {
   } catch (err) {
     labelsCount.textContent = "—";
     labelsTbody.replaceChildren();
-    labelsNote.textContent = `Hata: ${err && err.message ? err.message : err}`;
+    labelsNote.textContent = t("statusError", [err && err.message ? err.message : String(err)]);
     show(labelsPreview);
     await logError("extract-labels", err);
   } finally {
     extractLabelsBtn.disabled = false;
-    extractLabelsBtn.textContent = "Yeniden Çıkar";
+    extractLabelsBtn.textContent = t("labelsReextractBtn");
   }
 }
 
@@ -614,8 +645,8 @@ function renderLabelsPreview(labels) {
 
   // Header count: distinguish user labels from system filters
   const countParts = [];
-  countParts.push(`${userLabels.length} kullanıcı etiketi`);
-  if (systemLabels.length) countParts.push(`${systemLabels.length} sistem filtresi`);
+  countParts.push(t("labelsCountUser", [String(userLabels.length)]));
+  if (systemLabels.length) countParts.push(t("labelsCountSystem", [String(systemLabels.length)]));
   labelsCount.textContent = countParts.join(" + ");
 
   labelsTbody.replaceChildren();
@@ -623,7 +654,7 @@ function renderLabelsPreview(labels) {
     const tr = document.createElement("tr");
     const color = l.hexColor || (typeof l.color === "number" ? `#${l.color.toString(16).padStart(6, "0")}` : "—");
     const swatch = color.startsWith("#") ? `<span class="swatch" style="background:${color}"></span>` : "";
-    const sysBadge = l.isSystem ? ` <span class="health-tag">sistem</span>` : "";
+    const sysBadge = l.isSystem ? ` <span class="health-tag">${esc(t("labelsBadgeSystem"))}</span>` : "";
     tr.innerHTML = `<td>${esc(l.name || "")}${sysBadge}</td><td>${swatch}${esc(color)}</td><td>${l.count || 0}</td>`;
     labelsTbody.appendChild(tr);
   }
@@ -631,14 +662,17 @@ function renderLabelsPreview(labels) {
   // Helpful messaging
   let note = "";
   if (userLabels.length === 0 && systemLabels.length > 0) {
-    note = "Bu hesapta kullanıcı etiketi bulunamadı — listede yalnızca WA'nın sistem filtreleri var. " +
-           "Kullanıcı etiketleri WhatsApp Business özelliğidir; sıradan WhatsApp hesabında etiket oluşturulamaz.";
+    note = t("labelsNoteEmptyBusiness");
   } else if (visible.length === 0) {
-    note = "Etiket bulunamadı. Sistem filtrelerini görmek için yukarıdaki kutucuğu işaretleyin.";
+    note = t("labelsNoteEmpty");
   } else if (visible.length > 10) {
-    note = `İlk 10 / ${visible.length} ${includeSystem ? "etiket+filtre" : "etiket"} gösteriliyor.`;
+    note = includeSystem
+      ? t("labelsNoteFirstNLabelsFilters", [String(visible.length)])
+      : t("labelsNoteFirstNLabels", [String(visible.length)]);
   } else {
-    note = `${visible.length} ${includeSystem ? "etiket+filtre" : "etiket"} listelendi.`;
+    note = includeSystem
+      ? t("labelsNoteListedLabelsFilters", [String(visible.length)])
+      : t("labelsNoteListedLabels", [String(visible.length)]);
   }
   labelsNote.textContent = note;
 
@@ -650,26 +684,24 @@ async function exportLabelsCsv() {
   const labels = state.labels.extracted;
   if (!labels || labels.length === 0) return;
   labelsExportCsv.disabled = true;
-  labelsExportCsv.textContent = "Hazırlanıyor…";
+  labelsExportCsv.textContent = t("exportPreparingBtn");
   try {
     const includeSystem = $("labels-include-system")?.checked || false;
     const { blob, rows } = labelsToCsvBlob(labels, { includeSystem });
     if (rows.length === 0) {
-      alert(includeSystem
-        ? "Etiket/filtre bulunamadı."
-        : "Kullanıcı etiketi bulunamadı. Sistem filtrelerini de eklemek için \"Sistem filtrelerini de göster\" işaretini açın.");
+      alert(includeSystem ? t("labelsExportEmptyAllFilters") : t("labelsExportEmptyUser"));
       return;
     }
     const dataUrl = await blobToDataUrl(blob);
     const filename = `wa-labels-${stamp()}.csv`;
     const reply = await chrome.runtime.sendMessage({ kind: "DOWNLOAD", filename, dataUrl });
-    if (!reply || !reply.ok) throw new Error(reply?.error || "indirme başarısız");
+    if (!reply || !reply.ok) throw new Error(reply?.error || t("exportDownloadFailed"));
   } catch (err) {
-    alert(`İndirme hatası: ${err && err.message ? err.message : err}`);
+    alert(t("exportDownloadErrorAlert", [err && err.message ? err.message : String(err)]));
     await logError("export-labels-csv", err);
   } finally {
     labelsExportCsv.disabled = false;
-    labelsExportCsv.textContent = "CSV indir";
+    labelsExportCsv.textContent = t("exportCsvBtn");
   }
 }
 
@@ -678,7 +710,7 @@ async function exportLabelsCsv() {
 async function extractContacts() {
   if (!currentTab) return;
   extractContactsBtn.disabled = true;
-  extractContactsBtn.textContent = "Çıkarılıyor…";
+  extractContactsBtn.textContent = t("chatsExtracting");
   hide(contactsPreview);
   hide(contactsExportRow);
   try {
@@ -689,29 +721,33 @@ async function extractContacts() {
   } catch (err) {
     contactsCount.textContent = "—";
     contactsTbody.replaceChildren();
-    contactsNote.textContent = `Hata: ${err && err.message ? err.message : err}`;
+    contactsNote.textContent = t("statusError", [err && err.message ? err.message : String(err)]);
     show(contactsPreview);
     await logError("extract-contacts", err);
   } finally {
     extractContactsBtn.disabled = false;
-    extractContactsBtn.textContent = "Yeniden Çıkar";
+    extractContactsBtn.textContent = t("contactsReextractBtn");
   }
 }
 
 function renderContactsPreview(contacts) {
   const saved = contacts.filter((c) => c.isMyContact).length;
-  contactsCount.textContent = `${contacts.length} kişi · ${saved} kayıtlı`;
+  contactsCount.textContent = t("contactsCount", [String(contacts.length), String(saved)]);
   contactsTbody.replaceChildren();
   const visible = contactsIncludeUnsavedCb.checked ? contacts : contacts.filter((c) => c.isMyContact);
   for (const c of visible.slice(0, 10)) {
     const tr = document.createElement("tr");
-    const name = c.name || c.formattedName || c.verifiedName || c.pushName || "(isimsiz)";
+    const name = c.name || c.formattedName || c.verifiedName || c.pushName || t("anonymous");
     const phone = c.phone || "—";
-    const type = c.isBusiness ? "İşletme" : (c.isMyContact ? "Kayıtlı" : "Kayıtsız");
-    tr.innerHTML = `<td>${esc(name)}</td><td>${esc(phone)}</td><td>${type}</td>`;
+    const type = c.isBusiness
+      ? t("contactsTypeBusiness")
+      : (c.isMyContact ? t("contactsTypeSaved") : t("contactsTypeUnsaved"));
+    tr.innerHTML = `<td>${esc(name)}</td><td>${esc(phone)}</td><td>${esc(type)}</td>`;
     contactsTbody.appendChild(tr);
   }
-  contactsNote.textContent = visible.length > 10 ? `İlk 10 / ${visible.length} kişi gösteriliyor.` : `${visible.length} kişi listelendi.`;
+  contactsNote.textContent = visible.length > 10
+    ? t("contactsNoteFirstN", [String(visible.length)])
+    : t("contactsNoteListed", [String(visible.length)]);
   show(contactsPreview);
   show(contactsExportRow);
 }
@@ -720,24 +756,24 @@ async function exportContactsCsv() {
   const contacts = state.contacts.extracted;
   if (!contacts || contacts.length === 0) return;
   contactsExportCsv.disabled = true;
-  contactsExportCsv.textContent = "Hazırlanıyor…";
+  contactsExportCsv.textContent = t("exportPreparingBtn");
   try {
     const includeUnsaved = contactsIncludeUnsavedCb.checked;
     const { blob, rows } = contactsToCsvBlob(contacts, { includeUnsaved });
     if (rows.length === 0) {
-      alert("Filtreden geçen kayıt yok. \"Kayıtlı olmayan kişileri dahil et\" işaretini deneyin.");
+      alert(t("exportEmpty"));
       return;
     }
     const dataUrl = await blobToDataUrl(blob);
     const filename = `wa-contacts-${stamp()}.csv`;
     const reply = await chrome.runtime.sendMessage({ kind: "DOWNLOAD", filename, dataUrl });
-    if (!reply || !reply.ok) throw new Error(reply?.error || "indirme başarısız");
+    if (!reply || !reply.ok) throw new Error(reply?.error || t("exportDownloadFailed"));
   } catch (err) {
-    alert(`İndirme hatası: ${err && err.message ? err.message : err}`);
+    alert(t("exportDownloadErrorAlert", [err && err.message ? err.message : String(err)]));
     await logError("export-contacts-csv", err);
   } finally {
     contactsExportCsv.disabled = false;
-    contactsExportCsv.textContent = "CSV indir";
+    contactsExportCsv.textContent = t("exportCsvBtn");
   }
 }
 
@@ -776,12 +812,12 @@ async function applyProviderUI(ai) {
   renderModelInfo(currentModel);
 
   aiHelpLink.href = cfg.helpLink;
-  aiHelpLink.textContent = cfg.id === "anthropic" ? "Anahtar nasıl alınır?" : "Kurulum rehberi";
+  aiHelpLink.textContent = cfg.id === "anthropic" ? t("aiHelpLinkAnthropicKey") : t("aiHelpLinkSetup");
   aiProviderHelp.innerHTML = providerHelpHtml(cfg.id);
   if (ai.apiKey && cfg.requiresKey) {
-    aiApiKeyInput.placeholder = "•••• kayıtlı (yenisi için yaz ve Kaydet'e bas)";
+    aiApiKeyInput.placeholder = t("aiApiKeySaved");
   } else {
-    aiApiKeyInput.placeholder = cfg.id === "anthropic" ? "sk-ant-..." : "(opsiyonel)";
+    aiApiKeyInput.placeholder = cfg.id === "anthropic" ? "sk-ant-..." : t("aiApiKeyOptional");
   }
   await refreshAiStatus();
 }
@@ -808,7 +844,7 @@ function populateModelSelect(modelIds, currentModel) {
   if (currentModel && !currentIsKnown) {
     const opt = document.createElement("option");
     opt.value = currentModel;
-    opt.textContent = `${currentModel}  ·  (özel)`;
+    opt.textContent = `${currentModel}  ·  ${t("aiModelCustomTag")}`;
     opt.selected = true;
     aiModelSelect.appendChild(opt);
   }
@@ -818,7 +854,7 @@ function populateModelSelect(modelIds, currentModel) {
   aiModelSelect.appendChild(sep);
   const manual = document.createElement("option");
   manual.value = MODEL_MANUAL_VALUE;
-  manual.textContent = "✏️  Manuel yaz...";
+  manual.textContent = t("aiModelManualOption");
   aiModelSelect.appendChild(manual);
 
   // Mode: manual input visible only when MANUAL is the active value.
@@ -850,7 +886,7 @@ function renderModelInfo(modelId) {
   const meta = MODEL_META[modelId];
   if (!meta) {
     aiModelInfo.hidden = false;
-    aiModelInfo.innerHTML = `<div class="ai-model-info__head"><span class="ai-model-info__title">${escHtml(modelId)}</span><span class="ai-model-info__vendor">özel</span></div><div class="ai-model-info__desc">Bu model için detaylı bilgi mevcut değil; kurulum komutu: <code>ollama pull ${escHtml(modelId)}</code></div>`;
+    aiModelInfo.innerHTML = t("aiModelInfoCustom", [escHtml(modelId), escHtml(modelId)]);
     return;
   }
   const trStars = "⭐".repeat(meta.trQuality) + "☆".repeat(5 - meta.trQuality);
@@ -862,13 +898,13 @@ function renderModelInfo(modelId) {
       <span class="ai-model-info__vendor">${escHtml(meta.vendor)}</span>
     </div>
     <div class="ai-model-info__meta">
-      <span><strong>İndirme:</strong> ${escHtml(meta.size)}</span>
-      <span><strong>RAM:</strong> ${escHtml(meta.ram)}</span>
-      <span><strong>TR:</strong> ${trStars}</span>
-      <span><strong>Hız:</strong> ${speedStars}</span>
+      <span><strong>${escHtml(t("aiModelInfoDownload"))}</strong> ${escHtml(meta.size)}</span>
+      <span><strong>${escHtml(t("aiModelInfoRam"))}</strong> ${escHtml(meta.ram)}</span>
+      <span><strong>${escHtml(t("aiModelInfoTr"))}</strong> ${trStars}</span>
+      <span><strong>${escHtml(t("aiModelInfoSpeed"))}</strong> ${speedStars}</span>
     </div>
     <div class="ai-model-info__desc">${escHtml(meta.description)}</div>
-    <div class="ai-model-info__best"><strong>İdeal:</strong> ${escHtml(meta.bestFor)}</div>
+    <div class="ai-model-info__best"><strong>${escHtml(t("aiModelInfoBest"))}</strong> ${escHtml(meta.bestFor)}</div>
   `;
 }
 
@@ -876,37 +912,37 @@ function escHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 
-// AI info banner — kompakt tek satır + isteğe bağlı detay.
+// AI info banner — compact summary line + optional detail expander.
 function renderAiInfoBanner(ai, cfg) {
   const el = $("ai-info");
   if (!el) return;
   let summary, detail;
   if (cfg.id === "anthropic") {
-    summary = "Anthropic Claude · veriler Anthropic'e gider · API anahtarınızla";
-    detail = "İstekler tarayıcıdan doğrudan <strong>api.anthropic.com</strong>'a gider. API anahtarı yalnızca bu cihazda saklanır; aracı sunucu yok. Maliyet kendi Anthropic hesabınıza yansır.";
+    summary = t("aiInfoAnthropicSummary");
+    detail = t("aiInfoAnthropicDetail");
   } else if (cfg.id === "openai") {
-    summary = "OpenAI ChatGPT · veriler OpenAI'ya gider · API anahtarınızla";
-    detail = "İstekler tarayıcıdan doğrudan <strong>api.openai.com</strong>'a gider. API anahtarı yalnızca bu cihazda saklanır. Maliyet kendi OpenAI hesabınıza yansır.";
+    summary = t("aiInfoOpenAiSummary");
+    detail = t("aiInfoOpenAiDetail");
   } else if (cfg.id === "gemini") {
-    summary = "Google Gemini · veriler Google'a gider · ücretsiz tier mevcut";
-    detail = "İstekler tarayıcıdan doğrudan Google AI Studio'ya gider. Ücretsiz tier: günde 1500 istek (Gemini 2.0 Flash). Anahtar bu cihazda saklanır.";
+    summary = t("aiInfoGeminiSummary");
+    detail = t("aiInfoGeminiDetail");
   } else if (cfg.id === "groq") {
-    summary = "Groq · veriler Groq'a gider · ücretsiz tier · çok hızlı";
-    detail = "İstekler tarayıcıdan doğrudan <strong>api.groq.com</strong>'a gider. Açık modelleri (Llama 3.3 70B, Qwen, DeepSeek) bulut donanımında çalıştırır — saniyede ~500 token. Cömert ücretsiz tier.";
+    summary = t("aiInfoGroqSummary");
+    detail = t("aiInfoGroqDetail");
   } else if (cfg.id === "ollama") {
     const url = (ai.baseUrl || cfg.defaultBaseUrl).replace(/\/v1\/?$/, "");
-    summary = `Yerel Ollama · 0 ₺ · veriler bilgisayarınızda`;
-    detail = `İstekler tarayıcıdan doğrudan yerel Ollama sunucusuna gider (<strong>${escHtml(url)}</strong>). Mesajlar internete çıkmaz.`;
+    summary = t("aiInfoOllamaSummary");
+    detail = t("aiInfoOllamaDetail", [escHtml(url)]);
   } else {
     const url = ai.baseUrl || cfg.defaultBaseUrl;
-    summary = `Yerel LLM · 0 ₺ · veriler bilgisayarınızda`;
-    detail = `İstekler tarayıcıdan doğrudan yerel sunucuya gider (<strong>${escHtml(url)}</strong>). Mesajlar internete çıkmaz.`;
+    summary = t("aiInfoLocalLlmSummary");
+    detail = t("aiInfoLocalLlmDetail", [escHtml(url)]);
   }
   el.innerHTML = `
     <div class="ai-info__compact">
       <span class="ai-info__icon">✓</span>
       <span class="ai-info__text">${summary}</span>
-      <button type="button" class="ai-info__more" id="ai-info-more">Detay</button>
+      <button type="button" class="ai-info__more" id="ai-info-more">${esc(t("aiInfoMore"))}</button>
     </div>
     <div class="ai-info__detail" id="ai-info-detail" hidden>${detail}</div>
   `;
@@ -915,50 +951,18 @@ function renderAiInfoBanner(ai, cfg) {
   if (moreBtn && detailEl) {
     moreBtn.addEventListener("click", () => {
       detailEl.hidden = !detailEl.hidden;
-      moreBtn.textContent = detailEl.hidden ? "Detay" : "Gizle";
+      moreBtn.textContent = detailEl.hidden ? t("aiInfoMore") : t("aiInfoHide");
     });
   }
 }
 
 function providerHelpHtml(id) {
-  if (id === "ollama") {
-    return `<strong>Ollama (ücretsiz, yerel):</strong>
-      <a href="https://ollama.com/download" target="_blank" rel="noopener">indir</a>,
-      <code>ollama pull aya-expanse:8b</code> ile model yükle, sonra
-      <code>OLLAMA_ORIGINS=chrome-extension://* ollama serve</code>
-      ile çalıştır (CORS izni). Veriler bilgisayardan çıkmaz, maliyet 0 ₺.`;
-  }
-  if (id === "openai_compat") {
-    return `<strong>LM Studio / llama.cpp (ücretsiz, yerel):</strong>
-      <a href="https://lmstudio.ai/" target="_blank" rel="noopener">LM Studio</a>'da
-      bir model indir → "Local Server"ı başlat (varsayılan port 1234).
-      <a href="https://github.com/ggerganov/llama.cpp" target="_blank" rel="noopener">llama.cpp</a>
-      için <code>llama-server</code> komutunu kullan.`;
-  }
-  if (id === "anthropic") {
-    return `<strong>Anthropic Claude:</strong>
-      <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>'dan
-      API anahtarı alın. Tipik fiyat: Haiku 4.5 ~$0.001/sohbet, Sonnet 4.6 ~$0.01.
-      Mesajlar Anthropic'e gider; maliyet kendi hesabınıza yansır.`;
-  }
-  if (id === "openai") {
-    return `<strong>OpenAI ChatGPT:</strong>
-      <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a>'dan
-      API anahtarı alın. Tipik fiyat: gpt-4o-mini ~$0.0002/sohbet, gpt-4o ~$0.005.
-      Mesajlar OpenAI'ya gider.`;
-  }
-  if (id === "gemini") {
-    return `<strong>Google Gemini:</strong>
-      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com</a>'dan
-      ücretsiz API anahtarı alın. Gemini 2.0 Flash günde 1500 istek ücretsiz.
-      Mesajlar Google'a gider.`;
-  }
-  if (id === "groq") {
-    return `<strong>Groq (çok hızlı):</strong>
-      <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com</a>'dan
-      ücretsiz API anahtarı alın. Açık modelleri (Llama 3.3 70B, Qwen 2.5) saniyede
-      ~500 token hızla çalıştırır. Cömert ücretsiz tier.`;
-  }
+  if (id === "ollama") return t("aiProviderHelpOllamaFull");
+  if (id === "openai_compat") return t("aiProviderHelpOpenAiCompat");
+  if (id === "anthropic") return t("aiProviderHelpAnthropic");
+  if (id === "openai") return t("aiProviderHelpOpenAi");
+  if (id === "gemini") return t("aiProviderHelpGemini");
+  if (id === "groq") return t("aiProviderHelpGroq");
   return "";
 }
 
@@ -984,27 +988,27 @@ async function saveAiSettings() {
   if (newKey) patch.apiKey = newKey;
   await setAiSettings(patch);
   aiApiKeyInput.value = "";
-  aiSaveKeyBtn.textContent = "Kaydedildi ✓";
-  setTimeout(() => (aiSaveKeyBtn.textContent = "Kaydet"), 1500);
+  aiSaveKeyBtn.textContent = t("aiSavedBtn");
+  setTimeout(() => (aiSaveKeyBtn.textContent = t("aiSaveBtn")), 1500);
   await refreshAiStatus();
 }
 
 async function testAiConnection() {
   const orig = aiTestKeyBtn.textContent;
   aiTestKeyBtn.disabled = true;
-  aiTestKeyBtn.textContent = "Test ediliyor…";
+  aiTestKeyBtn.textContent = t("aiTestingBtn");
   try {
     const ai = await getAiSettings();
     const res = await pingProvider(ai);
     if (res.ok) {
-      aiTestKeyBtn.textContent = `✓ ${res.ms}ms`;
+      aiTestKeyBtn.textContent = t("aiTestOk", [String(res.ms)]);
     } else {
-      alert(`Bağlantı başarısız (${res.ms}ms):\n${res.error}`);
-      aiTestKeyBtn.textContent = "✗ başarısız";
+      alert(t("aiTestFailedAlert", [String(res.ms), res.error || ""]));
+      aiTestKeyBtn.textContent = t("aiTestFailedBtn");
     }
   } catch (err) {
-    alert(`Test hatası: ${err.message || err}`);
-    aiTestKeyBtn.textContent = "✗ hata";
+    alert(t("aiTestErrorAlert", [err.message || String(err)]));
+    aiTestKeyBtn.textContent = t("aiTestErrorBtn");
   } finally {
     setTimeout(() => { aiTestKeyBtn.textContent = orig; aiTestKeyBtn.disabled = false; }, 2500);
   }
@@ -1014,7 +1018,9 @@ async function refreshAiStatus() {
   const ai = await getAiSettings();
   const cfg = PROVIDERS[ai.provider] || PROVIDERS.ollama;
   const ready = !cfg.requiresKey || !!ai.apiKey;
-  aiStatus.textContent = ready ? `Hazır · ${cfg.label} · ${ai.model || cfg.defaultModel}` : "Anahtar gerekli";
+  aiStatus.textContent = ready
+    ? t("aiReadyStatus", [cfg.label, ai.model || cfg.defaultModel])
+    : t("aiKeyRequiredStatus");
   refreshAiButtons();
 }
 
@@ -1044,11 +1050,11 @@ function refreshAiChatSelect() {
   const placeholder = aiChatSelect.querySelector('option[value=""]');
   aiChatSelect.replaceChildren(placeholder);
   if (!state.messages.extracted || state.messages.extracted.length === 0) {
-    placeholder.textContent = "— Önce Mesajlar sekmesinden çıkar —";
+    placeholder.textContent = t("aiChatSelectNoMessages");
     refreshAiButtons();
     return;
   }
-  placeholder.textContent = "— Sohbet seç —";
+  placeholder.textContent = t("aiChatSelectPlaceholder");
 
   // Aggregate per chat: { name, count, ownCount, lastT }
   const byChat = new Map();
@@ -1070,44 +1076,26 @@ function refreshAiChatSelect() {
     return b[1].count - a[1].count;
   });
 
+  const lowDataBadge = (getCurrentLocale() === "tr" || (getCurrentLocale() === "auto" && (chrome.i18n.getUILanguage?.().startsWith("tr"))))
+    ? " ⚠️ az veri"
+    : " ⚠️ low data";
+  const lowVoiceBadge = (getCurrentLocale() === "tr" || (getCurrentLocale() === "auto" && (chrome.i18n.getUILanguage?.().startsWith("tr"))))
+    ? " ⚠️ üslup yetersiz"
+    : " ⚠️ weak voice";
+  const messagesWord = (getCurrentLocale() === "tr" || (getCurrentLocale() === "auto" && (chrome.i18n.getUILanguage?.().startsWith("tr"))))
+    ? "mesaj"
+    : "messages";
+
   for (const [id, info] of sorted) {
     const opt = document.createElement("option");
     opt.value = id;
-    // Visual cue when too few messages for reliable AI output.
-    // <3 own outgoing messages → AI cannot mimic style.
-    // <5 total messages → AI lacks context to stay on topic.
     let badge = "";
-    if (info.count < 3) badge = " ⚠️ az veri";
-    else if (info.ownCount < 3) badge = " ⚠️ üslup yetersiz";
-    opt.textContent = `${info.name} (${info.count} mesaj${badge})`;
+    if (info.count < 3) badge = lowDataBadge;
+    else if (info.ownCount < 3) badge = lowVoiceBadge;
+    opt.textContent = `${info.name} (${info.count} ${messagesWord}${badge})`;
     aiChatSelect.appendChild(opt);
   }
   refreshAiButtons();
-}
-
-async function saveAiKey() {
-  const key = aiApiKeyInput.value.trim();
-  const model = aiModelSelect.value;
-  if (!key && !(await getAiSettings()).apiKey) {
-    alert("API anahtarı boş olamaz.");
-    return;
-  }
-  const patch = { model };
-  if (key) patch.apiKey = key;
-  await setAiSettings(patch);
-  aiApiKeyInput.value = "";
-  aiApiKeyInput.placeholder = "•••• kayıtlı (yeni anahtar girip Kaydet'e basın)";
-  aiSaveKeyBtn.textContent = "Kaydedildi ✓";
-  setTimeout(() => (aiSaveKeyBtn.textContent = "Kaydet"), 1500);
-  await refreshAiStatus();
-}
-
-async function clearAiKey() {
-  if (!confirm("API anahtarı silinsin mi?")) return;
-  await setAiSettings({ apiKey: "" });
-  aiApiKeyInput.value = "";
-  aiApiKeyInput.placeholder = "sk-ant-...";
-  await refreshAiStatus();
 }
 
 function showAiOutput(title, text, usage) {
@@ -1115,8 +1103,8 @@ function showAiOutput(title, text, usage) {
   aiOutputBody.textContent = text;
   const parts = [];
   if (usage) {
-    if (usage.input_tokens) parts.push(`giriş: ${usage.input_tokens} token`);
-    if (usage.output_tokens) parts.push(`çıkış: ${usage.output_tokens} token`);
+    if (usage.input_tokens) parts.push(t("aiTokensIn", [String(usage.input_tokens)]));
+    if (usage.output_tokens) parts.push(t("aiTokensOut", [String(usage.output_tokens)]));
   }
   aiOutputMeta.textContent = parts.join(" · ");
   aiOutput.hidden = false;
@@ -1126,7 +1114,7 @@ function aiBusy(btn, on, idleText) {
   if (on) {
     btn.dataset.idle = btn.textContent;
     btn.disabled = true;
-    btn.textContent = "Üretiliyor… (5-30sn)";
+    btn.textContent = t("aiBusyText");
   } else {
     btn.disabled = false;
     btn.textContent = idleText || btn.dataset.idle || btn.textContent;
@@ -1134,7 +1122,7 @@ function aiBusy(btn, on, idleText) {
 }
 
 async function runAiSummarize() {
-  if (!await requirePro({ feature: "AI Sohbet Özeti", anchorEl: aiSummarizeBtn })) return;
+  if (!await requirePro({ feature: t("aiSummarizeFeature"), anchorEl: aiSummarizeBtn })) return;
   const ai = await getAiSettings();
   const chatId = aiChatSelect.value;
   if (!chatId) return;
@@ -1144,12 +1132,12 @@ async function runAiSummarize() {
   aiBusy(aiSummarizeBtn, true);
   try {
     const res = await summarizeChat({ ...ai, messages, chatName, instructions });
-    showAiOutput(`Özet — ${chatName}`, res.text, res.usage);
+    showAiOutput(t("aiOutputSummary", [chatName]), res.text, res.usage);
   } catch (err) {
-    alert(`AI hatası: ${err.message || err}`);
+    alert(t("aiErrorAlert", [err.message || String(err)]));
     await logError("ai-summarize", err);
   } finally {
-    aiBusy(aiSummarizeBtn, false, "Özet üret");
+    aiBusy(aiSummarizeBtn, false, t("aiSummarizeBtn"));
   }
 }
 
@@ -1161,7 +1149,7 @@ const suggestionSession = {
 };
 
 async function runAiFollowups() {
-  if (!await requirePro({ feature: "AI Cevap Önerileri", anchorEl: aiFollowupsBtn })) return;
+  if (!await requirePro({ feature: t("aiFollowupsFeature"), anchorEl: aiFollowupsBtn })) return;
   const ai = await getAiSettings();
   const chatId = aiChatSelect.value;
   if (!chatId) return;
@@ -1170,14 +1158,7 @@ async function runAiFollowups() {
   const ownCount = messages.filter((m) => m.from_me && m.body).length;
   const totalNonEmpty = messages.filter((m) => m.body && m.body.trim()).length;
   if (ownCount < 3 || totalNonEmpty < 5) {
-    const proceed = confirm(
-      `⚠️ Bu sohbet için yeterli mesaj geçmişi yok (${totalNonEmpty} mesaj, sizin: ${ownCount}).\n\n` +
-      `AI üslubunuzu ve sohbet bağlamını öğrenmek için en az 5+ mesaj gerekir. ` +
-      `Yetersiz bağlamda model genel/varsayım önerileri üretir.\n\n` +
-      `Önerilen: Mesajlar sekmesine geçip bu sohbet için "Eski mesaj yükleme turu" seçeneğini 5+ ` +
-      `yapıp mesajları yeniden çıkarın.\n\n` +
-      `Yine de devam etmek ister misiniz?`
-    );
+    const proceed = confirm(t("lowMessagesConfirm", [String(totalNonEmpty), String(ownCount)]));
     if (!proceed) return;
   }
 
@@ -1232,7 +1213,7 @@ async function fetchSuggestion(userFeedback = "") {
       ownCount: messages.filter((m) => m.from_me && m.body).length,
     });
   } catch (err) {
-    alert(`AI hatası: ${err.message || err}`);
+    alert(t("aiErrorAlert", [err.message || String(err)]));
     await logError("ai-suggest-one", err);
     hide($("suggestion-card"));
   } finally {
@@ -1257,21 +1238,23 @@ function showSuggestionCard({ loading, suggestion, target, mode, usage, chatName
   if (legacy) legacy.hidden = true;
 
   if (loading) {
-    title.textContent = `Öneri hazırlanıyor — ${chatName}`;
+    title.textContent = t("suggestionLoading", [chatName]);
     targetEl.innerHTML = "";
     body.className = "suggestion-body suggestion-body--loading";
-    body.textContent = "AI çalışıyor… (5–30 sn)";
+    body.textContent = t("suggestionLoadingBody");
     meta.textContent = "";
     card.hidden = false;
     return;
   }
 
   title.textContent = mode === "reminder"
-    ? `Takip mesajı — ${chatName} (cevap bekleniyor)`
-    : `Cevap önerisi — ${chatName}`;
+    ? t("suggestionTitleReminder", [chatName])
+    : t("suggestionTitleReply", [chatName]);
 
   if (target?.body) {
-    const label = target.fromMe ? "Senin yanıtsız mesajın" : `${target.sender || "Karşı taraf"}'ın mesajı`;
+    const label = target.fromMe
+      ? t("suggestionTargetSelfLabel")
+      : t("suggestionTargetOtherLabel", [target.sender || t("suggestionOtherFallback")]);
     targetEl.innerHTML = `📩 <span class="suggestion-target__label">${esc(label)}:</span><span class="suggestion-target__quote">${esc(target.body)}</span>`;
   } else {
     targetEl.innerHTML = "";
@@ -1281,10 +1264,10 @@ function showSuggestionCard({ loading, suggestion, target, mode, usage, chatName
   body.textContent = suggestion;
 
   const parts = [];
-  if (suggestionSession.rejected.length > 0) parts.push(`${suggestionSession.rejected.length}. deneme`);
-  if (typeof ownCount === "number" && ownCount < 3) parts.push(`üslup örneği az (${ownCount})`);
-  if (usage?.input_tokens) parts.push(`giriş: ${usage.input_tokens} tok`);
-  if (usage?.output_tokens) parts.push(`çıkış: ${usage.output_tokens} tok`);
+  if (suggestionSession.rejected.length > 0) parts.push(t("suggestionAttempt", [String(suggestionSession.rejected.length)]));
+  if (typeof ownCount === "number" && ownCount < 3) parts.push(t("suggestionLowVoice", [String(ownCount)]));
+  if (usage?.input_tokens) parts.push(t("aiTokensInShort", [String(usage.input_tokens)]));
+  if (usage?.output_tokens) parts.push(t("aiTokensOutShort", [String(usage.output_tokens)]));
   meta.textContent = parts.join(" · ");
 
   // History of rejected suggestions
@@ -1359,7 +1342,7 @@ async function onAiChatSelectChange() {
 async function saveAiChatInstruction() {
   const id = aiChatSelect.value;
   if (!id) {
-    alert("Önce bir sohbet seçin.");
+    alert(t("aiInstructionsNoChat"));
     return;
   }
   if (!aiChatInstructions) return;
@@ -1368,7 +1351,7 @@ async function saveAiChatInstruction() {
   updateInstructionHint("saved");
   if (aiInstructionsSave) {
     const orig = aiInstructionsSave.textContent;
-    aiInstructionsSave.textContent = "Kaydedildi ✓";
+    aiInstructionsSave.textContent = t("aiInstructionsSavedBtn");
     setTimeout(() => (aiInstructionsSave.textContent = orig), 1500);
   }
 }
@@ -1376,10 +1359,10 @@ async function saveAiChatInstruction() {
 function updateInstructionHint(state) {
   if (!aiInstructionsHint) return;
   if (state === "saved") {
-    aiInstructionsHint.textContent = "Bu sohbet için talimat kaydedildi.";
+    aiInstructionsHint.textContent = t("aiInstructionsSavedHint");
     aiInstructionsHint.classList.add("ai-instructions__hint--saved");
   } else if (state === "dirty") {
-    aiInstructionsHint.textContent = "Kaydedilmemiş değişiklik — Talimatı kaydet'e basın.";
+    aiInstructionsHint.textContent = t("aiInstructionsDirtyHint");
     aiInstructionsHint.classList.remove("ai-instructions__hint--saved");
   } else {
     aiInstructionsHint.textContent = "";
@@ -1388,10 +1371,10 @@ function updateInstructionHint(state) {
 }
 
 async function runAiTriage() {
-  if (!await requirePro({ feature: "Sohbet Önceliklendirme", anchorEl: aiTriageBtn })) return;
+  if (!await requirePro({ feature: t("aiTriageFeature"), anchorEl: aiTriageBtn })) return;
   const ai = await getAiSettings();
   if (!state.chats.extracted || state.chats.extracted.length === 0) {
-    alert("Önce Sohbetler sekmesinde 'Çıkar' deyin.");
+    alert(t("triageNoChatsAlert"));
     return;
   }
   aiBusy(aiTriageBtn, true);
@@ -1399,10 +1382,10 @@ async function runAiTriage() {
     const res = await triageChats({ ...ai, chats: state.chats.extracted });
     renderTriageResult(res);
   } catch (err) {
-    alert(`AI hatası: ${err.message || err}`);
+    alert(t("aiErrorAlert", [err.message || String(err)]));
     await logError("ai-triage", err);
   } finally {
-    aiBusy(aiTriageBtn, false, "Sıralamayı üret");
+    aiBusy(aiTriageBtn, false, t("aiTriageBtnIdle"));
   }
 }
 
@@ -1430,19 +1413,19 @@ function renderTriageResult(res) {
     const verified = verifiedByChatId.get(chat.id);
     li.className = "triage-row " + (verified ? "triage-row--verified" : "triage-row--unverified");
 
-    const name = chat.contactName || chat.formattedName || chat.name || chat.formattedTitle || chat.phone || chat.id || "?";
+    const name = chat.contactName || chat.formattedName || chat.name || chat.formattedTitle || chat.phone || chat.id || t("triageRowUnknownChatName");
     const dis = computeDisplayDisambig(chat);
     const lm = chat.lastMessage;
     const fromMe = lm && lm.fromMe;
     const fallbackReason = lm && lm.body
-      ? `${fromMe ? "siz: " : ""}${lm.body.slice(0, 80)}`
-      : "(içerik yok)";
-    const reason = verified ? verified.reason : `[AI bu satırı üretmedi] ${fallbackReason}`;
+      ? `${fromMe ? t("triageRowYouPrefix") : ""}${lm.body.slice(0, 80)}`
+      : t("triageRowEmpty");
+    const reason = verified ? verified.reason : t("triageRowAiMissing", [fallbackReason]);
 
     const tags = [];
-    if (chat.unreadCount > 0) tags.push(`<span class="triage-tag triage-tag--unread">${chat.unreadCount} ok'mamış</span>`);
+    if (chat.unreadCount > 0) tags.push(`<span class="triage-tag triage-tag--unread">${esc(t("triageTagUnread", [String(chat.unreadCount)]))}</span>`);
     if (chat.pinned) tags.push(`<span class="triage-tag triage-tag--pinned">📌</span>`);
-    if (chat.isGroup) tags.push(`<span class="triage-tag">GRUP</span>`);
+    if (chat.isGroup) tags.push(`<span class="triage-tag">${esc(t("triageTagGroup"))}</span>`);
 
     li.innerHTML = `
       <span class="triage-num">${i + 1}.</span>
@@ -1452,7 +1435,7 @@ function renderTriageResult(res) {
         ${tags.length ? `<span class="triage-tags">${tags.join("")}</span>` : ""}
       </span>
       <span class="triage-badge ${verified ? "triage-badge--ok" : "triage-badge--warn"}"
-            title="${verified ? "Girdideki sohbetle eşleşti" : "AI bu satır için doğrulanabilir gerekçe üretmedi"}">
+            title="${esc(verified ? t("triageBadgeOkTitle") : t("triageBadgeWarnTitle"))}">
         ${verified ? "✓" : "⚠️"}
       </span>
       <span class="triage-reason">— ${esc(reason)}</span>
@@ -1468,11 +1451,11 @@ function renderTriageResult(res) {
     li.innerHTML = `
       <span class="triage-num">?</span>
       <span class="triage-name-block">
-        <span class="triage-name">${esc(r.name || "(?)")}</span>
+        <span class="triage-name">${esc(r.name || t("triageRowUnknownName"))}</span>
         <span class="triage-disambig">${esc(r.disambig || "")}</span>
       </span>
       <span class="triage-badge triage-badge--warn"
-            title="Bu isim girdideki sohbetlerle eşleşmedi — AI uydurmuş olabilir">⚠️</span>
+            title="${esc(t("triageWarnUnmatched"))}">⚠️</span>
       <span class="triage-reason">— ${esc(r.reason || r.rawLine || "")}</span>
     `;
     list.appendChild(li);
@@ -1482,14 +1465,14 @@ function renderTriageResult(res) {
   const unmatched = res.parsed.stats.unmatched;
   const total = res.ranked.length;
   stats.innerHTML = `
-    <span class="triage-stats__verified">✓ ${verified} doğrulandı</span>
-    ${unmatched > 0 ? ` · <span class="triage-stats__unmatched">⚠️ ${unmatched} uyumsuz</span>` : ""}
-    · ${total} sohbet kural-tabanlı sıralandı
+    <span class="triage-stats__verified">${esc(t("triageStatsVerified", [String(verified)]))}</span>
+    ${unmatched > 0 ? ` · <span class="triage-stats__unmatched">${esc(t("triageStatsUnmatched", [String(unmatched)]))}</span>` : ""}
+    · ${esc(t("triageStatsTotal", [String(total)]))}
   `;
 
   const usageParts = [];
-  if (res.usage?.input_tokens) usageParts.push(`giriş: ${res.usage.input_tokens} token`);
-  if (res.usage?.output_tokens) usageParts.push(`çıkış: ${res.usage.output_tokens} token`);
+  if (res.usage?.input_tokens) usageParts.push(t("aiTokensIn", [String(res.usage.input_tokens)]));
+  if (res.usage?.output_tokens) usageParts.push(t("aiTokensOut", [String(res.usage.output_tokens)]));
   meta.textContent = usageParts.join(" · ");
 
   triageOut.hidden = false;
@@ -1499,7 +1482,7 @@ function renderTriageResult(res) {
     const v = verifiedByChatId.get(chat.id);
     const name = chat.contactName || chat.formattedName || chat.name || chat.formattedTitle || chat.phone || chat.id;
     const dis = computeDisplayDisambig(chat);
-    const reason = v ? v.reason : (chat.lastMessage?.body || "(içerik yok)").slice(0, 80);
+    const reason = v ? v.reason : (chat.lastMessage?.body || t("triageRowEmpty")).slice(0, 80);
     return `${i + 1}. ${name} (${dis}) — ${reason}`;
   });
   const copyBtn = $("ai-triage-copy");
@@ -1518,25 +1501,28 @@ function setupCopyButton(btn, getText, opts = {}) {
   btn.dataset.copyBound = "1";
   btn.classList.add("copy-btn");
   btn.innerHTML = COPY_ICON_SVG;
-  btn.title = "Kopyala";
-  btn.setAttribute("aria-label", "Kopyala");
+  const copyLabel = t("aiOutputCopyBtn");
+  const copiedLabel = t("vcardCopiedBtn"); // "Copied ✓" / "Kopyalandı ✓"
+  const failedLabel = t("vcardCopyFailedBtn"); // "Copy failed" / "Kopyalanamadı"
+  btn.title = copyLabel;
+  btn.setAttribute("aria-label", copyLabel);
   btn.onclick = async () => {
     try {
       const text = typeof getText === "function" ? getText() : getText;
       if (!text) return;
       await navigator.clipboard.writeText(text);
       btn.innerHTML = CHECK_ICON_SVG;
-      btn.title = "Kopyalandı ✓";
-      btn.setAttribute("aria-label", "Kopyalandı");
+      btn.title = copiedLabel;
+      btn.setAttribute("aria-label", copiedLabel);
       btn.classList.add("copy-btn--success");
       setTimeout(() => {
         btn.innerHTML = COPY_ICON_SVG;
-        btn.title = "Kopyala";
-        btn.setAttribute("aria-label", "Kopyala");
+        btn.title = copyLabel;
+        btn.setAttribute("aria-label", copyLabel);
         btn.classList.remove("copy-btn--success");
       }, 1800);
     } catch (err) {
-      btn.title = "Kopyalanamadı";
+      btn.title = failedLabel;
       btn.classList.add("copy-btn--error");
       setTimeout(() => btn.classList.remove("copy-btn--error"), 1800);
     }
@@ -1561,6 +1547,11 @@ function computeDisplayDisambig(chat) {
 
 // ---------------- Otomatik Cevap (Auto-Reply) ------------------
 
+function autoreplyStatusText(ar) {
+  if (!ar.masterEnabled) return t("autoreplyOff");
+  return ar.mode === "auto" ? t("autoreplyOnAuto") : t("autoreplyOnDraft");
+}
+
 async function loadAutoReplySettings() {
   const ar = await getAutoReply();
   arMasterEnabled.checked = !!ar.masterEnabled;
@@ -1570,7 +1561,7 @@ async function loadAutoReplySettings() {
   arQuietEnabled.checked = !!ar.quietHours?.enabled;
   arQuietStart.value = ar.quietHours?.startHour ?? 22;
   arQuietEnd.value = ar.quietHours?.endHour ?? 8;
-  arStatus.textContent = ar.masterEnabled ? `Açık · ${ar.mode === "auto" ? "Otomatik" : "Taslak"}` : "Kapalı";
+  arStatus.textContent = autoreplyStatusText(ar);
   refreshAutoReplyChatSelect();
   renderPending(ar);
   renderHistory(ar);
@@ -1591,21 +1582,21 @@ async function saveAutoReplyMaster() {
     },
   });
   const ar = await getAutoReply();
-  arStatus.textContent = ar.masterEnabled ? `Açık · ${ar.mode === "auto" ? "Otomatik" : "Taslak"}` : "Kapalı";
+  arStatus.textContent = autoreplyStatusText(ar);
 }
 
 async function onMasterToggle() {
-  if (arMasterEnabled.checked && !await requirePro({ feature: "Otomatik Cevap", anchorEl: arMasterEnabled })) {
+  if (arMasterEnabled.checked && !await requirePro({ feature: t("autoReplyFeature"), anchorEl: arMasterEnabled })) {
     arMasterEnabled.checked = false;
     return;
   }
   await setAutoReply({ masterEnabled: arMasterEnabled.checked });
   if (arMasterEnabled.checked) {
     await ensureSubscribed();
-    arStatus.textContent = "Açık · " + (arMode.value === "auto" ? "Otomatik" : "Taslak");
+    arStatus.textContent = arMode.value === "auto" ? t("autoreplyOnAuto") : t("autoreplyOnDraft");
   } else {
     await unsubscribe();
-    arStatus.textContent = "Kapalı";
+    arStatus.textContent = t("autoreplyOff");
   }
 }
 
@@ -1629,15 +1620,15 @@ function refreshAutoReplyChatSelect() {
   const placeholder = arChatSelect.querySelector('option[value=""]');
   arChatSelect.replaceChildren(placeholder);
   if (!state.chats.extracted || state.chats.extracted.length === 0) {
-    placeholder.textContent = "— Önce Sohbetler sekmesinden çıkar —";
+    placeholder.textContent = t("autoreplyChatSelectPlaceholderEmpty");
     return;
   }
-  placeholder.textContent = "— Sohbet seç —";
+  placeholder.textContent = t("autoreplyChatSelectPlaceholderReady");
   for (const c of state.chats.extracted) {
     const opt = document.createElement("option");
     opt.value = c.id;
     const name = c.contactName || c.formattedName || c.name || c.formattedTitle || c.phone || c.id;
-    opt.textContent = name + (c.isGroup ? " (grup)" : "");
+    opt.textContent = name + (c.isGroup ? t("autoreplyGroupSuffix") : "");
     arChatSelect.appendChild(opt);
   }
 }
@@ -1657,15 +1648,15 @@ async function loadChatPerSettings() {
 
 async function saveChatPerSettings() {
   const id = arChatSelect.value;
-  if (!id) { alert("Önce bir sohbet seçin."); return; }
+  if (!id) { alert(t("autoreplyNoChatAlert")); return; }
   const ar = await getAutoReply();
   ar.perChat[id] = {
     enabled: arChatEnabled.checked,
     instructions: arInstructions.value.trim(),
   };
   await setAutoReply({ perChat: ar.perChat });
-  arSaveChat.textContent = "Kaydedildi ✓";
-  setTimeout(() => (arSaveChat.textContent = "Sohbet ayarını kaydet"), 1500);
+  arSaveChat.textContent = t("autoreplySaveChatSavedBtn");
+  setTimeout(() => (arSaveChat.textContent = t("autoreplySaveChatBtn")), 1500);
 }
 
 function isInQuietHours(qh) {
@@ -1683,8 +1674,8 @@ async function checkRateLimit(rl, history) {
   const dayAgo = now - 86400 * 1000;
   const hour = history.filter((h) => h.sent && h.ts >= hourAgo).length;
   const day = history.filter((h) => h.sent && h.ts >= dayAgo).length;
-  if (hour >= (rl.maxPerHour || 10)) return "saat başı limit aşıldı";
-  if (day >= (rl.maxPerDay || 50)) return "gün başı limit aşıldı";
+  if (hour >= (rl.maxPerHour || 10)) return t("autoreplyStatusRateHour");
+  if (day >= (rl.maxPerDay || 50)) return t("autoreplyStatusRateDay");
   return null;
 }
 
@@ -1701,7 +1692,7 @@ async function handleIncomingMessage(rec) {
     if (!chatCfg || !chatCfg.enabled) return;
 
     if (isInQuietHours(ar.quietHours)) {
-      await appendAutoReplyHistory({ chatId: rec.chat_id, chatName: rec.chat_name, incoming: rec.body, sent: false, status: "sessiz-saat" });
+      await appendAutoReplyHistory({ chatId: rec.chat_id, chatName: rec.chat_name, incoming: rec.body, sent: false, status: t("autoreplyStatusQuiet") });
       await loadAutoReplySettings();
       return;
     }
@@ -1728,7 +1719,7 @@ async function handleIncomingMessage(rec) {
     });
     const draft = (draftRes.text || "").trim();
     if (!draft) {
-      await appendAutoReplyHistory({ chatId: rec.chat_id, chatName: rec.chat_name, incoming: rec.body, sent: false, status: "boş-cevap" });
+      await appendAutoReplyHistory({ chatId: rec.chat_id, chatName: rec.chat_name, incoming: rec.body, sent: false, status: t("autoreplyStatusEmpty") });
       await loadAutoReplySettings();
       return;
     }
@@ -1742,9 +1733,9 @@ async function handleIncomingMessage(rec) {
           payload: { chatId: rec.chat_id, body: draft },
         });
         if (!reply || !reply.ok) throw new Error(reply?.error || "send failed");
-        await appendAutoReplyHistory({ chatId: rec.chat_id, chatName: rec.chat_name, incoming: rec.body, draft, sent: true, status: "gönderildi" });
+        await appendAutoReplyHistory({ chatId: rec.chat_id, chatName: rec.chat_name, incoming: rec.body, draft, sent: true, status: t("autoreplyStatusSent") });
       } catch (err) {
-        await appendAutoReplyHistory({ chatId: rec.chat_id, chatName: rec.chat_name, incoming: rec.body, draft, sent: false, status: "hata: " + (err.message || err) });
+        await appendAutoReplyHistory({ chatId: rec.chat_id, chatName: rec.chat_name, incoming: rec.body, draft, sent: false, status: t("autoreplyStatusError", [err.message || String(err)]) });
         await logError("ar-auto-send", err);
       }
     } else {
@@ -1773,14 +1764,14 @@ function renderPending(ar) {
     const p = pending[i];
     const card = document.createElement("div");
     card.className = "ar-card";
-    const when = new Date(p.ts).toLocaleString("tr-TR");
+    const when = new Date(p.ts).toLocaleString(localeTag());
     card.innerHTML = `
       <div class="ar-card__head"><span class="ar-card__name">${esc(p.chatName)}</span><span>${esc(when)}</span></div>
-      <div class="ar-card__incoming">${esc(p.incoming || "(boş)")}</div>
+      <div class="ar-card__incoming">${esc(p.incoming || t("autoreplyPendingIncomingEmpty"))}</div>
       <div class="ar-card__draft"><textarea data-idx="${i}">${esc(p.draft)}</textarea></div>
       <div class="ar-card__actions">
-        <button class="btn btn--primary" data-action="send" data-idx="${i}">Gönder</button>
-        <button class="btn" data-action="discard" data-idx="${i}">Sil</button>
+        <button class="btn btn--primary" data-action="send" data-idx="${i}">${esc(t("autoreplySendBtn"))}</button>
+        <button class="btn" data-action="discard" data-idx="${i}">${esc(t("autoreplyDiscardBtn"))}</button>
       </div>`;
     arPendingList.appendChild(card);
   }
@@ -1798,7 +1789,7 @@ async function onPendingAction(e) {
   if (action === "discard") {
     ar.pending.splice(idx, 1);
     await setAutoReply({ pending: ar.pending });
-    await appendAutoReplyHistory({ chatId: item.chatId, chatName: item.chatName, incoming: item.incoming, draft: item.draft, sent: false, status: "iptal" });
+    await appendAutoReplyHistory({ chatId: item.chatId, chatName: item.chatName, incoming: item.incoming, draft: item.draft, sent: false, status: t("autoreplyStatusCancelled") });
     await loadAutoReplySettings();
     return;
   }
@@ -1806,7 +1797,7 @@ async function onPendingAction(e) {
     // Read possibly-edited draft from the textarea
     const ta = arPendingList.querySelector(`textarea[data-idx="${idx}"]`);
     const draft = ta ? ta.value.trim() : item.draft;
-    if (!draft) { alert("Boş mesaj gönderilemez."); return; }
+    if (!draft) { alert(t("autoreplyEmptyDraftAlert")); return; }
     try {
       const reply = await chrome.tabs.sendMessage(currentTab.id, {
         kind: "WA_REQ", op: "send-text-message",
@@ -1815,9 +1806,9 @@ async function onPendingAction(e) {
       if (!reply || !reply.ok) throw new Error(reply?.error || "send failed");
       ar.pending.splice(idx, 1);
       await setAutoReply({ pending: ar.pending });
-      await appendAutoReplyHistory({ chatId: item.chatId, chatName: item.chatName, incoming: item.incoming, draft, sent: true, status: "gönderildi" });
+      await appendAutoReplyHistory({ chatId: item.chatId, chatName: item.chatName, incoming: item.incoming, draft, sent: true, status: t("autoreplyStatusSent") });
     } catch (err) {
-      alert(`Gönderim hatası: ${err.message || err}`);
+      alert(t("autoreplySendErrorAlert", [err.message || String(err)]));
       await logError("ar-manual-send", err);
     }
     await loadAutoReplySettings();
@@ -1830,12 +1821,16 @@ function renderHistory(ar) {
   for (const h of hist) {
     const card = document.createElement("div");
     card.className = "ar-card";
-    const when = new Date(h.ts).toLocaleString("tr-TR");
-    const statusClass = h.sent ? "sent" : (h.status && /hata/i.test(h.status) ? "error" : "skipped");
+    const when = new Date(h.ts).toLocaleString(localeTag());
+    // Detect both English and Turkish error markers in saved status text
+    const statusClass = h.sent
+      ? "sent"
+      : (h.status && /hata|error/i.test(h.status) ? "error" : "skipped");
+    const fallbackStatus = h.sent ? t("autoreplyStatusSent") : t("autoreplyStatusSkipped");
     card.innerHTML = `
       <div class="ar-card__head">
         <span class="ar-card__name">${esc(h.chatName || "?")}</span>
-        <span class="ar-card__status ar-card__status--${statusClass}">${esc(h.status || (h.sent ? "gönderildi" : "geçildi"))}</span>
+        <span class="ar-card__status ar-card__status--${statusClass}">${esc(h.status || fallbackStatus)}</span>
       </div>
       <div class="ar-card__incoming">${esc((h.incoming || "").slice(0, 200))}</div>
       ${h.draft ? `<div class="ar-card__draft">${esc(h.draft.slice(0, 200))}</div>` : ""}
@@ -1849,21 +1844,21 @@ function renderHistory(ar) {
 async function extractMessages() {
   if (!currentTab) return;
   extractMessagesBtn.disabled = true;
-  extractMessagesBtn.textContent = "Çıkarılıyor… (uzun sürebilir)";
+  extractMessagesBtn.textContent = t("messagesExtractingLong");
   hide(messagesPreview);
   hide(messagesExportRow);
   try {
     const requestedLimit = parseInt(messagesPerChatLimitSel.value, 10) || 500;
     const { limit: perChatLimit, capped } = await effectiveMessageLimit(requestedLimit);
     if (capped) {
-      const proceed = confirm(
-        `Free sürümde sohbet başına en fazla ${FREE_MSG_LIMIT_PER_CHAT} mesaj çıkarılabilir.\n\n` +
-        `Seçtiğiniz ${requestedLimit} → ${perChatLimit} olarak sınırlanacak.\n\n` +
-        `Daha yüksek limit için Pro sekmesinden lisansınızı aktive edin.\n\nDevam edilsin mi?`
-      );
+      const proceed = confirm(t("freeMsgLimitConfirm", [
+        String(FREE_MSG_LIMIT_PER_CHAT),
+        String(requestedLimit),
+        String(perChatLimit),
+      ]));
       if (!proceed) {
         extractMessagesBtn.disabled = false;
-        extractMessagesBtn.textContent = "Mesajları Çıkar";
+        extractMessagesBtn.textContent = t("messagesExtractBtn");
         return;
       }
     }
@@ -1886,50 +1881,51 @@ async function extractMessages() {
   } catch (err) {
     messagesCount.textContent = "—";
     messagesTbody.replaceChildren();
-    messagesNote.textContent = `Hata: ${err && err.message ? err.message : err}`;
+    messagesNote.textContent = t("statusError", [err && err.message ? err.message : String(err)]);
     show(messagesPreview);
     await logError("extract-messages", err);
   } finally {
     extractMessagesBtn.disabled = false;
-    extractMessagesBtn.textContent = "Yeniden Çıkar";
+    extractMessagesBtn.textContent = t("messagesReextractBtn");
   }
 }
 
 function renderMessagesPreview(messages, diag) {
   const distinctChats = new Set(messages.map((m) => m.chat_id)).size;
   const avg = distinctChats ? (messages.length / distinctChats).toFixed(1) : 0;
-  messagesCount.textContent = `${messages.length} mesaj · ${distinctChats} sohbet (ort. ${avg} msj/sohbet)`;
+  messagesCount.textContent = t("messagesCount", [String(messages.length), String(distinctChats), String(avg)]);
   messagesTbody.replaceChildren();
 
   const sorted = messages.slice().sort((a, b) => (b.t || 0) - (a.t || 0));
   for (const m of sorted.slice(0, 10)) {
     const tr = document.createElement("tr");
-    const chatName = m.chat_name || "(?)";
-    const sender = m.from_me ? "(siz)" : (m.sender_name || m.sender_phone || "—");
+    const chatName = m.chat_name || t("triageRowUnknownName");
+    const sender = m.from_me
+      ? t("messagesSenderYou")
+      : (m.sender_name || m.sender_phone || t("messagesSenderNone"));
     const body = m.body ? (m.body.length > 50 ? m.body.slice(0, 50) + "…" : m.body) : (m.type ? `[${m.type}]` : "");
-    const when = m.t ? new Date(m.t * 1000).toLocaleString("tr-TR") : "—";
+    const when = m.t ? new Date(m.t * 1000).toLocaleString(localeTag()) : "—";
     tr.innerHTML = `<td>${esc(chatName)}</td><td>${esc(sender)}</td><td>${esc(body)}</td><td>${esc(when)}</td>`;
     messagesTbody.appendChild(tr);
   }
 
   // Build a context-aware note. The diagnostic from inject.js tells us which
   // strategy worked for which chats — surface that so user can act on it.
-  let note = `${distinctChats} sohbetten ${messages.length} mesaj çekildi.`;
+  let note = t("messagesNoteBase", [String(messages.length), String(distinctChats)]);
   if (diag) {
     const lastOnly = (diag.msgSource?.lastMessage || 0);
     const real = (diag.msgSource?.getModelsArray || 0) + (diag.msgSource?.["_models"] || 0) + (diag.msgSource?.messages || 0);
-    const noLoadStrategy = (diag.loadStrategy?.none || 0);
     const ratio = diag.totalChats ? Math.round(100 * lastOnly / diag.totalChats) : 0;
     if (avg < 2 && lastOnly > real) {
-      note += ` ⚠️ Sohbetlerin %${ratio}'i için yalnızca son mesaj alınabildi (WA Web hafızasında daha eskisi yok).`;
-      note += ` Daha kaliteli AI çıktısı için WA Web'de **istediğin sohbeti açıp yukarı kaydır** (eski mesajlar yüklenir), sonra "Yeniden Çıkar" de.`;
+      note += " " + t("messagesNoteLowContext", [String(ratio)]);
+      note += " " + t("messagesNoteScrollUp");
     } else if (avg >= 2 && avg < 10) {
-      note += ` Bağlam için yeterli ama daha iyi AI sonucu için sohbetleri WA Web'de açıp scroll'la, sonra Yeniden Çıkar.`;
+      note += " " + t("messagesNoteOkContext");
     } else {
-      note += ` ✓ İyi bağlam.`;
+      note += " " + t("messagesNoteGoodContext");
     }
   } else {
-    note += ` Daha eski mesajlar için her sohbeti açıp yukarı kaydırın, sonra "Yeniden Çıkar" deyin.`;
+    note += " " + t("messagesNoteFallback");
   }
   messagesNote.textContent = note;
 
@@ -1941,20 +1937,20 @@ async function exportMessagesCsv() {
   const msgs = state.messages.extracted;
   if (!msgs || msgs.length === 0) return;
   messagesExportCsv.disabled = true;
-  messagesExportCsv.textContent = "Hazırlanıyor…";
+  messagesExportCsv.textContent = t("exportPreparingBtn");
   try {
     const { blob, rows } = messagesToCsvBlob(msgs);
-    if (rows.length === 0) { alert("Kayıt yok."); return; }
+    if (rows.length === 0) { alert(t("messagesExtractEmpty")); return; }
     const dataUrl = await blobToDataUrl(blob);
     const filename = `wa-messages-${stamp()}.csv`;
     const reply = await chrome.runtime.sendMessage({ kind: "DOWNLOAD", filename, dataUrl });
-    if (!reply || !reply.ok) throw new Error(reply?.error || "indirme başarısız");
+    if (!reply || !reply.ok) throw new Error(reply?.error || t("exportDownloadFailed"));
   } catch (err) {
-    alert(`İndirme hatası: ${err && err.message ? err.message : err}`);
+    alert(t("exportDownloadErrorAlert", [err && err.message ? err.message : String(err)]));
     await logError("export-messages-csv", err);
   } finally {
     messagesExportCsv.disabled = false;
-    messagesExportCsv.textContent = "CSV indir";
+    messagesExportCsv.textContent = t("exportCsvBtn");
   }
 }
 
@@ -1962,35 +1958,30 @@ async function exportMessagesCsv() {
 
 async function exportXlsx(tabKey, btn) {
   if (!hasAnyExtracted()) {
-    alert("Önce en az bir sekmede veri çıkarın.");
+    alert(t("exportXlsxNoData"));
     return;
   }
   // Inform user about which sheets will/won't appear so they can decide
   // whether to extract more before exporting.
   const status = {
-    Sohbetler: !!state.chats.extracted,
-    Mesajlar: !!state.messages.extracted,
-    Gruplar: !!state.groups.extracted,
-    Etiketler: !!state.labels.extracted,
-    Kişiler: !!state.contacts.extracted,
+    [t("xlsxSheetChats")]: !!state.chats.extracted,
+    [t("xlsxSheetMessages")]: !!state.messages.extracted,
+    [t("xlsxSheetGroups")]: !!state.groups.extracted,
+    [t("xlsxSheetLabels")]: !!state.labels.extracted,
+    [t("xlsxSheetContacts")]: !!state.contacts.extracted,
   };
   const included = Object.entries(status).filter(([, v]) => v).map(([k]) => k);
   const excluded = Object.entries(status).filter(([, v]) => !v).map(([k]) => k);
   if (excluded.length > 0) {
-    const proceed = confirm(
-      `XLSX dosyasında şu sayfalar OLACAK:\n  ✓ ${included.join(", ")}\n\n` +
-      `Çıkarılmamış olanlar GELMEYECEK:\n  ✗ ${excluded.join(", ")}\n\n` +
-      `Tüm sayfaları içeren dosya istiyorsanız, önce "İptal"e basıp eksik sekmelerden de "Çıkar" yapın.\n\n` +
-      `Mevcut sekmelerle devam etmek ister misiniz?`
-    );
+    const proceed = confirm(t("exportXlsxConfirm", [included.join(", "), excluded.join(", ")]));
     if (!proceed) return;
   }
   const original = btn.textContent;
   btn.disabled = true;
-  btn.textContent = "Yükleniyor…";
+  btn.textContent = t("exportLoadingBtn");
   try {
     const { buildWorkbookBlob } = await import("../lib/xlsx.js");
-    btn.textContent = "Hazırlanıyor…";
+    btn.textContent = t("exportPreparingBtn");
     const datasets = {
       chats: state.chats.extracted,
       groups: state.groups.extracted,
@@ -2006,9 +1997,9 @@ async function exportXlsx(tabKey, btn) {
     const dataUrl = await blobToDataUrl(blob);
     const filename = `wa-export-${stamp()}.xlsx`;
     const reply = await chrome.runtime.sendMessage({ kind: "DOWNLOAD", filename, dataUrl });
-    if (!reply || !reply.ok) throw new Error(reply?.error || "indirme başarısız");
+    if (!reply || !reply.ok) throw new Error(reply?.error || t("exportDownloadFailed"));
   } catch (err) {
-    alert(`XLSX dışa aktarım hatası: ${err && err.message ? err.message : err}`);
+    alert(t("exportXlsxErrorAlert", [err && err.message ? err.message : String(err)]));
     await logError(`export-xlsx-${tabKey}`, err);
   } finally {
     btn.disabled = false;
@@ -2032,17 +2023,17 @@ async function exportVcard(kind, btn) {
   let includeUnsaved;
   try {
     if (kind === "chats") {
-      if (!state.chats.extracted) { alert("Önce 'Sohbetleri Çıkar' deyin."); return; }
+      if (!state.chats.extracted) { alert(t("vcardChatsNeedExtract")); return; }
       includeUnsaved = includeUnsavedCb.checked;
       text = chatsToVcard(state.chats.extracted, { includeUnsaved });
       filename = `wa-chats-${stamp()}.vcf`;
     } else if (kind === "contacts") {
-      if (!state.contacts.extracted) { alert("Önce 'Kişileri Çıkar' deyin."); return; }
+      if (!state.contacts.extracted) { alert(t("vcardContactsNeedExtract")); return; }
       includeUnsaved = contactsIncludeUnsavedCb.checked;
       text = contactsToVcard(state.contacts.extracted, { includeUnsaved });
       filename = `wa-contacts-${stamp()}.vcf`;
     } else if (kind === "group-members") {
-      if (!state.groups.extracted) { alert("Önce 'Grupları Çıkar' deyin."); return; }
+      if (!state.groups.extracted) { alert(t("vcardGroupsNeedExtract")); return; }
       includeUnsaved = groupsIncludeUnsavedCb.checked;
       text = groupMembersToVcard(state.groups.extracted, { includeUnsaved });
       filename = `wa-group-members-${stamp()}.vcf`;
@@ -2050,17 +2041,17 @@ async function exportVcard(kind, btn) {
       throw new Error(`unknown vcard kind: ${kind}`);
     }
     if (!text || text.trim() === "") {
-      alert("Filtreden geçen kayıt yok. \"Kayıtlı olmayan kişileri dahil et\" işaretini deneyin.");
+      alert(t("exportEmpty"));
       return;
     }
     const original = btn.textContent;
     btn.disabled = true;
-    btn.textContent = "Hazırlanıyor…";
+    btn.textContent = t("exportPreparingBtn");
     try {
       const blob = vcardBlob(text);
       const dataUrl = await blobToDataUrl(blob);
       const reply = await chrome.runtime.sendMessage({ kind: "DOWNLOAD", filename, dataUrl });
-      if (!reply || !reply.ok) throw new Error(reply?.error || "indirme başarısız");
+      if (!reply || !reply.ok) throw new Error(reply?.error || t("exportDownloadFailed"));
       lastVcardText = text;
       showVcardHelp();
     } finally {
@@ -2068,7 +2059,7 @@ async function exportVcard(kind, btn) {
       btn.textContent = original;
     }
   } catch (err) {
-    alert(`VCard dışa aktarım hatası: ${err && err.message ? err.message : err}`);
+    alert(t("exportVcardErrorAlert", [err && err.message ? err.message : String(err)]));
     await logError(`export-vcard-${kind}`, err);
   }
 }
@@ -2084,10 +2075,10 @@ async function copyVcardToClipboard() {
   const original = btn.textContent;
   try {
     await navigator.clipboard.writeText(lastVcardText);
-    btn.textContent = "Kopyalandı ✓";
+    btn.textContent = t("vcardCopiedBtn");
     setTimeout(() => (btn.textContent = original), 1800);
   } catch (err) {
-    btn.textContent = "Kopyalanamadı";
+    btn.textContent = t("vcardCopyFailedBtn");
     setTimeout(() => (btn.textContent = original), 1800);
     await logError("vcard-copy-clipboard", err);
   }
@@ -2116,10 +2107,10 @@ async function copyDebugReport() {
     };
     const text = JSON.stringify(report, null, 2);
     await navigator.clipboard.writeText(text);
-    copyDebugBtn.textContent = "Kopyalandı ✓";
+    copyDebugBtn.textContent = t("ctaCopiedBtn");
     setTimeout(() => (copyDebugBtn.textContent = original), 1800);
   } catch (err) {
-    copyDebugBtn.textContent = "Kopyalanamadı";
+    copyDebugBtn.textContent = t("ctaCopyFailedBtn");
     setTimeout(() => (copyDebugBtn.textContent = original), 1800);
   } finally {
     copyDebugBtn.disabled = false;
@@ -2139,6 +2130,15 @@ function stamp() {
   const d = new Date();
   const pad = (n) => String(n).padStart(2, "0");
   return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`;
+}
+
+// Locale tag for date/time formatting. In auto mode we let the runtime infer
+// from the browser; with an explicit override we use the matching BCP-47 tag.
+function localeTag() {
+  const cur = getCurrentLocale();
+  if (cur === "tr") return "tr-TR";
+  if (cur === "en") return "en-US";
+  return undefined; // auto: defer to platform default
 }
 
 function esc(s) {

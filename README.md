@@ -2,7 +2,7 @@
 
 WhatsApp Web sohbetlerini, gruplarını, etiketlerini ve kişilerini **CSV / XLSX / VCard** olarak yerel dosyalara çıkaran + AI ile özet/cevap önerisi/önceliklendirme üreten Chrome eklentisi (Manifest V3).
 
-> Bluedev tarafından geliştirildi · v0.1.0 Beta · 🇹🇷 Türkçe (English version: [README.en.md](./README.en.md))
+> Bluedev tarafından geliştirildi · v0.1.0 Beta · 🌐 Türkçe + English (English version: [README.en.md](./README.en.md))
 
 [![Lisans](https://img.shields.io/badge/lisans-Proprietary-red)](./LICENSE) [![Manifest V3](https://img.shields.io/badge/manifest-v3-blue)](./manifest.json) [![KVKK](https://img.shields.io/badge/KVKK-uyumlu-green)](./PRIVACY.md)
 
@@ -138,7 +138,6 @@ WA Web her sohbet için sadece **son ~50 mesajı** RAM'de tutar. Daha eski bağl
 - **GroupMetadata** modülü bazı sürümlerde "OPSİYONEL" görünür — fallback'ler ile gruplar yine listelenir
 - **Mesajlar sınırı**: WA Web'in hafıza modeli yüzünden tüm sohbet geçmişi otomatik gelmez; manuel scroll gerekebilir
 - **Otomatik cevap popup açıkken çalışıyor** — popup kapalıyken yeni mesaj orchestration durur (gelecek sürümde background SW'a taşınacak)
-- **Sadece Türkçe arayüz** — İngilizce locale gelecek sürümlerde
 
 ## Sürüm uyumluluğu
 
