@@ -30,10 +30,10 @@ const GRACE_PERIOD_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 // Keep the product id ConfigurablE without a build-time secret. Set this
 // to your Gumroad product_id once the listing is created, or override at
 // runtime via chrome.storage. Until set, activation always fails fast.
-const DEFAULT_PRODUCT_ID = ""; // TODO: fill with real Gumroad product_id once listing is live
+const DEFAULT_PRODUCT_ID = "rOoFYYtVnWcoKdWKYxkuPQ=="; // Bluedev Gumroad product_id (WA Contacts Exporter Pro)
 const PRODUCT_ID_OVERRIDE_KEY = "wa_pro_product_id";
 
-const PURCHASE_URL = "https://gumroad.com/l/wa-contacts-exporter-pro"; // TODO: update once listing is live
+const PURCHASE_URL = "https://bluedev.dev/products/wa-contacts-exporter"; // canonical landing → Gumroad CTA
 
 export async function getProductId() {
   try {
