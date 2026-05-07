@@ -32,7 +32,7 @@ your license key, then click "Aktive et". You should see
 If activation fails, it's almost always one of two things:
 either the email doesn't match what you used to buy, or there's
 a stray space in the key. If neither of those is it, write to
-destek@bluedev.dev with your purchase email and I'll sort it.
+support@bluedev.dev with your purchase email and I'll sort it.
 
 
 What Pro turns on
@@ -118,7 +118,7 @@ or process that data is on you, not on the tool.
 
 Help
 
-destek@bluedev.dev. I aim for a one-business-day response on
+support@bluedev.dev. I aim for a one-business-day response on
 Pro support.
 
 If something's broken, click "Hata raporu kopyala" in the

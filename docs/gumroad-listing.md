@@ -75,7 +75,7 @@ A few things people often ask.
 
 Do I need to install something extra after I buy? No. You install the same free extension, then enter your key in the Pro tab. Same one binary; the key just turns the locked features on.
 
-I lost my key. Resend it from your Gumroad library, or write to me at destek@bluedev.dev with the email you used at checkout.
+I lost my key. Resend it from your Gumroad library, or write to me at support@bluedev.dev with the email you used at checkout.
 
 Will it still work if Bluedev disappears? License verification calls Gumroad directly, not my servers, and there's a 30-day offline grace window after each successful check. So even if my site went down for some reason, your install would keep working until the next re-verify failed.
 
@@ -84,7 +84,7 @@ Does Bluedev see my WhatsApp data? No. The extension processes everything on you
 Is this affiliated with WhatsApp or Meta? No. Independent project. WhatsApp is their trademark.
 
 
-For support, write to destek@bluedev.dev. I aim for one business day on Pro support. Bug reports go faster if you click "Hata raporu kopyala" in the extension popup before emailing — that copies a JSON blob with the WA Web version, your OS, and the actual exception, which makes problems much faster to reproduce.
+For support, write to support@bluedev.dev. I aim for one business day on Pro support. Bug reports go faster if you click "Hata raporu kopyala" in the extension popup before emailing — that copies a JSON blob with the WA Web version, your OS, and the actual exception, which makes problems much faster to reproduce.
 
 GDPR, KVKK, CCPA: this tool gives you access to what's already in your own WhatsApp Web session. Whether you're allowed to export or process that data is on you, not on the tool.
 
@@ -120,7 +120,7 @@ delivers it plus the unique license key by email automatically.
 
   To activate: install the free extension from bluedev.dev/products/wa-contacts-exporter, open WhatsApp Web, click the WA icon, then the Pro tab. Paste your email and key, hit Activate. Should take about a minute.
 
-  If something goes wrong, write to destek@bluedev.dev with your purchase email.
+  If something goes wrong, write to support@bluedev.dev with your purchase email.
 
   Aydoğan
   ```
