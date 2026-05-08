@@ -2,7 +2,7 @@
 
 **Privacy Policy / Aydınlatma Metni**
 Son güncelleme: 6 Mayıs 2026
-Sürüm: 0.1.0
+Sürüm: 1.0.0
 
 > Bu eklenti çıkarılan hiçbir veriyi sunucuya göndermez, üçüncü taraflarla paylaşmaz, bulut tabanlı bir hizmet kullanmaz **(kullanıcının açıkça seçtiği AI sağlayıcısı dışında)**. Tüm işlem cihazınızda yereldir.
 

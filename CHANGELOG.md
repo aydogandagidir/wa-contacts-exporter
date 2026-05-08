@@ -3,6 +3,33 @@
 Tüm önemli değişiklikler bu dosyada belgelenir.
 Format [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) standardına dayanır.
 
+## [1.0.0] — 2026-05-08
+
+İlk production sürümü. Tek-aktivasyon lisans modeli, EN/TR i18n ve canlı Gumroad listing.
+
+### ✨ Eklendi
+
+- **Bilingual EN (default) + TR UI** — `chrome.i18n` altyapısı + popup header'da Auto / English / Türkçe seçici. 379 message key, EN ↔ TR parity. Browser locale `tr` ise otomatik Türkçeye düşer; başka her dilde varsayılan İngilizce. Manuel override `chrome.storage.local` üzerinde tutulur.
+- **Manifest çift dilli** — `__MSG_extName__` / `__MSG_extDescription__` token'larıyla, `default_locale: "en"`.
+- **Locale-aware tarih/saat** — `localeTag()` helper'ı `tr-TR` / `en-US` / auto formatlarını uygular.
+- **Canlı Gumroad listing** — `product_id: axfxg`, `https://bluedev.gumroad.com/l/wa-contacts-exporter`. Aktivasyon + lisans verifikasyonu uçtan uca çalışır.
+
+### 🔄 Değişti
+
+- **Lisans modeli tek-aktivasyon oldu** — Aktivasyonda Gumroad'a tek istek atılır; başarılıysa eklenti bir daha hiç Gumroad'a bağlanmaz. Haftalık `chrome.alarms` re-verify ve 30 günlük offline grace pencere kaldırıldı. Alıcı seyahat / çevrimdışı / wifi değişikliği senaryolarında lock-out yaşamaz.
+- **`isPro()` sadeleşti** — Yalnızca local key varlığını kontrol eder. `GRACE_PERIOD_MS` ve `graceUntil` mantığı kaldırıldı.
+
+### 🗑️ Kaldırıldı
+
+- Pro sekmesindeki **"Şimdi yeniden doğrula"** butonu (artık gerekli değil — model tek-aktivasyon).
+- Background service worker'daki periyodik `chrome.alarms` lisans yenileme alarmı (legacy alarm tek-seferlik temizleme bırakıldı).
+
+### 🐛 Düzeltildi
+
+- README'deki "Sadece Türkçe arayüz — İngilizce locale gelecek sürümlerde" sınırlaması artık geçersiz; not kaldırıldı.
+
+---
+
 ## [0.1.0] — 2026-05-06
 
 İlk beta sürümü. Çekirdek export + AI asistan + otomatik cevap modülleri tamamlandı.
@@ -72,4 +99,5 @@ Format [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) standardına day
 
 ---
 
-[0.1.0]: https://github.com/bluedev/wa-contacts-exporter/releases/tag/v0.1.0
+[1.0.0]: https://github.com/aydogandagidir/wa-contacts-exporter/releases/tag/v1.0.0
+[0.1.0]: https://github.com/aydogandagidir/wa-contacts-exporter/releases/tag/v0.1.0

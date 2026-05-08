@@ -143,7 +143,7 @@ It accesses data from the user's **own device**, in the user's **own WhatsApp We
 
 ---
 
-Built by Bluedev · All rights reserved · v0.1.0 Beta
+Built by Bluedev · All rights reserved · v1.0.0
 ```
 
 ---
@@ -179,5 +179,5 @@ Hosted as a Next.js page within the Bluedev main site, with KVKK + GDPR (TR + EN
 
 - **Review time**: Typically 3-7 business days; first submission may be longer
 - **If rejected**: refine the permission/policy reason cited by the CWS reviewer's email against this document, then resubmit
-- **Versioning**: when v0.1.1 ships, these texts get refreshed in the next submission
+- **Versioning**: when v1.0.1 ships, these texts get refreshed in the next submission
 - **Brand caveat**: in title and description prefer "WA" or "WhatsApp Web" over the full "WhatsApp" name; phrase as "for WhatsApp Web" to align with Meta brand guidelines

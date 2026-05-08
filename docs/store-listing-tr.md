@@ -143,7 +143,7 @@ Kullanıcının kendi cihazında, kendi WhatsApp Web oturumunda kendi verilerine
 
 ---
 
-Bluedev tarafından geliştirilmiştir · Tüm hakları saklıdır · v0.1.0 Beta
+Bluedev tarafından geliştirilmiştir · Tüm hakları saklıdır · v1.0.0
 ```
 
 ---
@@ -179,5 +179,5 @@ Bluedev ana sitesi içinde Next.js page olarak yayında, KVKK + GDPR (TR + EN) i
 
 - **Review süresi**: Genelde 3-7 iş günü; ilk submission daha uzun olabilir
 - **Reddedilirse**: CWS reviewer'ın e-postasında belirttiği permission/policy nedenini bu doküman üzerinde rafine et, yeniden gönder
-- **Versiyonlama**: v0.1.1 yayını yapılırsa bu metinler bir sonraki submission'da güncellenir
+- **Versiyonlama**: v1.0.1 yayını yapılırsa bu metinler bir sonraki submission'da güncellenir
 - **Marka uyarısı**: Title ve description'da WhatsApp tam adı yerine "WA" veya "WhatsApp Web" kullan; "for WhatsApp Web" şeklinde Meta brand guideline'a uygun ifade tercih et

@@ -2,7 +2,7 @@
 
 A Chrome extension (Manifest V3) that exports your WhatsApp Web chats, groups, labels, and contacts to **CSV / XLSX / VCard** + generates summaries, reply suggestions, and chat triage with AI.
 
-> Built by Bluedev · v0.1.0 Beta · 🇬🇧 English (Türkçe sürüm: [README.md](./README.md))
+> Built by Bluedev · v1.0.0 · 🇬🇧 English (Türkçe sürüm: [README.md](./README.md))
 
 [![License](https://img.shields.io/badge/license-Proprietary-red)](./LICENSE) [![Manifest V3](https://img.shields.io/badge/manifest-v3-blue)](./manifest.json) [![GDPR](https://img.shields.io/badge/GDPR-compliant-green)](./PRIVACY.md)
 
@@ -152,7 +152,7 @@ Tested on WA Web 2.3000.x (May 2026). If you encounter incompatibility, use the 
 npm run dev       # Vite dev server + popup HMR
 npm run build     # production build → dist/
 npm run icons     # SVG → PNG (16/48/128)
-npm run package   # build + zip → wa-contacts-exporter-0.1.0.zip
+npm run package   # build + zip → wa-contacts-exporter-1.0.0.zip
 ```
 
 ### Architecture

@@ -2,7 +2,7 @@
 
 WhatsApp Web sohbetlerini, gruplarını, etiketlerini ve kişilerini **CSV / XLSX / VCard** olarak yerel dosyalara çıkaran + AI ile özet/cevap önerisi/önceliklendirme üreten Chrome eklentisi (Manifest V3).
 
-> Bluedev tarafından geliştirildi · v0.1.0 Beta · 🌐 Türkçe + English (English version: [README.en.md](./README.en.md))
+> Bluedev tarafından geliştirildi · v1.0.0 · 🌐 Türkçe + English (English version: [README.en.md](./README.en.md))
 
 [![Lisans](https://img.shields.io/badge/lisans-Proprietary-red)](./LICENSE) [![Manifest V3](https://img.shields.io/badge/manifest-v3-blue)](./manifest.json) [![KVKK](https://img.shields.io/badge/KVKK-uyumlu-green)](./PRIVACY.md)
 
@@ -151,7 +151,7 @@ WA Web sürümü 2.3000.x (Mayıs 2026'da test edildi). Yeni sürümlerde uyumsu
 npm run dev       # Vite dev server + popup HMR
 npm run build     # production build → dist/
 npm run icons     # SVG → PNG (16/48/128)
-npm run package   # build + zip → wa-contacts-exporter-0.1.0.zip
+npm run package   # build + zip → wa-contacts-exporter-1.0.0.zip
 ```
 
 ### Mimari özet

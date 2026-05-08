@@ -47,7 +47,7 @@ git checkout -B gh-pages
 git rm -rf .  # hot path: sadece landing/ kalsın
 cp -r landing/* .
 git add .
-git commit -m "Deploy landing v0.1.0"
+git commit -m "Deploy landing v1.0.0"
 git push -u origin gh-pages
 
 # Repo Settings → Pages → Source: gh-pages branch → /

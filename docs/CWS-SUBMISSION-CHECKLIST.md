@@ -23,7 +23,7 @@ Bu doküman CWS Developer Console'da yayın taslağı doldururken kullanacağın
 ## 1. Yeni öğe oluştur
 
 - [ ] "**+ New item**" tıkla
-- [ ] Dosya seç: `wa-contacts-exporter-0.1.0.zip` (proje root'unda, 211 KB)
+- [ ] Dosya seç: `wa-contacts-exporter-1.0.0.zip` (proje root'unda, 242 KB)
 - [ ] Upload tamamlanınca yeni listing taslağı açılır
 
 > Zip dosyası `npm run package` ile yeniden üretilir. Manifest validation hatası olursa önce yerel olarak `npm run build` ile doğrula.
@@ -187,7 +187,7 @@ Sonra ilgili alanı düzelt → **Submit for review** tekrar.
 
 ```
 PROJECT ROOT
-├── wa-contacts-exporter-0.1.0.zip      (211 KB · upload → CWS)
+├── wa-contacts-exporter-1.0.0.zip      (242 KB · upload → CWS)
 ├── docs/
 │   ├── store-listing-tr.md             (TR locale metin paketi)
 │   ├── store-listing-en.md             (EN locale metin paketi)

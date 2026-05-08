@@ -54,7 +54,7 @@ Resolution: 1920×1080
 **Görsel öğeler**:
 - Beyaz arka plan
 - Bluedev brand mark animasyonu (sol→sağ slide-in)
-- "WA Contacts Exporter" başlık + alt başlık "Beta · v0.1.0"
+- "WA Contacts Exporter" başlık + alt başlık "v1.0.0"
 - 0.5 sn fade-in, 4 sn statik, 0.5 sn fade-out
 
 **Animasyon araçları**: Canva / Adobe Express ücretsiz template'leri.

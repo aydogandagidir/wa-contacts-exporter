@@ -2098,7 +2098,7 @@ async function copyDebugReport() {
     const log = await getDebugLog();
     const report = {
       generatedAt: new Date().toISOString(),
-      version: "0.1.0",
+      version: "1.0.0",
       userAgent: navigator.userAgent,
       activeTab: activeTabKey,
       lastHealth,

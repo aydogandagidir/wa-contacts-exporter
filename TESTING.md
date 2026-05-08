@@ -1,6 +1,6 @@
 # Test Plan — WA Contacts Exporter
 
-Manuel kabul testleri. v0.1.0 release öncesi tüm 15 senaryo PASS olmalı.
+Manuel kabul testleri. v1.0.0 release öncesi tüm 15 senaryo PASS olmalı.
 
 ## Test ortamı
 
@@ -67,7 +67,7 @@ Her senaryoda preview tablosu doğru görünmeli + dosya indirilebilmeli + içer
 - [ ] **B2:** `dist/manifest.json` `world: "MAIN"` içerir, content_scripts iki adettir (inject.js + content.js)
 - [ ] **B3:** `dist/assets/` içinde `xlsx-*.js` chunk **var** ve >100 KB (SheetJS code-split kanıtı)
 - [ ] **B4:** `dist/assets/popup.html-*.js` <50 KB (XLSX bundle'a girmemiş)
-- [ ] **B5:** `npm run package` → `wa-contacts-exporter-0.1.0.zip` üretir; içeriği `dist/`'in aynısı
+- [ ] **B5:** `npm run package` → `wa-contacts-exporter-1.0.0.zip` üretir; içeriği `dist/`'in aynısı
 
 ## Smoke check (her commit sonrası)
 
