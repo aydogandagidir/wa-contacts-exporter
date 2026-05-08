@@ -1,6 +1,6 @@
 {
   "extName": { "message": "WA Contacts Exporter" },
-  "extDescription": { "message": "Export your WhatsApp Web chats, contacts, and messages (CSV / XLSX / VCard). Generate summaries and reply suggestions with local or cloud AI." },
+  "extDescription": { "message": "Export WhatsApp Web chats, contacts and messages (CSV/XLSX/VCard). AI summaries and reply suggestions, local or cloud." },
 
   "brandTitle": { "message": "Contacts Exporter" },
   "brandSub": { "message": "v1.0.0 · Bluedev" },
