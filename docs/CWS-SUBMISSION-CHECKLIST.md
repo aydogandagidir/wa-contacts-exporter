@@ -4,7 +4,7 @@ Bu doküman CWS Developer Console'da yayın taslağı doldururken kullanacağın
 
 > **🟢 Live URL'ler doğrulandı (2026-05-07):**
 > - **Ürün sayfası**: https://bluedev.dev/products/wa-contacts-exporter
-> - **Privacy URL (CWS form için)**: https://bluedev.dev/products/wa-contacts-exporter/privacy
+> - **Privacy URL (CWS form için)**: https://bluedev.dev/privacy
 > - **Eski URL** (geriye dönük uyumlu): https://bluedev.dev/wa-contacts-exporter → 301 → product page
 >
 > Privacy URL'i CWS Developer Console'da Step 5'teki "Privacy practices URL" alanına kopyala-yapıştır.
