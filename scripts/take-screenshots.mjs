@@ -1,11 +1,19 @@
-// take-screenshots.mjs — automated CWS screenshot generator
+// take-screenshots.mjs — automated CWS screenshot generator (locale-aware)
 //
 // Spins up a local static server for dist/, launches Playwright Chromium,
 // stubs all chrome.* APIs the popup uses, drives the popup through 5
-// scripted UI states, then composites each shot onto a 1280×800 canvas
-// with Bluedev brand styling via Sharp.
+// scripted UI states for each requested locale, then composites each shot
+// onto a 1280×800 canvas with Bluedev brand styling via Sharp.
 //
-// Output: docs/screenshots/0X_*.png + landing/assets/screenshots/0X_*.png
+// Output:
+//   docs/screenshots/{en,tr}/0X_*.png
+//   landing/assets/screenshots/{en,tr}/0X_*.png
+//
+// CLI:
+//   node scripts/take-screenshots.mjs              # both locales
+//   node scripts/take-screenshots.mjs --locale=en  # EN only
+//   node scripts/take-screenshots.mjs --locale=tr  # TR only
+//   node scripts/take-screenshots.mjs --keep-tmp   # keep tmp-screenshots/
 
 import http from "node:http";
 import path from "node:path";
@@ -27,16 +35,41 @@ const POPUP_W = 380;
 const POPUP_H = 1100;         // tall viewport so AI/auto-reply content all renders without scroll
 
 // ─────────────────────────────────────────────────────────────
-// Demo data — anonymized, deliberately marked "Demo"
+// CLI parsing
+
+function parseArgs(argv) {
+  const opts = { locales: ["en", "tr"], keepTmp: false };
+  for (const arg of argv.slice(2)) {
+    const m = arg.match(/^--locale=(en|tr)$/);
+    if (m) {
+      opts.locales = [m[1]];
+      continue;
+    }
+    if (arg === "--keep-tmp") {
+      opts.keepTmp = true;
+      continue;
+    }
+    if (arg === "--help" || arg === "-h") {
+      console.log("Usage: node scripts/take-screenshots.mjs [--locale=en|tr] [--keep-tmp]");
+      process.exit(0);
+    }
+  }
+  return opts;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Demo data — anonymized, deliberately marked "Demo".
 // All timestamps are Unix seconds, set to look like "today" relative to
-// the popup's tr-TR formatter. We pin to 2026-05-06 mid-afternoon range.
+// the popup's locale-aware formatter. We pin to 2026-05-06 mid-afternoon.
 
 const NOW_S = Math.floor(new Date("2026-05-06T15:00:00+03:00").getTime() / 1000);
 const minutesAgo = (m) => NOW_S - m * 60;
 const hoursAgo = (h) => NOW_S - h * 3600;
 const daysAgo = (d) => NOW_S - d * 86400;
 
-const DEMO_CHATS = [
+// ─── TR demo data ──────────────────────────────────────────
+
+const DEMO_CHATS_TR = [
   { id: "chat_1", contactName: "Ahmet Demo Yıldız",  phone: "+90 555 010 0001", isGroup: false, t: minutesAgo(8),  lastMessage: { t: minutesAgo(8) } },
   { id: "chat_2", contactName: "Ayşe Demo Çelik",    phone: "+90 555 010 0002", isGroup: false, t: minutesAgo(45), lastMessage: { t: minutesAgo(45) } },
   { id: "chat_3", formattedTitle: "Bluedev Demo Grubu",                         isGroup: true,  t: hoursAgo(2),    lastMessage: { t: hoursAgo(2) } },
@@ -47,7 +80,7 @@ const DEMO_CHATS = [
   { id: "chat_8", contactName: "Zeynep Demo Acar",   phone: "+90 555 010 0006", isGroup: false, t: daysAgo(1),     lastMessage: { t: daysAgo(1) } },
 ];
 
-const DEMO_MESSAGES = [
+const DEMO_MESSAGES_TR = [
   { chat_id: "chat_1", chat_name: "Ahmet Demo Yıldız", from_me: false, sender_name: "Ahmet Demo Yıldız", sender_phone: "+90 555 010 0001", body: "Merhaba, yarın saat 10:00'daki toplantı kalıyor mu?", t: minutesAgo(12) },
   { chat_id: "chat_1", chat_name: "Ahmet Demo Yıldız", from_me: true,  body: "Evet, 10:00'da Zoom'da görüşelim. Linki birazdan gönderiyorum.",                                         t: minutesAgo(10) },
   { chat_id: "chat_1", chat_name: "Ahmet Demo Yıldız", from_me: false, sender_name: "Ahmet Demo Yıldız", body: "Süper, teşekkürler.",                                                  t: minutesAgo(8) },
@@ -60,12 +93,12 @@ const DEMO_MESSAGES = [
   { chat_id: "chat_6", chat_name: "Ekip Demo Sohbeti",  from_me: false, sender_name: "Hasan Demo Bey",   sender_phone: "+90 555 010 0005", body: "Sprint planlama yarın 14:00'da mı?",   t: hoursAgo(7) },
 ];
 
-const DEMO_GROUPS = [
+const DEMO_GROUPS_TR = [
   { id: "chat_3", formattedTitle: "Bluedev Demo Grubu", participants: [{ id: "u1" }, { id: "u2" }, { id: "u3" }, { id: "u4" }], t: hoursAgo(2), lastMessage: { t: hoursAgo(2) } },
   { id: "chat_6", formattedTitle: "Ekip Demo Sohbeti",  participants: [{ id: "u1" }, { id: "u5" }, { id: "u6" }], t: hoursAgo(7), lastMessage: { t: hoursAgo(7) } },
 ];
 
-const DEMO_AUTOREPLY_PENDING = [
+const DEMO_AUTOREPLY_PENDING_TR = [
   {
     id: "p1",
     chatId: "chat_2",
@@ -76,48 +109,165 @@ const DEMO_AUTOREPLY_PENDING = [
   },
 ];
 
-// AI suggestion content (single-suggestion card state)
-const DEMO_SUGGESTION = {
+const DEMO_SUGGESTION_TR = {
   title: "Cevap önerisi — Ahmet Demo Yıldız",
   targetMessage: "Merhaba, yarın saat 10:00'daki toplantı kalıyor mu?",
   body: "Merhaba Ahmet Bey, evet toplantı 10:00'da kalıyor. Zoom linkini birazdan size iletiyorum. Eğer ek bir gündem maddesi eklemek isterseniz bana yazabilirsiniz.",
   meta: "Local — Ollama · aya-expanse:8b · 2.4 sn",
 };
 
+const DEMO_LABELS_TR = [
+  { id: "lbl_1", name: "Müşteri",     color: "#10B981", chatCount: 12, isSystem: false },
+  { id: "lbl_2", name: "Beklemede",   color: "#FB923C", chatCount: 5,  isSystem: false },
+  { id: "lbl_3", name: "Tamamlandı",  color: "#6B7280", chatCount: 28, isSystem: false },
+];
+
+const AR_INSTRUCTIONS_TR = "Profesyonel ve nazik ton kullan, randevu önerirken 2 alternatif sun.";
+
+// ─── EN demo data ──────────────────────────────────────────
+
+const DEMO_CHATS_EN = [
+  { id: "chat_1", contactName: "Alex Demo Smith",     phone: "+1 555 010 0001", isGroup: false, t: minutesAgo(8),  lastMessage: { t: minutesAgo(8) } },
+  { id: "chat_2", contactName: "Emma Demo Johnson",   phone: "+1 555 010 0002", isGroup: false, t: minutesAgo(45), lastMessage: { t: minutesAgo(45) } },
+  { id: "chat_3", formattedTitle: "Bluedev Demo Group",                         isGroup: true,  t: hoursAgo(2),    lastMessage: { t: hoursAgo(2) } },
+  { id: "chat_4", contactName: "Mike Demo Brown",     phone: "+1 555 010 0003", isGroup: false, t: hoursAgo(3),    lastMessage: { t: hoursAgo(3) } },
+  { id: "chat_5", contactName: "Sarah Demo Wilson",   phone: "+1 555 010 0004", isGroup: false, t: hoursAgo(5),    lastMessage: { t: hoursAgo(5) } },
+  { id: "chat_6", formattedTitle: "Team Demo Channel",                          isGroup: true,  t: hoursAgo(7),    lastMessage: { t: hoursAgo(7) } },
+  { id: "chat_7", contactName: "David Demo Lee",      phone: "+1 555 010 0005", isGroup: false, t: hoursAgo(11),   lastMessage: { t: hoursAgo(11) } },
+  { id: "chat_8", contactName: "Lisa Demo Chen",      phone: "+1 555 010 0006", isGroup: false, t: daysAgo(1),     lastMessage: { t: daysAgo(1) } },
+];
+
+const DEMO_MESSAGES_EN = [
+  { chat_id: "chat_1", chat_name: "Alex Demo Smith",   from_me: false, sender_name: "Alex Demo Smith",   sender_phone: "+1 555 010 0001", body: "Hi, is the 10am meeting tomorrow still on?",       t: minutesAgo(12) },
+  { chat_id: "chat_1", chat_name: "Alex Demo Smith",   from_me: true,  body: "Sure — sending the Zoom link now.",                                                                                       t: minutesAgo(10) },
+  { chat_id: "chat_1", chat_name: "Alex Demo Smith",   from_me: false, sender_name: "Alex Demo Smith",   body: "Awesome, thanks!",                                                                       t: minutesAgo(8) },
+  { chat_id: "chat_3", chat_name: "Bluedev Demo Group", from_me: false, sender_name: "Mike Demo Brown",   sender_phone: "+1 555 010 0003", body: "Could you share the slides?",                          t: hoursAgo(2) - 60 },
+  { chat_id: "chat_3", chat_name: "Bluedev Demo Group", from_me: true,  body: "Will do — uploading to Drive in a minute.",                                                                               t: hoursAgo(2) },
+  { chat_id: "chat_2", chat_name: "Emma Demo Johnson",  from_me: false, sender_name: "Emma Demo Johnson", sender_phone: "+1 555 010 0002", body: "How can we set up the product demo?",                  t: minutesAgo(45) },
+  { chat_id: "chat_2", chat_name: "Emma Demo Johnson",  from_me: true,  body: "Let's catch up Thursday afternoon — does that work?",                                                                     t: minutesAgo(40) },
+  { chat_id: "chat_4", chat_name: "Mike Demo Brown",    from_me: false, sender_name: "Mike Demo Brown",   sender_phone: "+1 555 010 0003", body: "Quick question on the invoice — can we send it today?", t: hoursAgo(3) },
+  { chat_id: "chat_5", chat_name: "Sarah Demo Wilson",  from_me: false, sender_name: "Sarah Demo Wilson", sender_phone: "+1 555 010 0004", body: "Notes from yesterday's standup?",                      t: hoursAgo(5) },
+  { chat_id: "chat_6", chat_name: "Team Demo Channel",  from_me: false, sender_name: "David Demo Lee",    sender_phone: "+1 555 010 0005", body: "Sprint planning tomorrow at 2pm?",                     t: hoursAgo(7) },
+];
+
+const DEMO_GROUPS_EN = [
+  { id: "chat_3", formattedTitle: "Bluedev Demo Group", participants: [{ id: "u1" }, { id: "u2" }, { id: "u3" }, { id: "u4" }], t: hoursAgo(2), lastMessage: { t: hoursAgo(2) } },
+  { id: "chat_6", formattedTitle: "Team Demo Channel",  participants: [{ id: "u1" }, { id: "u5" }, { id: "u6" }], t: hoursAgo(7), lastMessage: { t: hoursAgo(7) } },
+];
+
+const DEMO_AUTOREPLY_PENDING_EN = [
+  {
+    id: "p1",
+    chatId: "chat_2",
+    chatName: "Emma Demo Johnson",
+    incoming: "How can we set up the product demo?",
+    draft: "Hi Emma — happy to set up the demo. Thursday at 2pm or Friday at 11am works for me, both via Zoom. Which one suits you better?",
+    ts: minutesAgo(45) * 1000,
+  },
+];
+
+const DEMO_SUGGESTION_EN = {
+  title: "Reply suggestion — Alex Demo Smith",
+  targetMessage: "Hi, is the 10am meeting tomorrow still on?",
+  body: "Hi Alex — yes, 10am works. I'll send the Zoom link shortly. If you want to add anything to the agenda, just let me know.",
+  meta: "Local — Ollama · llama3.2:8b · 2.4 sec",
+};
+
+const DEMO_LABELS_EN = [
+  { id: "lbl_1", name: "Customer",   color: "#10B981", chatCount: 12, isSystem: false },
+  { id: "lbl_2", name: "On hold",    color: "#FB923C", chatCount: 5,  isSystem: false },
+  { id: "lbl_3", name: "Completed",  color: "#6B7280", chatCount: 28, isSystem: false },
+];
+
+const AR_INSTRUCTIONS_EN = "Use a professional and friendly tone; when proposing meetings, offer 2 alternatives.";
+
+// ─── Locale dispatcher ────────────────────────────────────
+
+function getDemoData(locale) {
+  if (locale === "en") {
+    return {
+      chats: DEMO_CHATS_EN,
+      messages: DEMO_MESSAGES_EN,
+      groups: DEMO_GROUPS_EN,
+      autoreplyPending: DEMO_AUTOREPLY_PENDING_EN,
+      suggestion: DEMO_SUGGESTION_EN,
+      labels: DEMO_LABELS_EN,
+      arInstructions: AR_INSTRUCTIONS_EN,
+    };
+  }
+  return {
+    chats: DEMO_CHATS_TR,
+    messages: DEMO_MESSAGES_TR,
+    groups: DEMO_GROUPS_TR,
+    autoreplyPending: DEMO_AUTOREPLY_PENDING_TR,
+    suggestion: DEMO_SUGGESTION_TR,
+    labels: DEMO_LABELS_TR,
+    arInstructions: AR_INSTRUCTIONS_TR,
+  };
+}
+
+// Per-locale microcopy used in the auto-reply pending card (built inline in
+// the popup DOM by the screenshot script). Mirrors what the live UI renders.
+const PENDING_CARD_COPY = {
+  en: {
+    timeAgo: "45 min ago",
+    aiSuggestion: "AI suggestion (draft):",
+    btnSend: "Send",
+    btnEdit: "Edit",
+    btnDelete: "Delete",
+  },
+  tr: {
+    timeAgo: "45 dk önce",
+    aiSuggestion: "AI önerisi (taslak):",
+    btnSend: "Gönder",
+    btnEdit: "Düzelt",
+    btnDelete: "Sil",
+  },
+};
+
 // ─────────────────────────────────────────────────────────────
 // Init script — runs in browser context BEFORE popup.js boots.
 // Replaces window.chrome with mocks pre-seeded with demo state.
 // IMPORTANT: must be a self-contained string (no template-string
-// interpolation collisions). We send demo data as JSON.
+// interpolation collisions). We send demo data + locale as JSON.
 
-function buildInitScript() {
+function buildInitScript(locale) {
+  const demo = getDemoData(locale);
   const stateJson = JSON.stringify({
-    chats: DEMO_CHATS,
-    messages: DEMO_MESSAGES,
-    groups: DEMO_GROUPS,
-    pendingAutoReply: DEMO_AUTOREPLY_PENDING,
+    chats: demo.chats,
+    messages: demo.messages,
+    groups: demo.groups,
+    pendingAutoReply: demo.autoreplyPending,
+    labels: demo.labels,
   });
+  const localeJson = JSON.stringify(locale);
+  const arInstructionsJson = JSON.stringify(demo.arInstructions);
 
   return `
 (() => {
   const DEMO = ${stateJson};
+  const LOCALE = ${localeJson};
+  const AR_INSTRUCTIONS = ${arInstructionsJson};
 
-  // Persistent-ish in-memory storage
+  // Persistent-ish in-memory storage. Seeding wa_ui_locale forces the popup's
+  // i18n.js to load the correct locale's bundled messages map regardless of
+  // the headless browser's UI language.
   const STORE = {
+    wa_ui_locale: LOCALE,
     wa_consent: { accepted: true, ts: Date.now() },
     wa_settings: { includeUnsaved: false },
     wa_ai: {
       provider: "ollama",
       apiKey: "",
       baseUrl: "http://localhost:11434/v1",
-      model: "aya-expanse:8b",
+      model: LOCALE === "en" ? "llama3.2:8b" : "aya-expanse:8b",
       modelMigrated: true,
     },
     wa_ai_per_chat: {},
     wa_autoreply: {
       masterEnabled: true,
       mode: "draft",
-      perChat: { chat_2: { enabled: true, instructions: "Profesyonel ve nazik ton kullan, randevu önerirken 2 alternatif sun." } },
+      perChat: { chat_2: { enabled: true, instructions: AR_INSTRUCTIONS } },
       rateLimit: { maxPerHour: 10, maxPerDay: 50 },
       quietHours: { enabled: true, startHour: 22, endHour: 8 },
       history: [],
@@ -171,7 +321,7 @@ function buildInitScript() {
         case "list-chats":       return { ok: true, data: DEMO.chats };
         case "list-messages":    return { ok: true, data: DEMO.messages, diag: { totalChats: DEMO.chats.length, msgSource: { getModelsArray: 4, _models: 2, lastMessage: 2 }, loadStrategy: { none: 1 } } };
         case "list-groups":      return { ok: true, data: DEMO.groups };
-        case "list-labels":      return { ok: true, data: [{ id: "lbl_1", name: "Müşteri", color: "#10B981", chatCount: 12, isSystem: false }, { id: "lbl_2", name: "Beklemede", color: "#FB923C", chatCount: 5, isSystem: false }, { id: "lbl_3", name: "Tamamlandı", color: "#6B7280", chatCount: 28, isSystem: false }] };
+        case "list-labels":      return { ok: true, data: DEMO.labels };
         case "list-contacts":    return { ok: true, data: DEMO.chats.filter(c => !c.isGroup) };
         case "subscribe-new-messages":   return { ok: true };
         case "unsubscribe-new-messages": return { ok: true };
@@ -188,8 +338,17 @@ function buildInitScript() {
     return { ok: true };
   }
 
+  // chrome.i18n.getUILanguage shim — popup uses this in "auto" mode but we
+  // override via wa_ui_locale anyway. Returning the chosen locale keeps
+  // <html lang> consistent.
+  const i18nStub = {
+    getUILanguage: () => (LOCALE === "tr" ? "tr-TR" : "en-US"),
+    getMessage: () => "",
+  };
+
   // Shim chrome.* — must be ready before popup.js loads.
   const chromeStub = {
+    i18n: i18nStub,
     runtime: {
       id: "demo-extension-id",
       sendMessage: (msg) => Promise.resolve(handleRuntimeMessage(msg)),
@@ -213,9 +372,6 @@ function buildInitScript() {
       download: () => Promise.resolve(1),
     },
   };
-
-  // Some popup code may use callback-style; bridge it just in case.
-  // (Not strictly necessary — popup uses Promise style.)
 
   Object.defineProperty(window, "chrome", {
     value: chromeStub,
@@ -265,157 +421,261 @@ function startServer() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Screenshot scenarios
+// Screenshot scenarios (per-locale builder)
+//
+// Each scenario produces a setup() that drives the popup into the desired
+// state, plus the brand-canvas marketing copy (heading / subhead / body).
+// File names differ per locale to keep TR muscle memory ("sohbetler" stays
+// in the TR set) and EN-friendly slugs in the EN set.
 
-const SCENARIOS = [
-  {
-    name: "01_sohbetler_tab",
-    title: "Sohbetler sekmesi",
-    heading: "Sohbet listesi",
-    subhead: "→ CSV / XLSX / VCard",
-    body: "Birebir sohbetler, gruplar, son mesaj zaman damgaları. UTF-8 BOM ile Excel'de Türkçe karakter sorunsuz açılır.",
-    setup: async (page) => {
-      await page.click('[data-tab="chats"]');
-      await page.click('#extract-chats-btn');
-      await page.waitForSelector('#chats-preview:not([hidden])', { timeout: 5000 });
-      await page.waitForTimeout(300);
+function buildScenarios(locale) {
+  if (locale === "en") {
+    return [
+      {
+        name: "01_chats_tab",
+        title: "Chats tab",
+        heading: "Chat list",
+        subhead: "→ CSV / XLSX / VCard",
+        body: "1-on-1 chats, groups, last-message timestamps. UTF-8 BOM CSV opens cleanly in Excel.",
+        setup: async (page) => {
+          await page.click('[data-tab="chats"]');
+          await page.click('#extract-chats-btn');
+          await page.waitForSelector('#chats-preview:not([hidden])', { timeout: 5000 });
+          await page.waitForTimeout(300);
+        },
+      },
+      {
+        name: "02_messages_tab",
+        title: "Messages tab",
+        heading: "Message history",
+        subhead: "Controlled extraction",
+        body: "100–5000 messages per chat. Earlier-message load rounds for older history. All processing on-device.",
+        setup: async (page) => {
+          await page.click('[data-tab="messages"]');
+          await page.click('#extract-messages-btn');
+          await page.waitForSelector('#messages-preview:not([hidden])', { timeout: 5000 });
+          await page.waitForTimeout(300);
+        },
+      },
+      {
+        name: "03_ai_provider",
+        title: "AI provider panel",
+        heading: "6 AI providers",
+        subhead: "Local or cloud",
+        body: "Ollama, LM Studio, Claude, ChatGPT, Gemini, Groq. Start free with local Ollama.",
+        setup: async (page) => {
+          await page.click('[data-tab="ai"]');
+          await page.waitForTimeout(200);
+          await page.evaluate(() => {
+            const d = document.querySelector('#ai-config');
+            if (d) d.open = true;
+          });
+          await page.waitForTimeout(200);
+        },
+      },
+      {
+        name: "04_ai_suggestion",
+        title: "AI iterative single-suggestion card",
+        heading: "Iterative suggestion",
+        subhead: "Refresh / Refine / Copy",
+        body: "AI learns your style from past messages. Refresh suggestions you don't like, refine with feedback.",
+        setup: async (page, suggestion) => {
+          await page.click('[data-tab="ai"]');
+          await page.waitForTimeout(200);
+          await page.evaluate((sug) => {
+            const card = document.getElementById('suggestion-card');
+            const title = document.getElementById('suggestion-title');
+            const target = document.getElementById('suggestion-target');
+            const body = document.getElementById('suggestion-body');
+            const meta = document.getElementById('suggestion-meta');
+            if (!card) return;
+            title.textContent = sug.title;
+            target.textContent = '📩  ' + sug.targetMessage;
+            body.textContent = sug.body;
+            meta.textContent = sug.meta;
+            card.hidden = false;
+          }, suggestion);
+          await page.waitForTimeout(300);
+        },
+      },
+      {
+        name: "05_auto_reply",
+        title: "Auto-reply module",
+        heading: "Auto-reply",
+        subhead: "Draft mode by default",
+        body: "AI proposes, you approve and send. Hourly limits, quiet hours, per-chat opt-in. Master switch off by default.",
+        setup: async (page) => {
+          await renderPendingCard(page, "en");
+        },
+      },
+    ];
+  }
+
+  // TR (default)
+  return [
+    {
+      name: "01_sohbetler_tab",
+      title: "Sohbetler sekmesi",
+      heading: "Sohbet listesi",
+      subhead: "→ CSV / XLSX / VCard",
+      body: "Birebir sohbetler, gruplar, son mesaj zaman damgaları. UTF-8 BOM ile Excel'de Türkçe karakter sorunsuz açılır.",
+      setup: async (page) => {
+        await page.click('[data-tab="chats"]');
+        await page.click('#extract-chats-btn');
+        await page.waitForSelector('#chats-preview:not([hidden])', { timeout: 5000 });
+        await page.waitForTimeout(300);
+      },
     },
-  },
-  {
-    name: "02_mesajlar_tab",
-    title: "Mesajlar sekmesi",
-    heading: "Mesaj geçmişi",
-    subhead: "Kontrollü çıkarma",
-    body: "Sohbet başına 100-5000 mesaj. Eski mesajlar için scroll-load tur sayısı ayarı. Tüm işlem cihazda yereldir.",
-    setup: async (page) => {
-      await page.click('[data-tab="messages"]');
-      await page.click('#extract-messages-btn');
-      await page.waitForSelector('#messages-preview:not([hidden])', { timeout: 5000 });
-      await page.waitForTimeout(300);
+    {
+      name: "02_mesajlar_tab",
+      title: "Mesajlar sekmesi",
+      heading: "Mesaj geçmişi",
+      subhead: "Kontrollü çıkarma",
+      body: "Sohbet başına 100-5000 mesaj. Eski mesajlar için scroll-load tur sayısı ayarı. Tüm işlem cihazda yereldir.",
+      setup: async (page) => {
+        await page.click('[data-tab="messages"]');
+        await page.click('#extract-messages-btn');
+        await page.waitForSelector('#messages-preview:not([hidden])', { timeout: 5000 });
+        await page.waitForTimeout(300);
+      },
     },
-  },
-  {
-    name: "03_ai_provider",
-    title: "AI sağlayıcı paneli",
-    heading: "6 AI sağlayıcı",
-    subhead: "Yerel veya bulut",
-    body: "Ollama, LM Studio, Claude, ChatGPT, Gemini, Groq. Aya Expanse 8B Türkçe için önerilen. Yerel Ollama ile tamamen ücretsiz başla.",
-    setup: async (page) => {
-      await page.click('[data-tab="ai"]');
-      await page.waitForTimeout(200);
-      await page.evaluate(() => {
-        const d = document.querySelector('#ai-config');
-        if (d) d.open = true;
-      });
-      await page.waitForTimeout(200);
+    {
+      name: "03_ai_provider",
+      title: "AI sağlayıcı paneli",
+      heading: "6 AI sağlayıcı",
+      subhead: "Yerel veya bulut",
+      body: "Ollama, LM Studio, Claude, ChatGPT, Gemini, Groq. Aya Expanse 8B Türkçe için önerilen. Yerel Ollama ile tamamen ücretsiz başla.",
+      setup: async (page) => {
+        await page.click('[data-tab="ai"]');
+        await page.waitForTimeout(200);
+        await page.evaluate(() => {
+          const d = document.querySelector('#ai-config');
+          if (d) d.open = true;
+        });
+        await page.waitForTimeout(200);
+      },
     },
-  },
-  {
-    name: "04_ai_suggestion",
-    title: "AI iteratif tek-öneri kartı",
-    heading: "İteratif öneri",
-    subhead: "Yenile / Düzelt / Kopyala",
-    body: "AI sizin geçmiş mesajlarınızdan üslubunuzu öğrenir. Beğenmediğiniz öneriyi yenileyin, geri bildirimle iyileştirin.",
-    setup: async (page, suggestion) => {
-      await page.click('[data-tab="ai"]');
-      await page.waitForTimeout(200);
-      await page.evaluate((sug) => {
-        const card = document.getElementById('suggestion-card');
-        const title = document.getElementById('suggestion-title');
-        const target = document.getElementById('suggestion-target');
-        const body = document.getElementById('suggestion-body');
-        const meta = document.getElementById('suggestion-meta');
-        if (!card) return;
-        title.textContent = sug.title;
-        target.textContent = '📩  ' + sug.targetMessage;
-        body.textContent = sug.body;
-        meta.textContent = sug.meta;
-        card.hidden = false;
-        // No scrollIntoView — let it render at its natural position;
-        // the 1100h viewport is tall enough that the whole AI tab fits.
-      }, suggestion);
-      await page.waitForTimeout(300);
+    {
+      name: "04_ai_suggestion",
+      title: "AI iteratif tek-öneri kartı",
+      heading: "İteratif öneri",
+      subhead: "Yenile / Düzelt / Kopyala",
+      body: "AI sizin geçmiş mesajlarınızdan üslubunuzu öğrenir. Beğenmediğiniz öneriyi yenileyin, geri bildirimle iyileştirin.",
+      setup: async (page, suggestion) => {
+        await page.click('[data-tab="ai"]');
+        await page.waitForTimeout(200);
+        await page.evaluate((sug) => {
+          const card = document.getElementById('suggestion-card');
+          const title = document.getElementById('suggestion-title');
+          const target = document.getElementById('suggestion-target');
+          const body = document.getElementById('suggestion-body');
+          const meta = document.getElementById('suggestion-meta');
+          if (!card) return;
+          title.textContent = sug.title;
+          target.textContent = '📩  ' + sug.targetMessage;
+          body.textContent = sug.body;
+          meta.textContent = sug.meta;
+          card.hidden = false;
+        }, suggestion);
+        await page.waitForTimeout(300);
+      },
     },
-  },
-  {
-    name: "05_oto_cevap",
-    title: "Otomatik cevap modülü",
-    heading: "Otomatik cevap",
-    subhead: "Taslak modu varsayılan",
-    body: "AI önerir, siz onaylayıp gönderirsiniz. Saatlik limit, sessiz saatler, sohbet bazlı opt-in. Master switch varsayılan kapalı.",
-    setup: async (page) => {
-      await page.click('[data-tab="autoreply"]');
-      await page.waitForTimeout(300);
-      await page.evaluate(() => {
-        const list = document.getElementById('ar-pending-list');
-        const empty = document.getElementById('ar-pending-empty');
-        if (!list) return;
-        // Inline styles guarantee the card renders correctly even though
-        // popup.css doesn't define `.ar-pending-card` (the live UI builds
-        // these from JS at runtime).
-        const html = `
-          <div style="background:#fff;border:1px solid #015AFF;border-radius:8px;padding:12px;margin-top:8px;box-shadow:0 1px 3px rgba(45,49,66,0.08);">
-            <div style="display:flex;justify-content:space-between;font-size:12px;color:#2D3142;margin-bottom:6px;">
-              <strong>Ayşe Demo Çelik</strong>
-              <span style="color:#6B7280;">45 dk önce</span>
-            </div>
-            <div style="font-size:12px;color:#2D3142;background:#F8FAFC;padding:6px 8px;border-radius:4px;margin-bottom:6px;">📩 Ürün demosunu nasıl ayarlayabiliriz?</div>
-            <div style="font-size:11px;color:#6B7280;margin-bottom:2px;">AI önerisi (taslak):</div>
-            <div style="font-size:12px;color:#2D3142;background:#E8F0FF;padding:6px 8px;border-radius:4px;margin-bottom:8px;line-height:1.45;">Merhaba Ayşe Hanım, demo için bu hafta perşembe 14:00 veya cuma 11:00 saatlerinde Zoom üzerinden buluşabiliriz. Sizin için hangisi daha uygun olur?</div>
-            <div style="display:flex;gap:6px;">
-              <button class="btn btn--primary" style="font-size:12px;padding:5px 10px;">Gönder</button>
-              <button class="btn btn--ghost" style="font-size:12px;padding:5px 10px;">Düzelt</button>
-              <button class="btn btn--ghost" style="font-size:12px;padding:5px 10px;">Sil</button>
-            </div>
-          </div>
-        `;
-        list.innerHTML = html;
-        if (empty) empty.style.display = 'none';
-      });
-      await page.waitForTimeout(200);
+    {
+      name: "05_oto_cevap",
+      title: "Otomatik cevap modülü",
+      heading: "Otomatik cevap",
+      subhead: "Taslak modu varsayılan",
+      body: "AI önerir, siz onaylayıp gönderirsiniz. Saatlik limit, sessiz saatler, sohbet bazlı opt-in. Master switch varsayılan kapalı.",
+      setup: async (page) => {
+        await renderPendingCard(page, "tr");
+      },
     },
-  },
-];
+  ];
+}
+
+// Auto-reply pending card renderer — both locales share the same DOM
+// scaffold, just with locale-specific copy. Inline styles guarantee the
+// card renders correctly even though popup.css doesn't define
+// `.ar-pending-card` (the live UI builds these from JS at runtime).
+async function renderPendingCard(page, locale) {
+  await page.click('[data-tab="autoreply"]');
+  await page.waitForTimeout(300);
+  const demo = getDemoData(locale);
+  const copy = PENDING_CARD_COPY[locale];
+  const pending = demo.autoreplyPending[0];
+  await page.evaluate(({ pending, copy }) => {
+    const list = document.getElementById('ar-pending-list');
+    const empty = document.getElementById('ar-pending-empty');
+    if (!list) return;
+    const escapeHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const html = `
+      <div style="background:#fff;border:1px solid #015AFF;border-radius:8px;padding:12px;margin-top:8px;box-shadow:0 1px 3px rgba(45,49,66,0.08);">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#2D3142;margin-bottom:6px;">
+          <strong>${escapeHtml(pending.chatName)}</strong>
+          <span style="color:#6B7280;">${escapeHtml(copy.timeAgo)}</span>
+        </div>
+        <div style="font-size:12px;color:#2D3142;background:#F8FAFC;padding:6px 8px;border-radius:4px;margin-bottom:6px;">📩 ${escapeHtml(pending.incoming)}</div>
+        <div style="font-size:11px;color:#6B7280;margin-bottom:2px;">${escapeHtml(copy.aiSuggestion)}</div>
+        <div style="font-size:12px;color:#2D3142;background:#E8F0FF;padding:6px 8px;border-radius:4px;margin-bottom:8px;line-height:1.45;">${escapeHtml(pending.draft)}</div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn--primary" style="font-size:12px;padding:5px 10px;">${escapeHtml(copy.btnSend)}</button>
+          <button class="btn btn--ghost" style="font-size:12px;padding:5px 10px;">${escapeHtml(copy.btnEdit)}</button>
+          <button class="btn btn--ghost" style="font-size:12px;padding:5px 10px;">${escapeHtml(copy.btnDelete)}</button>
+        </div>
+      </div>
+    `;
+    list.innerHTML = html;
+    if (empty) empty.style.display = 'none';
+  }, { pending, copy });
+  await page.waitForTimeout(200);
+}
 
 // ─────────────────────────────────────────────────────────────
-// Main
+// Main capture loop
 
-async function ensureDirs() {
-  for (const d of [TMP, OUT_DOCS, OUT_LANDING]) {
-    await fs.mkdir(d, { recursive: true });
+async function ensureDirs(locales) {
+  await fs.mkdir(TMP, { recursive: true });
+  for (const parent of [OUT_DOCS, OUT_LANDING]) {
+    await fs.mkdir(parent, { recursive: true });
+    for (const loc of locales) {
+      await fs.mkdir(path.join(parent, loc), { recursive: true });
+    }
   }
 }
 
 async function ensureBuilt() {
   if (!existsSync(path.join(DIST, "src", "popup", "popup.html"))) {
-    throw new Error(`dist/src/popup/popup.html bulunamadı. Önce 'npm run build' çalıştır.`);
+    throw new Error(`dist/src/popup/popup.html not found. Run 'npm run build' first.`);
   }
 }
 
-async function takeRawShots(initScript) {
+async function takeRawShotsForLocale(locale, scenarios) {
+  const initScript = buildInitScript(locale);
   const browser = await chromium.launch({ headless: true });
   try {
     const ctx = await browser.newContext({
       viewport: { width: POPUP_W, height: POPUP_H },
       deviceScaleFactor: 2, // retina-quality raw
+      locale: locale === "tr" ? "tr-TR" : "en-US",
     });
     await ctx.addInitScript(initScript);
     const page = await ctx.newPage();
 
     const url = `http://127.0.0.1:${PORT}/src/popup/popup.html`;
-    for (const sc of SCENARIOS) {
-      console.log(`  • ${sc.name}: ${sc.title}`);
+    const demo = getDemoData(locale);
+    for (const sc of scenarios) {
+      console.log(`  • [${locale}] ${sc.name}: ${sc.title}`);
       await page.goto(url, { waitUntil: "networkidle" });
       // Wait for popup boot (status renders + tabs visible)
       await page.waitForSelector("#tabs:not([hidden])", { timeout: 10000 });
       await page.waitForTimeout(300);
       try {
-        await sc.setup(page, DEMO_SUGGESTION);
+        await sc.setup(page, demo.suggestion);
       } catch (err) {
         console.warn(`    ⚠ setup error: ${err.message}`);
       }
       await page.screenshot({
-        path: path.join(TMP, `${sc.name}.png`),
+        path: path.join(TMP, `${locale}_${sc.name}.png`),
         fullPage: false,
         clip: { x: 0, y: 0, width: POPUP_W, height: POPUP_H },
       });
@@ -491,7 +751,7 @@ async function compositeShot(rawPath, outPath, scenario) {
     <text x="-160" y="-2" font-family="-apple-system, Segoe UI, Inter, sans-serif"
           font-size="16" font-weight="700" fill="#2D3142">Contacts Exporter</text>
     <text x="-160" y="16" font-family="-apple-system, Segoe UI, Inter, sans-serif"
-          font-size="11" fill="#6B7280">Beta · Bluedev</text>
+          font-size="11" fill="#6B7280">v1.0.0 · Bluedev</text>
   </g>
 
   <!-- Right column copy -->
@@ -562,33 +822,84 @@ async function compositeShot(rawPath, outPath, scenario) {
     .toFile(outPath);
 }
 
+// ─────────────────────────────────────────────────────────────
+// Legacy cleanup — remove the flat 0X_*.png files after the new
+// locale-aware files are confirmed present.
+
+const LEGACY_FLAT_FILES = [
+  "01_sohbetler_tab.png",
+  "02_mesajlar_tab.png",
+  "03_ai_provider.png",
+  "04_ai_suggestion.png",
+  "05_oto_cevap.png",
+];
+
+async function removeLegacyFlatFiles() {
+  for (const parent of [OUT_DOCS, OUT_LANDING]) {
+    for (const f of LEGACY_FLAT_FILES) {
+      const p = path.join(parent, f);
+      try {
+        await fs.unlink(p);
+        console.log(`  ✗ removed legacy ${path.relative(ROOT, p)}`);
+      } catch (err) {
+        if (err && err.code !== "ENOENT") {
+          console.warn(`  ⚠ could not remove ${p}: ${err.message}`);
+        }
+      }
+    }
+  }
+}
+
+async function cleanupTmp() {
+  try {
+    await fs.rm(TMP, { recursive: true, force: true });
+  } catch (_) {}
+}
+
+// ─────────────────────────────────────────────────────────────
+// Main
+
 async function main() {
-  console.log("📸 WA Contacts Exporter — screenshot generator\n");
+  const opts = parseArgs(process.argv);
+  const localeLabel = opts.locales.join(" + ");
+  console.log(`📸 WA Contacts Exporter — screenshot generator [${localeLabel}]\n`);
   await ensureBuilt();
-  await ensureDirs();
+  await ensureDirs(opts.locales);
 
   console.log("→ Static server :" + PORT + "  (serving dist/)");
   const server = await startServer();
 
   try {
-    const initScript = buildInitScript();
-    console.log("→ Capturing 5 scenarios via Playwright (headless)…");
-    await takeRawShots(initScript);
+    for (const locale of opts.locales) {
+      const scenarios = buildScenarios(locale);
+      console.log(`\n→ Capturing ${scenarios.length} scenarios via Playwright [${locale}]…`);
+      await takeRawShotsForLocale(locale, scenarios);
 
-    console.log("\n→ Compositing onto 1280×800 brand canvas…");
-    for (const sc of SCENARIOS) {
-      const raw = path.join(TMP, `${sc.name}.png`);
-      const outDocs = path.join(OUT_DOCS, `${sc.name}.png`);
-      const outLanding = path.join(OUT_LANDING, `${sc.name}.png`);
-      await compositeShot(raw, outDocs, sc);
-      await fs.copyFile(outDocs, outLanding);
-      const stat = await fs.stat(outDocs);
-      console.log(`  ✓ ${sc.name}.png  (${(stat.size / 1024).toFixed(0)} KB)`);
+      console.log(`\n→ Compositing [${locale}] onto 1280×800 brand canvas…`);
+      for (const sc of scenarios) {
+        const raw = path.join(TMP, `${locale}_${sc.name}.png`);
+        const outDocs = path.join(OUT_DOCS, locale, `${sc.name}.png`);
+        const outLanding = path.join(OUT_LANDING, locale, `${sc.name}.png`);
+        await compositeShot(raw, outDocs, sc);
+        await fs.copyFile(outDocs, outLanding);
+        const stat = await fs.stat(outDocs);
+        const kb = stat.size / 1024;
+        const tag = kb < 50 ? " ⚠ TOO SMALL" : "";
+        console.log(`  ✓ ${locale}/${sc.name}.png  (${kb.toFixed(0)} KB)${tag}`);
+      }
     }
 
-    console.log("\n✅ Done. 5 screenshots written to:");
-    console.log(`   - ${path.relative(ROOT, OUT_DOCS)}/`);
-    console.log(`   - ${path.relative(ROOT, OUT_LANDING)}/`);
+    // Legacy cleanup — only after all locales succeed.
+    console.log("\n→ Removing legacy flat screenshots…");
+    await removeLegacyFlatFiles();
+
+    console.log("\n✅ Done. Screenshots written to:");
+    for (const locale of opts.locales) {
+      console.log(`   - ${path.relative(ROOT, path.join(OUT_DOCS, locale))}/`);
+      console.log(`   - ${path.relative(ROOT, path.join(OUT_LANDING, locale))}/`);
+    }
+
+    if (!opts.keepTmp) await cleanupTmp();
   } finally {
     server.close();
   }

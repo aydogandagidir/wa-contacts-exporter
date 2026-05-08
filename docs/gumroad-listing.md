@@ -24,12 +24,21 @@ Lifetime Pro license: AI summaries, smart auto-reply, and 5000-message exports f
 - **File**: `landing/assets/promo/gumroad-thumb-600x600.png` *(create from existing 920×680 large-tile — center square crop)*
 - Recommended: 600×600 square
 
-## Gallery (5 screenshots — already exist)
-1. `landing/assets/screenshots/01_sohbetler_tab.png`
-2. `landing/assets/screenshots/02_mesajlar_tab.png`
-3. `landing/assets/screenshots/03_ai_tab.png`
-4. `landing/assets/screenshots/04_oto_cevap.png`
-5. `landing/assets/screenshots/05_oto_cevap.png`
+## Gallery (5 screenshots — already exist; pick the locale that matches your audience)
+
+EN (recommended for Gumroad's primary audience):
+1. `landing/assets/screenshots/en/01_chats_tab.png`
+2. `landing/assets/screenshots/en/02_messages_tab.png`
+3. `landing/assets/screenshots/en/03_ai_provider.png`
+4. `landing/assets/screenshots/en/04_ai_suggestion.png`
+5. `landing/assets/screenshots/en/05_auto_reply.png`
+
+TR (alternate set, same scenarios):
+1. `landing/assets/screenshots/tr/01_sohbetler_tab.png`
+2. `landing/assets/screenshots/tr/02_mesajlar_tab.png`
+3. `landing/assets/screenshots/tr/03_ai_provider.png`
+4. `landing/assets/screenshots/tr/04_ai_suggestion.png`
+5. `landing/assets/screenshots/tr/05_oto_cevap.png`
 
 ---
 

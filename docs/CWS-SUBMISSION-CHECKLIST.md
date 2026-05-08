@@ -56,13 +56,25 @@ Aynı şekilde **+ Add another language → English** seç, sonra:
 
 ### Screenshots (en az 1, önerilen 5)
 
-`docs/screenshots/` altındaki **5 PNG** (1280×800):
+Locale başına **5 PNG** (1280×800). EN listing → `docs/screenshots/en/`,
+TR listing → `docs/screenshots/tr/`:
 
-- [ ] `01_sohbetler_tab.png` — Sohbetler sekmesi + export butonları
-- [ ] `02_mesajlar_tab.png` — Mesajlar sekmesi + dropdown
-- [ ] `03_ai_provider.png` — AI sağlayıcı paneli
-- [ ] `04_ai_suggestion.png` — İteratif öneri kartı
-- [ ] `05_oto_cevap.png` — Otomatik cevap modülü
+EN:
+- [ ] `en/01_chats_tab.png` — Chats tab + export buttons
+- [ ] `en/02_messages_tab.png` — Messages tab + dropdown
+- [ ] `en/03_ai_provider.png` — AI provider panel
+- [ ] `en/04_ai_suggestion.png` — Iterative suggestion card
+- [ ] `en/05_auto_reply.png` — Auto-reply module
+
+TR:
+- [ ] `tr/01_sohbetler_tab.png` — Sohbetler sekmesi + export butonları
+- [ ] `tr/02_mesajlar_tab.png` — Mesajlar sekmesi + dropdown
+- [ ] `tr/03_ai_provider.png` — AI sağlayıcı paneli
+- [ ] `tr/04_ai_suggestion.png` — İteratif öneri kartı
+- [ ] `tr/05_oto_cevap.png` — Otomatik cevap modülü
+
+Üretmek için: `node scripts/take-screenshots.mjs`
+(detay: `docs/screenshots/README.md`)
 
 ### Promotional images
 
@@ -192,7 +204,7 @@ PROJECT ROOT
 │   ├── store-listing-tr.md             (TR locale metin paketi)
 │   ├── store-listing-en.md             (EN locale metin paketi)
 │   ├── permission-justifications.md    (her izin için gerekçe)
-│   ├── screenshots/0[1-5]_*.png        (5 × 1280×800 — CWS upload)
+│   ├── screenshots/{en,tr}/0[1-5]_*.png (5 × 1280×800 per locale — CWS upload)
 │   ├── promotional/
 │   │   ├── small-tile-440x280.png      (zorunlu)
 │   │   ├── large-tile-920x680.png      (önerilen)

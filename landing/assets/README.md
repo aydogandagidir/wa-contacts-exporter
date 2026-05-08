@@ -7,27 +7,39 @@ olarak üretilmesi gerekiyor.
 
 ```
 landing/assets/
-├── screenshots/                  # docs/screenshots/'tan kopyalanacak
-│   ├── 01_sohbetler_tab.png      # 1280×800 PNG
-│   ├── 02_mesajlar_tab.png       # 1280×800 PNG
-│   ├── 03_ai_provider.png        # 1280×800 PNG
-│   ├── 04_ai_suggestion.png      # 1280×800 PNG
-│   └── 05_oto_cevap.png          # 1280×800 PNG
-├── social-banner.png             # 1200×630 (Open Graph share preview)
-├── demo-90s.mp4                  # opsiyonel: direct video embed
-└── hero-illustration.svg         # opsiyonel: hero görseli
+├── screenshots/                       # generator tarafından üretilir
+│   ├── en/
+│   │   ├── 01_chats_tab.png           # 1280×800 PNG
+│   │   ├── 02_messages_tab.png
+│   │   ├── 03_ai_provider.png
+│   │   ├── 04_ai_suggestion.png
+│   │   └── 05_auto_reply.png
+│   └── tr/
+│       ├── 01_sohbetler_tab.png       # 1280×800 PNG
+│       ├── 02_mesajlar_tab.png
+│       ├── 03_ai_provider.png
+│       ├── 04_ai_suggestion.png
+│       └── 05_oto_cevap.png
+├── social-banner.png                  # 1200×630 (Open Graph share preview)
+├── demo-90s.mp4                       # opsiyonel: direct video embed
+└── hero-illustration.svg              # opsiyonel: hero görseli
 ```
 
 ## Üretim adımları
 
 ### 1. Screenshots (önce bunlar)
 
-`docs/screenshots/README.md` dosyasındaki rehbere göre 5 adet 1280×800 PNG çek.
-Bittiğinde:
+Generator hem `docs/screenshots/` hem de `landing/assets/screenshots/`
+altına yazıyor — tek komut:
 
 ```bash
-cp docs/screenshots/0*.png landing/assets/screenshots/
+npm run build
+node scripts/take-screenshots.mjs        # her iki locale
+node scripts/take-screenshots.mjs --locale=en   # sadece EN
+node scripts/take-screenshots.mjs --locale=tr   # sadece TR
 ```
+
+Detay: `docs/screenshots/README.md`
 
 ### 2. Social banner (Open Graph)
 

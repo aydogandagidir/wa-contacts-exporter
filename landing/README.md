@@ -71,7 +71,7 @@ Eğer `bluedev.dev` zaten Vercel/Netlify'de host ediliyorsa:
 ## Deploy sonrası verification checklist
 
 - [ ] `https://your-domain/` → hero section yüklendi
-- [ ] Tüm screenshot'lar broken-image değil (`landing/assets/screenshots/01-05.png`)
+- [ ] Tüm screenshot'lar broken-image değil (`landing/assets/screenshots/{en,tr}/0[1-5]_*.png`; landing language switcher EN/TR'ye göre src'i değiştirir)
 - [ ] Demo video oynatılıyor (`landing/assets/demo.mp4`)
 - [ ] TR/EN dil switcher çalışıyor (sağ üst pill)
 - [ ] `privacy.html` açılıyor (footer'daki "Aydınlatma Metni" linki)

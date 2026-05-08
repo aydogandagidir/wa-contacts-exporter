@@ -125,7 +125,7 @@ AI gelen mesajlara cevap verir. **Varsayılan = Taslak modu**: AI önerir, siz o
 - WhatsApp Web yalnızca son ~50 mesajı RAM'de tutar; daha eski mesajlar için sohbeti yukarı kaydırın veya "Eski mesaj yükleme turu = 5+" ayarını kullanın
 - WhatsApp Web sürüm güncellemeleri (her 2-3 ay) sonrası bazı modüller değişebilir; bu durumda eklenti güncellenir
 - Otomatik cevap popup açıkken çalışır; popup kapatıldığında pasif olur (gelecek sürümde background SW'a taşınacak)
-- Şu anda yalnızca Türkçe arayüz; İngilizce locale planlanıyor
+- Çift dilli arayüz: İngilizce (varsayılan) + Türkçe, popup header'ında dil seçici ile manuel değiştirilebilir
 
 ## 📞 İletişim & Destek
 
@@ -171,7 +171,7 @@ Bluedev ana sitesi içinde Next.js page olarak yayında, KVKK + GDPR (TR + EN) i
 | Small tile | 440×280 PNG | ✅ Evet | Search results küçük thumbnail |
 | Large tile | 920×680 PNG | ⚠️ Önerilir | Detay sayfası kapak |
 | Marquee | 1400×560 PNG | ❌ Opsiyonel | Featured listing (gerekirse) |
-| Screenshots | 1280×800 PNG × 5 | ✅ Evet | UI ekran görüntüleri |
+| Screenshots | 1280×800 PNG × 5 | ✅ Evet | UI ekran görüntüleri (`docs/screenshots/tr/` altında) |
 
 ---
 

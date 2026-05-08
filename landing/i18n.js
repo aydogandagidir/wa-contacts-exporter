@@ -46,12 +46,24 @@ const I18N = {
     "providers.groq.desc": "Ultra hızlı (saniyede 1000+ token). Llama 3.3, Mixtral.",
 
     "screenshots.heading": "Eklenti içinden",
-    "screenshots.sub": "Tüm UI Türkçe; İngilizce locale yolda.",
+    "screenshots.sub": "Çift dilli arayüz: İngilizce + Türkçe.",
     "screenshots.s1": "Sohbetler sekmesi · CSV / XLSX / VCard export",
     "screenshots.s2": "Mesajlar sekmesi · Sohbet başına 100-5000 mesaj",
     "screenshots.s3": "AI sekmesi · 6 sağlayıcı seçimi",
     "screenshots.s4": "İteratif tek-öneri · Yenile / Düzelt",
     "screenshots.s5": "Oto-Cevap sekmesi · Taslak modu",
+    "screenshots.hero_src": "/wa-contacts-exporter/assets/screenshots/tr/01_sohbetler_tab.png",
+    "screenshots.hero_alt": "Sohbetler sekmesi ekran görüntüsü",
+    "screenshots.s1_src": "/wa-contacts-exporter/assets/screenshots/tr/01_sohbetler_tab.png",
+    "screenshots.s1_alt": "Sohbetler sekmesi",
+    "screenshots.s2_src": "/wa-contacts-exporter/assets/screenshots/tr/02_mesajlar_tab.png",
+    "screenshots.s2_alt": "Mesajlar sekmesi",
+    "screenshots.s3_src": "/wa-contacts-exporter/assets/screenshots/tr/03_ai_provider.png",
+    "screenshots.s3_alt": "AI sağlayıcı seçimi",
+    "screenshots.s4_src": "/wa-contacts-exporter/assets/screenshots/tr/04_ai_suggestion.png",
+    "screenshots.s4_alt": "AI öneri kartı",
+    "screenshots.s5_src": "/wa-contacts-exporter/assets/screenshots/tr/05_oto_cevap.png",
+    "screenshots.s5_alt": "Otomatik cevap modülü",
 
     "privacy.heading": "Veri tarayıcınızda kalır",
     "privacy.body": "Bluedev'in sunucusu yok. Eklentinin manifest'inde tanımlı tüm host izinlerini chrome://extensions üzerinden inceleyebilirsiniz. AI istekleri tarayıcınızdan doğrudan seçtiğiniz sağlayıcıya gider — aracı sunucu kullanılmaz.",
@@ -143,12 +155,24 @@ const I18N = {
     "providers.groq.desc": "Ultra fast (1000+ tokens/sec). Llama 3.3, Mixtral.",
 
     "screenshots.heading": "Inside the extension",
-    "screenshots.sub": "UI is currently Turkish; English locale on the way.",
+    "screenshots.sub": "Bilingual UI: English + Turkish.",
     "screenshots.s1": "Chats tab · CSV / XLSX / VCard export",
     "screenshots.s2": "Messages tab · 100-5000 messages per chat",
     "screenshots.s3": "AI tab · 6-provider selection",
     "screenshots.s4": "Iterative single-suggestion · Refresh / Refine",
     "screenshots.s5": "Auto-Reply tab · Draft mode",
+    "screenshots.hero_src": "/wa-contacts-exporter/assets/screenshots/en/01_chats_tab.png",
+    "screenshots.hero_alt": "Chats tab screenshot",
+    "screenshots.s1_src": "/wa-contacts-exporter/assets/screenshots/en/01_chats_tab.png",
+    "screenshots.s1_alt": "Chats tab",
+    "screenshots.s2_src": "/wa-contacts-exporter/assets/screenshots/en/02_messages_tab.png",
+    "screenshots.s2_alt": "Messages tab",
+    "screenshots.s3_src": "/wa-contacts-exporter/assets/screenshots/en/03_ai_provider.png",
+    "screenshots.s3_alt": "AI provider selection",
+    "screenshots.s4_src": "/wa-contacts-exporter/assets/screenshots/en/04_ai_suggestion.png",
+    "screenshots.s4_alt": "AI suggestion card",
+    "screenshots.s5_src": "/wa-contacts-exporter/assets/screenshots/en/05_auto_reply.png",
+    "screenshots.s5_alt": "Auto-reply module",
 
     "privacy.heading": "Your data stays in your browser",
     "privacy.body": "Bluedev runs no servers. You can audit every host permission declared in the manifest via chrome://extensions. AI requests go directly from your browser to the provider you select — no relay server.",
@@ -247,6 +271,20 @@ function applyLang(lang) {
     } else {
       el.textContent = value;
     }
+  });
+
+  // Locale-aware <img src=...> swapping (used for the screenshot gallery)
+  document.querySelectorAll("[data-i18n-src]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-src");
+    const value = dict[key];
+    if (value !== undefined && el.getAttribute("src") !== value) {
+      el.setAttribute("src", value);
+    }
+  });
+  document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-alt");
+    const value = dict[key];
+    if (value !== undefined) el.setAttribute("alt", value);
   });
 
   // Special case: hero h1 + p

@@ -380,11 +380,21 @@ Bluedev
 
 ## 7. Görsel asset listesi (post'lar için hazır olmalı)
 
+TR thread için (`landing/assets/screenshots/tr/`):
 - `01_sohbetler_tab.png` — Sohbetler sekmesi
 - `02_mesajlar_tab.png` — Mesajlar sekmesi
 - `03_ai_provider.png` — 6 sağlayıcı dropdown'u
 - `04_ai_suggestion.png` — Tek-öneri kartı
 - `05_oto_cevap.png` — Oto-cevap modülü
+
+EN thread için (`landing/assets/screenshots/en/`):
+- `01_chats_tab.png` — Chats tab
+- `02_messages_tab.png` — Messages tab
+- `03_ai_provider.png` — 6-provider dropdown
+- `04_ai_suggestion.png` — Single-suggestion card
+- `05_auto_reply.png` — Auto-reply module
+
+Ortak:
 - `demo-90s.mp4` — Demo videosu (YouTube unlisted)
 - `social-banner-1200x630.png` — LinkedIn / Twitter share preview (Open Graph)
 

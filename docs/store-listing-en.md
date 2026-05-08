@@ -125,7 +125,7 @@ AI replies to incoming messages. **Default = Draft mode**: AI proposes, you appr
 - WhatsApp Web only keeps the last ~50 messages per chat in RAM; for older messages, scroll up in the chat or set "Earlier-message load rounds = 5+"
 - WhatsApp Web version updates (every 2-3 months) may shift internal modules; the extension updates accordingly
 - Auto-reply runs while popup is open; closing popup disables it (will move to background SW in a future release)
-- UI is Turkish only at the moment; English locale planned
+- Bilingual UI: English (default) and Turkish, with a language switcher in the popup header
 
 ## 📞 Contact & Support
 
@@ -171,7 +171,7 @@ Hosted as a Next.js page within the Bluedev main site, with KVKK + GDPR (TR + EN
 | Small tile | 440×280 PNG | ✅ Yes | Search-results small thumbnail |
 | Large tile | 920×680 PNG | ⚠️ Recommended | Detail-page header |
 | Marquee | 1400×560 PNG | ❌ Optional | Featured listing (if needed) |
-| Screenshots | 1280×800 PNG × 5 | ✅ Yes | UI screenshots |
+| Screenshots | 1280×800 PNG × 5 | ✅ Yes | UI screenshots from `docs/screenshots/en/` |
 
 ---
 
