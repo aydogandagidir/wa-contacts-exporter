@@ -181,7 +181,7 @@ Ticari lisanslama / ortaklık için: [bluedev.dev](https://bluedev.dev)
 ## İletişim
 
 - **Web**: [bluedev.dev](https://bluedev.dev)
-- **Destek**: bluedev.dev/destek
+- **Destek**: bluedev.dev/contact
 - **Hata raporu**: eklenti popup'ı → "Hata raporu kopyala" → JSON'u iletişim formuna yapıştır
 
 ---

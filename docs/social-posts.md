@@ -341,7 +341,7 @@ WA Contacts Exporter:
 de aramızda olursa çok memnun oluruz; şu an ücretsiz, kurulum 5 dakika.
 
 Detaylar: bluedev.dev/products/wa-contacts-exporter
-İletişim: aydogan.dagidir@yahoo.com.tr (kişisel) veya bluedev.dev/destek
+İletişim: aydogan.dagidir@yahoo.com.tr (kişisel) veya bluedev.dev/contact
 
 Saygılarımla,
 [Adınız]

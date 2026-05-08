@@ -130,7 +130,7 @@ AI gelen mesajlara cevap verir. **Varsayılan = Taslak modu**: AI önerir, siz o
 ## 📞 İletişim & Destek
 
 - **Web**: bluedev.dev
-- **Destek**: bluedev.dev/destek
+- **Destek**: bluedev.dev/contact
 - **Hata raporu**: Eklenti popup'ında "Hata raporu kopyala" butonu → JSON'u destek formuna yapıştırın
 
 ## ⚖️ Yasal

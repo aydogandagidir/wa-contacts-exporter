@@ -130,7 +130,7 @@ AI replies to incoming messages. **Default = Draft mode**: AI proposes, you appr
 ## 📞 Contact & Support
 
 - **Web**: bluedev.dev
-- **Support**: bluedev.dev/destek
+- **Support**: bluedev.dev/contact
 - **Bug reports**: in the extension popup, click "Copy error report" → paste the JSON into our support form
 
 ## ⚖️ Legal

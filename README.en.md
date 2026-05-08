@@ -182,7 +182,7 @@ For commercial licensing / partnerships: [bluedev.dev](https://bluedev.dev)
 ## Contact
 
 - **Web**: [bluedev.dev](https://bluedev.dev)
-- **Support**: bluedev.dev/destek
+- **Support**: bluedev.dev/contact
 - **Bug reports**: extension popup → "Copy error report" → paste JSON into the contact form
 
 ---
