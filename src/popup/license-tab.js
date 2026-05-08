@@ -3,16 +3,16 @@
 // Responsibilities:
 //   - Render free vs pro view based on license-manager.getStatus()
 //   - Activate flow: collect email + key, call license-manager.activate(), surface errors
-//   - Deactivate button (this device only)
+//   - Re-check + deactivate buttons
 //   - Tag the "Pro 🔑" tab with .is-pro when active (header indicator)
 //   - Provide a public requirePro() helper used by other tabs to gate features.
 //
-// One-time activation model: there is no manual re-check button, no grace
-// state, no periodic re-verify. Activation succeeds → Pro is on until the
-// user explicitly deactivates.
+// Periodic re-verify model: activation is online; chrome.alarms re-checks weekly.
+// On invalid/refunded the license is cleared automatically. A 30-day offline
+// grace window keeps Pro alive across network outages / travel.
 
 import {
-  isPro, getStatus, activate, deactivate,
+  isPro, getStatus, activate, reverify, deactivate,
   getPurchaseUrl, getProductId,
 } from "../license/license-manager.js";
 import { GumroadApiError } from "../license/gumroad-api.js";
@@ -51,7 +51,9 @@ export async function refreshLicenseTab() {
 
   const pill = $("license-status-pill");
   if (pill) {
-    pill.textContent = tier === "pro" ? t("licenseStatusPro") : t("licenseStatusFree");
+    pill.textContent = tier === "pro"
+      ? (status.reason === "grace" ? t("licenseProGrace") : t("licenseStatusPro"))
+      : t("licenseStatusFree");
     pill.classList.toggle("is-pro", tier === "pro");
   }
 
@@ -70,6 +72,9 @@ export async function refreshLicenseTab() {
       if (status.productName) parts.push(`<div>${escapeHtml(t("licenseProductField"))} <strong>${escapeHtml(status.productName)}</strong></div>`);
       parts.push(`<div>${escapeHtml(t("licenseKeyField"))} <strong>${escapeHtml(maskKey(status.key))}</strong></div>`);
       parts.push(`<div>${escapeHtml(t("licenseActivatedAtField"))} <strong>${escapeHtml(fmtDate(status.activatedAt))}</strong></div>`);
+      if (status.reason === "grace") {
+        parts.push(`<div style="color:var(--c-danger)">${escapeHtml(t("licenseGraceWarning", [fmtDate(status.graceUntil)]))}</div>`);
+      }
       meta.innerHTML = parts.join("");
     }
   } else {
@@ -134,10 +139,36 @@ async function onActivateClick() {
   }
 }
 
+async function onRecheckClick() {
+  const btn = $("license-recheck-btn");
+  if (btn) btn.disabled = true;
+  try {
+    const res = await reverify();
+    if (res.ok) {
+      await refreshLicenseTab();
+      flashTabPill(t("licenseRecheckSuccess"), "ok");
+    } else if (res.kind === "invalid" || res.kind === "refunded") {
+      await refreshLicenseTab();
+      flashTabPill(res.message || t("licenseRecheckInvalid"), "err");
+    } else {
+      flashTabPill(t("licenseRecheckOffline"), null);
+    }
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
 async function onDeactivateClick() {
   if (!confirm(t("licenseDeactivateConfirm"))) return;
   await deactivate();
   await refreshLicenseTab();
+}
+
+function flashTabPill(text, _kind) {
+  const pill = $("license-status-pill");
+  if (!pill) return;
+  pill.textContent = text;
+  setTimeout(() => { refreshLicenseTab(); }, 1500);
 }
 
 function escapeHtml(s) {
@@ -149,8 +180,10 @@ export function initLicenseTab() {
   if (initialized) return;
   initialized = true;
   const activateBtn = $("license-activate-btn");
+  const recheckBtn = $("license-recheck-btn");
   const deactivateBtn = $("license-deactivate-btn");
   if (activateBtn) activateBtn.addEventListener("click", onActivateClick);
+  if (recheckBtn) recheckBtn.addEventListener("click", onRecheckClick);
   if (deactivateBtn) deactivateBtn.addEventListener("click", onDeactivateClick);
   refreshLicenseTab();
 }

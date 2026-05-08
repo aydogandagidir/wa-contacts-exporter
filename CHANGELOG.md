@@ -3,6 +3,26 @@
 Tüm önemli değişiklikler bu dosyada belgelenir.
 Format [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) standardına dayanır.
 
+## [1.0.1] — 2026-05-08
+
+Restored periodic license re-verification with offline grace, closing the refund-abuse window that was open in v1.0.0.
+
+### 🔄 Değişti
+
+- **Lisans modeli yeniden periyodik** — Aktivasyon tek seferlik kalır, ancak `chrome.alarms` ile haftada bir Gumroad'a non-incrementing re-verify atılır. Refund / chargeback / dispute durumlarında Gumroad anlık döner ve eklenti license'i siler — Pro maksimum 7 gün gecikmeyle Free'ye iner. Bu, v1.0.0'da kapatılmamış olan "aktive et, kullan, refund al, ücretsiz Pro" döngüsünü kapatır.
+- **30 günlük offline grace** geri eklendi — Çevrimdışı / seyahat / wifi değişimi senaryolarında lock-out riski yok. Son başarılı re-verify'dan itibaren 30 gün boyunca Pro çalışır.
+
+### ✨ Eklendi
+
+- Pro 🔑 sekmesinde **"Şimdi yeniden doğrula"** butonu — kullanıcı isterse manuel re-verify tetikleyebilir.
+- "Pro · grace" durumu UI'da görünür hâle geldi (offline grace pencere son tarihi gösterilir).
+
+### Sebep
+
+v1.0.0'da kullanıcı kararıyla periodik re-verify kaldırılmıştı. Ancak bu, refund abuse'a kapı bıraktığı için 24 saat içinde geri alındı. v1.0.1, v1.0.0'ın doğrulanmış UX iyileştirmelerini (i18n, locale-screenshots, doğru Gumroad değerleri) korur, sadece lisans yaşam döngüsünü revize eder.
+
+---
+
 ## [1.0.0] — 2026-05-08
 
 İlk production sürümü. Tek-aktivasyon lisans modeli, EN/TR i18n ve canlı Gumroad listing.
@@ -99,5 +119,6 @@ Format [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) standardına day
 
 ---
 
+[1.0.1]: https://github.com/aydogandagidir/wa-contacts-exporter/releases/tag/v1.0.1
 [1.0.0]: https://github.com/aydogandagidir/wa-contacts-exporter/releases/tag/v1.0.0
 [0.1.0]: https://github.com/aydogandagidir/wa-contacts-exporter/releases/tag/v0.1.0
