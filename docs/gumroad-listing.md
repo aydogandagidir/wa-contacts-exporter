@@ -140,6 +140,6 @@ delivers it plus the unique license key by email automatically.
 - [x] Replace `PURCHASE_URL` in `src/license/license-manager.js` — set to `https://bluedev.gumroad.com/l/wa-contacts-exporter` (2026-05-07)
 - [ ] Test purchase with your own card while listing is "Unlisted"
 - [ ] Verify the activation flow end-to-end with the test key
-- [ ] Update landing page Buy CTAs to the real Gumroad URL
+- [x] Update landing page Buy CTAs to the real Gumroad URL — set to `https://bluedev.gumroad.com/l/wa-contacts-exporter` (2026-05-12)
 - [ ] Flip listing from "Unlisted" → "Public"
 - [ ] Optional: add Gumroad embed widget to landing page (`<script src="https://gumroad.com/js/gumroad.js"></script>`)

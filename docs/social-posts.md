@@ -1,3 +1,13 @@
+> **⚠️ Stale draft (2026-05-12)**: Bu dosyadaki post taslakları **v0.1.0 beta** dönemi içindir ve şu an üründe **uygulanmıyor**:
+> - Ürün artık **v1.0.2 (production)** — "Beta ücretsiz" / "Beta süresi" cümleleri yanıltıcı.
+> - Free + Pro model canlı: Free eklenti (CWS submission pending) + Pro lifetime **$29** (Gumroad'da satışta).
+> - Gumroad URL: `https://bluedev.gumroad.com/l/wa-contacts-exporter`.
+> - "v0.2.0'da Pro tier düşünüyoruz" cümleleri artık doğru değil; Pro v1.0.0'dan beri canlı.
+>
+> Post'lar yeniden yayımlanacaksa şu üç pattern'i refactor et: (1) "Beta" → "v1.0.2", (2) "ücretsiz" → "Free sürüm" + Pro link, (3) "Pro düşünüyoruz" → "Pro şu an satışta · $29 Gumroad".
+
+---
+
 # Sosyal Medya Duyuru Taslakları — Beta Launch
 
 Bu dokümanda **LinkedIn**, **X (Twitter)**, **Reddit** ve **kişisel network** için TR + EN post taslakları var. Hepsi copy-paste hazır; her platforma özgü ton/uzunluk gözetilmiştir.

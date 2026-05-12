@@ -12,7 +12,7 @@ const I18N = {
     "nav.faq": "SSS",
     "nav.install": "Kurulum",
 
-    "hero.badge": "🚀 Beta açıldı · ücretsiz",
+    "hero.badge": "✨ v1.0.2 · Free eklenti + Pro lifetime $29",
     "hero.title_html": "WhatsApp Web verilerinizi <span class=\"hl\">dışa aktarın</span>, <span class=\"hl-alt\">yapay zeka</span> ile yönetin.",
     "hero.sub_html": "Sohbetlerinizi, kişilerinizi, gruplarınızı ve mesajlarınızı tek tıkla CSV / XLSX / VCard olarak dışa aktarın. İsteğe bağlı AI asistanıyla özet üretin, cevap önerisi alın, önceliklerinizi sıralayın. <strong>Veri tarayıcınızdan çıkmaz.</strong>",
     "hero.cta_install": "Eklentiyi Yükle",
@@ -75,9 +75,9 @@ const I18N = {
     "privacy.code_caption": "Her host izni şeffaftır; AI sağlayıcısı seçmediğiniz sürece o domain'e istek yapılmaz.",
 
     "install.heading": "Kurulum",
-    "install.sub": "Chrome Web Store yayını onay bekliyor. O zamana kadar dev mode kurulumu:",
+    "install.sub": "Chrome Web Store yayını onay bekliyor. O zamana kadar dev mode kurulumu (Free sürüm; Pro lisansı Gumroad'da $29):",
     "install.s1_title": "GitHub release indir",
-    "install.s1_body": "wa-contacts-exporter-1.0.0.zip dosyasını çıkar.",
+    "install.s1_body": "wa-contacts-exporter-1.0.2.zip dosyasını çıkar.",
     "install.s2_title": "Chrome'da uzantılar sayfası",
     "install.s2_body": "Adres çubuğuna chrome://extensions yaz, Enter.",
     "install.s3_title": "Geliştirici modu",
@@ -86,7 +86,7 @@ const I18N = {
     "install.s4_body": "\"Paketlenmemiş öğe yükle\" tıkla → çıkardığın dist/ klasörünü seç.",
     "install.s5_title": "WhatsApp Web'i aç + KVKK rıza",
     "install.s5_body": "web.whatsapp.com adresine git, eklenti popup'ında rıza ekranını onayla.",
-    "install.download_btn": "Beta zip indir (yakında)",
+    "install.download_btn": "GitHub'dan zip indir",
     "install.note": "CWS yayını sonrasında bu adım tek tıkla \"Chrome'a Ekle\" butonuna dönüşecek.",
 
     "faq.heading": "Sıkça sorulanlar",
@@ -100,8 +100,8 @@ const I18N = {
     "faq.a4": "Hayır. Yerel Ollama / LM Studio ücretsizdir. Bulut isteyenler için Gemini ve Groq'un ücretsiz tier'ları yeterli. Claude / ChatGPT için kendi API anahtarınızı kullanırsınız.",
     "faq.q5": "Mesajların tamamı export ediliyor mu?",
     "faq.a5": "WhatsApp Web yalnızca son ~50 mesajı RAM'de tutuyor. Daha eski geçmiş için sohbeti yukarı kaydırın veya \"Eski mesaj yükleme turu = 5+\" ayarını kullanın. Eklenti hafıza sınırını aşamaz; bu Meta'nın WA Web tarafındaki tasarım kararıdır.",
-    "faq.q6": "Beta sürecinden sonra ne olacak?",
-    "faq.a6": "Beta süresi boyunca ücretsiz kalacak. Geri bildirimleri toplayıp v0.2.0'da Pro tier seçenekleri sunmayı planlıyoruz (ekip özellikleri, gelişmiş AI). Beta kullanıcıları Pro'ya erken erişim hakkı kazanacak.",
+    "faq.q6": "Free ve Pro arasındaki fark nedir?",
+    "faq.a6": "Free sürümde sohbet/mesaj/grup/etiket/kişi export (CSV/XLSX/VCard) ve sohbet başına 500 mesaj limiti var. Pro sürümde ek olarak AI asistan (6 sağlayıcı: özet, cevap önerisi, triage), akıllı oto-cevap ve 5000 mesaj limiti açılır. Pro tek seferlik $29 — Gumroad: bluedev.gumroad.com/l/wa-contacts-exporter (ömür boyu güncelleme dahil, 30 gün içinde iade).",
 
     "footer.privacy": "Aydınlatma Metni",
     "footer.support": "Destek",
@@ -121,7 +121,7 @@ const I18N = {
     "nav.faq": "FAQ",
     "nav.install": "Install",
 
-    "hero.badge": "🚀 Beta is live · free",
+    "hero.badge": "✨ v1.0.2 · Free extension + Pro lifetime $29",
     "hero.title_html": "<span class=\"hl\">Export</span> your WhatsApp Web data, manage it with <span class=\"hl-alt\">AI</span>.",
     "hero.sub_html": "Export your chats, contacts, groups, and messages to CSV / XLSX / VCard with a single click. Optional AI assistant summarizes, suggests replies, and prioritizes your inbox. <strong>Your data never leaves your browser.</strong>",
     "hero.cta_install": "Install Extension",
@@ -184,9 +184,9 @@ const I18N = {
     "privacy.code_caption": "Every host permission is transparent; if you don't pick an AI provider, no request is made to that domain.",
 
     "install.heading": "Install",
-    "install.sub": "Chrome Web Store submission pending. Until then, dev-mode install:",
+    "install.sub": "Chrome Web Store submission pending. Until then, dev-mode install (Free version; Pro license available on Gumroad for $29):",
     "install.s1_title": "Download GitHub release",
-    "install.s1_body": "Extract wa-contacts-exporter-1.0.0.zip.",
+    "install.s1_body": "Extract wa-contacts-exporter-1.0.2.zip.",
     "install.s2_title": "Open Chrome extensions",
     "install.s2_body": "Type chrome://extensions in the address bar and press Enter.",
     "install.s3_title": "Enable Developer mode",
@@ -195,7 +195,7 @@ const I18N = {
     "install.s4_body": "Click \"Load unpacked\" → select the extracted dist/ folder.",
     "install.s5_title": "Open WhatsApp Web + accept consent",
     "install.s5_body": "Visit web.whatsapp.com, accept the consent screen in the extension popup.",
-    "install.download_btn": "Download beta zip (soon)",
+    "install.download_btn": "Download zip from GitHub",
     "install.note": "Once CWS approves, this will become a one-click \"Add to Chrome\" button.",
 
     "faq.heading": "Frequently asked",
@@ -209,8 +209,8 @@ const I18N = {
     "faq.a4": "No. Local Ollama / LM Studio is free. For cloud, Gemini and Groq have free tiers that go a long way. Claude / ChatGPT use your own API key.",
     "faq.q5": "Are all messages exported?",
     "faq.a5": "WhatsApp Web only keeps the last ~50 messages per chat in RAM. For older history, scroll up in the chat or use \"Earlier-message load rounds = 5+\". The extension can't bypass that memory model — it's Meta's WA Web design choice.",
-    "faq.q6": "What happens after the beta?",
-    "faq.a6": "Beta stays free. We're collecting feedback to ship v0.2.0 with Pro-tier options (team features, advanced AI). Beta users will get early Pro access.",
+    "faq.q6": "What's the difference between Free and Pro?",
+    "faq.a6": "The Free version covers chat/message/group/label/contact export (CSV/XLSX/VCard) with a 500-message-per-chat limit. Pro adds the AI assistant (6 providers: summaries, reply suggestions, triage), smart auto-reply, and a 5000-message limit. Pro is a one-time $29 lifetime license on Gumroad: bluedev.gumroad.com/l/wa-contacts-exporter (includes all future updates, 30-day refund).",
 
     "footer.privacy": "Privacy Policy",
     "footer.support": "Support",
