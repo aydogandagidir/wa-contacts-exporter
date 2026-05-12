@@ -1,6 +1,6 @@
 {
   "name": "wa-contacts-exporter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "WhatsApp Web sohbet, kişi ve mesajlarınızı dışa aktarın (CSV/XLSX/VCard). Yerel veya bulut AI ile özet ve cevap önerisi üretin.",
   "private": true,
   "type": "module",

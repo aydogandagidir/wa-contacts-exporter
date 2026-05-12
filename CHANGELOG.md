@@ -3,6 +3,25 @@
 Tüm önemli değişiklikler bu dosyada belgelenir.
 Format [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) standardına dayanır.
 
+## [1.0.2] — 2026-05-12
+
+Removed unused `activeTab` permission to address Chrome Web Store rejection (Violation: "Use of Permissions — requesting but not using activeTab"). No functional change for users; the extension already accesses `web.whatsapp.com` exclusively via `host_permissions`, which is the correct scope.
+
+### 🗑️ Kaldırıldı
+
+- **`activeTab` permission'ı manifest'ten silindi** — Eklenti `chrome.tabs.query` ve `chrome.tabs.sendMessage` çağrılarını sadece `https://web.whatsapp.com/*` sekmesine yapıyor. Bu erişim zaten `host_permissions` üzerinden veriliyor; `activeTab` redundant'tı. CWS reviewer'ı tespit etti, biz teyit edip kaldırdık.
+- Permission justification doc'larından activeTab bölümleri çıkarıldı; özet body'leri buna göre kısaltıldı.
+
+### 🔄 Değişti
+
+- Brand badge `v1.0.1 · Bluedev` → `v1.0.2 · Bluedev` (her iki locale).
+
+### Sebep
+
+CWS rejection (`Violation reference: Purple Potassium`) — reviewer manifest'te istenen ama runtime'da kullanılmayan permission'ı tespit etti. Düzeltme reviewer'ın önerdiği yöntemle uyumlu: "Remove the unused permission(s) listed above from your manifest file." Hiçbir kullanıcı akışı bu değişiklikten etkilenmez; host_permissions zaten gerekli erişimi sağlıyor.
+
+---
+
 ## [1.0.1] — 2026-05-08
 
 Restored periodic license re-verification with offline grace, closing the refund-abuse window that was open in v1.0.0.
@@ -119,6 +138,7 @@ v1.0.0'da kullanıcı kararıyla periodik re-verify kaldırılmıştı. Ancak bu
 
 ---
 
+[1.0.2]: https://github.com/aydogandagidir/wa-contacts-exporter/releases/tag/v1.0.2
 [1.0.1]: https://github.com/aydogandagidir/wa-contacts-exporter/releases/tag/v1.0.1
 [1.0.0]: https://github.com/aydogandagidir/wa-contacts-exporter/releases/tag/v1.0.0
 [0.1.0]: https://github.com/aydogandagidir/wa-contacts-exporter/releases/tag/v0.1.0

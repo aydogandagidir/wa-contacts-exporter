@@ -3,7 +3,7 @@
   "extDescription": { "message": "WhatsApp Web sohbet, kişi ve mesajlarınızı dışa aktarın (CSV/XLSX/VCard). Yerel veya bulut AI ile özet ve cevap önerisi üretin." },
 
   "brandTitle": { "message": "Contacts Exporter" },
-  "brandSub": { "message": "v1.0.1 · Bluedev" },
+  "brandSub": { "message": "v1.0.2 · Bluedev" },
 
   "localeSwitcherLabel": { "message": "Dil" },
   "localeAuto": { "message": "Otomatik" },

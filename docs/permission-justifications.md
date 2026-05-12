@@ -18,12 +18,6 @@ CWS submission'da her permission için "neden gerekli?" açıklaması istenir. B
 
 **EN**: Used to download extracted CSV / XLSX / VCard files to the user's chosen location. Triggered only when the user explicitly clicks "Download".
 
-### `activeTab`
-
-**TR**: Eklenti popup'ı açıldığında WhatsApp Web sekmesine mesaj göndermek için. Sadece kullanıcı popup'ı açtığında ve aktif sekmeyle iletişim kurarken kullanılır.
-
-**EN**: Used to send messages to the active WhatsApp Web tab when the popup is opened. Only invoked while the user is interacting with the popup.
-
 ### `alarms`
 
 **TR**: Pro lisans anahtarının haftada bir kez Gumroad License API'si üzerinden yeniden doğrulanması için. Anahtar yoksa hiçbir alarm tetiklenmez. Doğrulama, kullanıcı arayüzü ile etkileşmeden background service worker tarafında sessizce çalışır.
@@ -119,10 +113,10 @@ CWS submission'da her permission için "neden gerekli?" açıklaması istenir. B
 ### Body (kısaltılmış, single-paragraph)
 
 **TR**:
-> `web.whatsapp.com` host izni eklentinin temel işlevi içindir; `storage` kullanıcı tercihlerini ve AI anahtarlarını yerel olarak saklar; `downloads` çıkarılan dosyaları kullanıcı seçtiği konuma kaydeder; `activeTab` popup'tan WA Web sekmesine mesaj göndermek için kullanılır. AI sağlayıcı host izinleri (Anthropic / OpenAI / Gemini / Groq) **yalnızca** kullanıcı o sağlayıcıyı seçtiğinde aktif olur. Localhost izni Yerel Ollama / LM Studio'ya bağlanmak içindir.
+> `web.whatsapp.com` host izni eklentinin temel işlevi içindir; `storage` kullanıcı tercihlerini ve AI anahtarlarını yerel olarak saklar; `downloads` çıkarılan dosyaları kullanıcı seçtiği konuma kaydeder; `alarms` Pro lisansını haftada bir Gumroad'da yeniden doğrular. AI sağlayıcı host izinleri (Anthropic / OpenAI / Gemini / Groq) **yalnızca** kullanıcı o sağlayıcıyı seçtiğinde aktif olur. Localhost izni Yerel Ollama / LM Studio'ya bağlanmak içindir.
 
 **EN**:
-> The `web.whatsapp.com` host permission is for the extension's core function. `storage` keeps user preferences and AI keys locally. `downloads` saves extracted files to the user's chosen location. `activeTab` lets the popup send messages to the WA Web tab. AI provider host permissions (Anthropic / OpenAI / Gemini / Groq) are only used **if** the user selects that provider. The localhost permission connects to Local Ollama / LM Studio.
+> The `web.whatsapp.com` host permission is for the extension's core function. `storage` keeps user preferences and AI keys locally. `downloads` saves extracted files to the user's chosen location. `alarms` re-verifies the Pro license against Gumroad once per week. AI provider host permissions (Anthropic / OpenAI / Gemini / Groq) are only used **if** the user selects that provider. The localhost permission connects to Local Ollama / LM Studio.
 
 ---
 
