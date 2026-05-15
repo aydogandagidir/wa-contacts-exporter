@@ -26,7 +26,7 @@ CWS rejection (`Violation reference: Purple Potassium`) — reviewer manifest'te
 
 - **Description softened (Spam fix)** — CWS Store Listing → Description'daki AI sağlayıcı marka listesi (`Ollama / LM Studio / Anthropic Claude / OpenAI ChatGPT / Google Gemini / Groq`) "local LLM server" + "cloud AI API" kategorilerine genelleştirildi. Reviewer "excessive keywords" tespit etmişti.
 - **Privacy policy expanded (Privacy fix)** — `landing/privacy.html` 8 section'dan 13 section'a genişletildi: data collection, use, storage, third parties tablosu, retention, user rights, Limited Use disclosure (CWS Policy), security, GDPR/KVKK responsibility, children's privacy, change log, Meta/WhatsApp affiliation, contact.
-- **Privacy URL switched** — CWS Privacy policy URL `bluedev.dev/privacy` (genel) → `bluedev.dev/products/wa-contacts-exporter/privacy` (ürün-spesifik, kapsamlı).
+- **Privacy URL switched** — CWS Privacy policy URL `bluedev.dev/privacy` (genel) → `bluedev.dev/wa-contacts-exporter/privacy` (ürün-spesifik, kapsamlı).
 - Repo-side doc updates (`docs/store-listing-{en,tr}.md`, `docs/permission-justifications.md`) — markaları kaldıracak şekilde generic ifadeye çekildi. Manifest + zip dokunulmadı (aynı v1.0.2 paketi).
 
 ---
