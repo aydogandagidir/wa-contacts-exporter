@@ -20,6 +20,15 @@ Removed unused `activeTab` permission to address Chrome Web Store rejection (Vio
 
 CWS rejection (`Violation reference: Purple Potassium`) — reviewer manifest'te istenen ama runtime'da kullanılmayan permission'ı tespit etti. Düzeltme reviewer'ın önerdiği yöntemle uyumlu: "Remove the unused permission(s) listed above from your manifest file." Hiçbir kullanıcı akışı bu değişiklikten etkilenmez; host_permissions zaten gerekli erişimi sağlıyor.
 
+### Listing resubmission amendment (2026-05-12)
+
+İkinci CWS rejection sonrası (`Violation references: Purple Nickel + Yellow Argon`) — zip değişmedi, sadece listing metadata ve privacy policy:
+
+- **Description softened (Spam fix)** — CWS Store Listing → Description'daki AI sağlayıcı marka listesi (`Ollama / LM Studio / Anthropic Claude / OpenAI ChatGPT / Google Gemini / Groq`) "local LLM server" + "cloud AI API" kategorilerine genelleştirildi. Reviewer "excessive keywords" tespit etmişti.
+- **Privacy policy expanded (Privacy fix)** — `landing/privacy.html` 8 section'dan 13 section'a genişletildi: data collection, use, storage, third parties tablosu, retention, user rights, Limited Use disclosure (CWS Policy), security, GDPR/KVKK responsibility, children's privacy, change log, Meta/WhatsApp affiliation, contact.
+- **Privacy URL switched** — CWS Privacy policy URL `bluedev.dev/privacy` (genel) → `bluedev.dev/products/wa-contacts-exporter/privacy` (ürün-spesifik, kapsamlı).
+- Repo-side doc updates (`docs/store-listing-{en,tr}.md`, `docs/permission-justifications.md`) — markaları kaldıracak şekilde generic ifadeye çekildi. Manifest + zip dokunulmadı (aynı v1.0.2 paketi).
+
 ---
 
 ## [1.0.1] — 2026-05-08

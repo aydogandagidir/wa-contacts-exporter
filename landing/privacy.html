@@ -3,56 +3,62 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Aydınlatma Metni — WA Contacts Exporter</title>
-    <meta name="description" content="WA Contacts Exporter KVKK / GDPR aydınlatma metni — Bluedev." />
+    <title>Privacy Policy — WA Contacts Exporter</title>
+    <meta name="description" content="WA Contacts Exporter privacy policy — what data is collected, how it is used, where it is stored, and which third parties may receive it. KVKK / GDPR compliant." />
     <meta name="theme-color" content="#015AFF" />
     <link rel="icon" type="image/png" sizes="32x32" href="/wa-contacts-exporter/icons/icon48.png" />
     <link rel="stylesheet" href="/wa-contacts-exporter/styles.css" />
     <style>
       .privacy-page {
-        max-width: 760px;
+        max-width: 820px;
         margin: 0 auto;
-        padding: 64px 24px 96px;
+        padding: 56px 24px 88px;
       }
       .privacy-page h1 {
-        font-size: 36px;
+        font-size: 32px;
         font-weight: 800;
         letter-spacing: -0.5px;
         margin: 0 0 8px;
       }
       .privacy-page h2 {
-        font-size: 20px;
-        margin: 36px 0 8px;
+        font-size: 19px;
+        margin: 32px 0 8px;
         color: var(--c-primary);
       }
-      .privacy-page p, .privacy-page ul {
-        margin: 0 0 14px;
+      .privacy-page h3 {
+        font-size: 15px;
+        margin: 18px 0 6px;
         color: var(--c-text);
       }
+      .privacy-page p, .privacy-page ul {
+        margin: 0 0 12px;
+        color: var(--c-text);
+        line-height: 1.6;
+      }
       .privacy-page ul {
-        padding-left: 24px;
+        padding-left: 22px;
       }
       .privacy-page li {
-        margin-bottom: 6px;
+        margin-bottom: 5px;
       }
       .privacy-page .meta {
         font-size: 14px;
         color: var(--c-muted);
-        margin-bottom: 28px;
+        margin-bottom: 24px;
       }
       .callout {
-        padding: 16px 18px;
+        padding: 14px 16px;
         background: var(--c-primary-tint);
         border-left: 3px solid var(--c-primary);
         border-radius: var(--r-sm);
-        font-size: 15px;
-        margin: 16px 0 24px;
+        font-size: 14.5px;
+        margin: 14px 0 22px;
       }
       .lang-toggle-row {
         display: flex;
         justify-content: flex-end;
         gap: 8px;
-        margin-bottom: 24px;
+        margin-bottom: 22px;
       }
       .lang-pill {
         padding: 4px 12px;
@@ -74,7 +80,23 @@
         gap: 6px;
         font-size: 14px;
         color: var(--c-muted);
-        margin-bottom: 16px;
+        margin-bottom: 12px;
+      }
+      .privacy-page table {
+        border-collapse: collapse;
+        margin: 8px 0 16px;
+        font-size: 14px;
+        width: 100%;
+      }
+      .privacy-page th, .privacy-page td {
+        border: 1px solid var(--c-border);
+        padding: 8px 10px;
+        text-align: left;
+        vertical-align: top;
+      }
+      .privacy-page th {
+        background: var(--c-primary-tint);
+        font-weight: 600;
       }
     </style>
   </head>
@@ -85,216 +107,532 @@
           <div class="brand-mark">WA</div>
           <div class="brand-text">
             <div class="brand-name">Contacts Exporter</div>
-            <div class="brand-sub">by Bluedev · v1.0.0</div>
+            <div class="brand-sub">by Bluedev · v1.0.2</div>
           </div>
         </a>
         <nav class="nav-links">
-          <a href="/wa-contacts-exporter/index.html#features">Özellikler</a>
-          <a href="/wa-contacts-exporter/index.html#install" class="btn btn-primary btn-sm">Kurulum</a>
+          <a href="/wa-contacts-exporter/index.html#features">Özellikler / Features</a>
+          <a href="/wa-contacts-exporter/index.html#install" class="btn btn-primary btn-sm">Kurulum / Install</a>
         </nav>
       </div>
     </header>
 
     <main class="privacy-page">
-      <a href="/wa-contacts-exporter/index.html" class="back-link">← Ana sayfaya dön</a>
+      <a href="/wa-contacts-exporter/index.html" class="back-link">← Ana sayfaya dön / Back to home</a>
       <div class="lang-toggle-row">
         <button class="lang-pill active" data-set-lang="tr">🇹🇷 Türkçe</button>
         <button class="lang-pill" data-set-lang="en">🇬🇧 English</button>
       </div>
 
-      <!-- TR section -->
+      <!-- ============================== TR section ============================== -->
       <section data-lang-section="tr">
-        <h1>KVKK / GDPR Aydınlatma Metni</h1>
-        <p class="meta">Son güncelleme: 6 Mayıs 2026 · v1.0.0</p>
+        <h1>Gizlilik Politikası — WA Contacts Exporter</h1>
+        <p class="meta">Son güncelleme: 12 Mayıs 2026 · v1.0.2</p>
 
         <div class="callout">
-          <strong>Önemli:</strong> Bu eklenti çıkarılan hiçbir veriyi sunucuya
-          göndermez, üçüncü taraflarla paylaşmaz, bulut tabanlı bir hizmet
-          kullanmaz (sizin açıkça seçtiğiniz AI sağlayıcısı hariç). Tüm işlem
-          cihazınızda yereldir.
+          Bu Gizlilik Politikası, WA Contacts Exporter Chrome eklentisinin
+          ("eklenti") kullanıcı verilerini nasıl ele aldığını açıklar. Hem Free
+          hem Pro sürümler için geçerlidir. Eklenti hiçbir veriyi Bluedev
+          sunucularına iletmez; tüm işlem kullanıcının kendi cihazında yereldir.
         </div>
 
-        <h2>1. Veri sorumlusu</h2>
+        <h2>1. Eklentinin Eriştiği Veriler</h2>
         <p>
-          Bu eklentiyi geliştiren <strong>Bluedev</strong>, eklentinin sizin
-          cihazınızda çalışan bir yazılım parçası olduğunu ve eklenti
-          kullanımında oluşturulan veriler üzerinde hiçbir sunucu işleme
-          gerçekleştirmediğini beyan eder. Eklenti sadece sizin etkileşim
-          ettiğiniz WhatsApp Web sayfasındaki verilere erişir.
+          Eklenti, yalnızca kullanıcı popup üzerinden bir işlem başlattığında,
+          kendi cihazından şu verilere erişir:
+        </p>
+        <h3>a. WhatsApp Web oturum verileri</h3>
+        <ul>
+          <li>Sohbet listesi (birebir ve grup), son mesaj zaman damgaları</li>
+          <li>Sohbet başına mesaj geçmişi (kullanıcı kontrollü, 100-5000 mesaj)</li>
+          <li>Grup üyeleri ve admin durumları</li>
+          <li>WhatsApp Business etiketleri ve sohbet eşleşmeleri</li>
+          <li>Kayıtlı kişiler (telefon defterindeki WA kullanıcıları)</li>
+          <li>Opsiyonel: kayıtsız kişiler (varsayılan kapalı, kullanıcı opt-in gerekir)</li>
+        </ul>
+        <h3>b. Kullanıcı tercihleri (chrome.storage.local'da yerel)</h3>
+        <ul>
+          <li>KVKK / GDPR rıza durumu</li>
+          <li>AI sağlayıcı konfigürasyonu (tip, URL, model adı, kullanıcı API anahtarı)</li>
+          <li>Sohbet başına AI talimatları</li>
+          <li>Otomatik cevap ayarları (limitler, sessiz saatler, sohbet opt-in)</li>
+          <li>Pro lisans aktivasyon durumu</li>
+          <li>Arayüz dili tercihi</li>
+        </ul>
+        <h3>c. Pro lisans verisi (yalnızca Pro sürümü)</h3>
+        <ul>
+          <li>Gumroad lisans anahtarı (kullanıcı tarafından girilen)</li>
+          <li>Gumroad satın alımıyla ilişkili e-posta</li>
+          <li>Aktivasyon ve son doğrulama zaman damgaları</li>
+        </ul>
+
+        <h2>2. Verilerin Kullanım Şekli</h2>
+        <h3>a. Dışa aktarma</h3>
+        <p>
+          Eklenti, WhatsApp Web verilerinden CSV, XLSX veya VCard dosyaları üretip
+          kullanıcının yerel İndirilenler klasörüne <code>chrome.downloads</code>
+          API'si üzerinden yazar.
+        </p>
+        <h3>b. AI özellikleri (Pro, opsiyonel)</h3>
+        <p>
+          Kullanıcı bir AI özelliğini kullandığında (sohbet özeti, cevap önerisi,
+          triyaj, üslup taklidi), ilgili sohbet içeriği <strong>kullanıcının
+          tarayıcısından doğrudan</strong> kullanıcının yapılandırdığı AI
+          sağlayıcısına gönderilir. AI sağlayıcı bir yanıt döner ve bu yanıt
+          popup'ta gösterilir. Eklenti hiçbir aracı sunucu üzerinden AI
+          yanıtlarını saklamaz veya iletmez.
+        </p>
+        <h3>c. Otomatik cevap (Pro, opsiyonel)</h3>
+        <p>
+          Kullanıcı belirli bir sohbet için otomatik cevabı etkinleştirdiğinde,
+          eklenti o sohbetin gelen mesajlarını izler ve yapılandırılmış AI
+          sağlayıcıyla taslak cevaplar üretir. Taslaklar gönderilmeden önce
+          kullanıcı tarafından onaylanır (Taslak modu varsayılandır; otomatik
+          gönderim her sohbet için ayrı opt-in).
+        </p>
+        <h3>d. Pro lisans doğrulaması</h3>
+        <p>
+          Kullanıcı Pro lisans aktive ettiğinde, eklenti lisans anahtarını ve
+          ürün kimliğini Gumroad License API'sine
+          (<code>POST https://api.gumroad.com/v2/licenses/verify</code>) tek
+          seferlik aktivasyon için gönderir. Aktivasyondan sonra, aynı çağrı
+          yaklaşık 7 günde bir, lisansın iade / chargeback / itiraz almadığını
+          doğrulamak için yapılır. İstek gövdesi <strong>yalnızca</strong> lisans
+          anahtarı ve ürün kimliği içerir; hiçbir sohbet içeriği, kişi verisi
+          veya başka kişisel bilgi gönderilmez.
         </p>
 
-        <h2>2. Hangi veriler işlenir?</h2>
+        <h2>3. Verilerin Saklandığı Yer</h2>
+        <h3>a. Kullanıcının cihazında</h3>
+        <ul>
+          <li>
+            Kullanıcı tercihleri, AI konfigürasyonu, lisans durumu ve rıza
+            bayrağı <code>chrome.storage.local</code>'da saklanır. Bu depolama
+            kullanıcının tarayıcı profiline özeldir.
+          </li>
+          <li>
+            Dışa aktarılan dosyalar (CSV / XLSX / VCard) kullanıcının
+            İndirilenler klasörüne yazılır.
+          </li>
+        </ul>
+        <h3>b. Cihaz dışında</h3>
+        <ul>
+          <li>
+            Eklenti hiçbir kullanıcı verisini Bluedev sunucusuna iletmez. Bluedev
+            bu eklenti için arka uç hizmeti işletmemektedir.
+          </li>
+        </ul>
+
+        <h2>4. Verilerin Paylaşıldığı Üçüncü Taraflar</h2>
         <p>
-          Sizin tetiklediğiniz "Çıkar" işlemleri sırasında WhatsApp Web'in kendi
-          <em>Store</em> nesnesinden okunan veriler:
+          Eklenti, yalnızca aşağıdaki koşullar altında aşağıdaki üçüncü taraflara
+          veri iletebilir:
+        </p>
+        <table>
+          <thead>
+            <tr><th>Üçüncü taraf</th><th>Tetiklenme koşulu</th><th>İletilen veri</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Kullanıcının seçtiği AI sağlayıcısı (yerel LLM sunucusu ya da bulut AI API)</td>
+              <td>Sadece kullanıcı bir AI özelliğini etkinleştirir ve bir sağlayıcı yapılandırırsa</td>
+              <td>Özetlenecek/cevaplanacak sohbet içeriği — kullanıcının kendi API anahtarıyla, doğrudan tarayıcıdan sağlayıcıya. Bluedev aracı sunucu kullanmaz.</td>
+            </tr>
+            <tr>
+              <td>Gumroad (<a href="https://gumroad.com/privacy">gumroad.com/privacy</a>)</td>
+              <td>Sadece kullanıcı Pro lisans aktive ederse ve aktivasyon sonrası haftalık doğrulama sırasında</td>
+              <td>Lisans anahtarı, ürün kimliği ve usage-counter bayrağı. Hiçbir sohbet içeriği veya kişi verisi <strong>YOKTUR</strong>.</td>
+            </tr>
+            <tr>
+              <td>WhatsApp Web (web.whatsapp.com)</td>
+              <td>Eklenti aktifken, kullanıcının kendi tarayıcısı içinde</td>
+              <td>Oturum verileri okuma; otomatik cevap için kullanıcı onaylı cevap gönderme. Eklenti kendi başına WhatsApp / Meta sunucusuna bağlanmaz.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          Eklenti reklam ağları, analitik hizmetleri veya yukarıda listelenmemiş
+          başka herhangi bir üçüncü tarafla <strong>veri paylaşmaz</strong>.
+        </p>
+
+        <h2>5. Veri Saklama Süresi</h2>
+        <ul>
+          <li>
+            Kullanıcı tercihleri ve lisans durumu, kullanıcı eklentiyi kaldırana,
+            chrome://settings üzerinden eklenti verilerini temizleyene veya Pro
+            sekmesindeki <em>"Bu cihazda devre dışı bırak"</em> butonunu
+            kullanana kadar <code>chrome.storage.local</code>'da kalır.
+          </li>
+          <li>
+            Dışa aktarılan dosyalar kullanıcı silene kadar cihazda kalır.
+          </li>
+          <li>
+            AI sağlayıcıları ve Gumroad verileri kendi saklama politikalarına
+            göre tutar; ilgili sağlayıcının gizlilik politikasına bakın.
+          </li>
+        </ul>
+
+        <h2>6. Kullanıcı Hakları</h2>
+        <ul>
+          <li>
+            <strong>Erişim hakkı:</strong> Tüm eklenti verileri kullanıcının
+            cihazında yerelde tutulur; <code>chrome://extensions</code>
+            üzerinden veya eklenti arayüzünden incelenebilir.
+          </li>
+          <li>
+            <strong>Silme hakkı:</strong> Eklentiyi kaldırmak
+            <code>chrome.storage.local</code>'daki tüm verileri kaldırır. Dışa
+            aktarılan dosyalar doğrudan dosya sisteminden silinebilir.
+          </li>
+          <li>
+            <strong>Pro'yu cihazda devre dışı bırakma:</strong> Pro sekmesindeki
+            <em>"Bu cihazda devre dışı bırak"</em> butonu lisansı yerelden
+            kaldırır.
+          </li>
+          <li>
+            <strong>İade hakkı:</strong> Pro lisansları Gumroad'un 30 gün
+            koşulsuz iade politikası ile iade edilebilir.
+          </li>
+        </ul>
+
+        <h2>7. Limited Use Disclosure (Chrome Web Store Politikası)</h2>
+        <p>
+          Eklentinin Google API'lerinden (kullanıcı bir Google AI sağlayıcısı
+          yapılandırdığında) aldığı bilgileri kullanımı, <strong>Limited
+          Use</strong> gereksinimleri dahil Chrome Web Store Kullanıcı Veri
+          Politikası'na uyar. Özellikle:
         </p>
         <ul>
-          <li>Sohbet adları, telefon numaraları, son mesaj zaman damgaları</li>
-          <li>Grup adları, üye listesi, üyelerin telefon numaraları ve admin durumu</li>
-          <li>WhatsApp etiketleri ve hangi sohbete uygulandığı</li>
-          <li>Kayıtlı kişiler (Contact koleksiyonu)</li>
-          <li>Mesaj geçmişi (sohbet başına 100-5000, kullanıcı kontrollü)</li>
+          <li>
+            Kullanıcı verisi yalnızca eklentinin arayüzünde belirgin olan
+            kullanıcıya yönelik özellikleri sağlamak veya iyileştirmek için
+            kullanılır.
+          </li>
+          <li>
+            Kullanıcı verisi, kullanıcıya yönelik özellikleri sağlamak/
+            iyileştirmek, geçerli yasalara uymak veya birleşme/satın alma
+            kapsamı dışında <strong>başkalarına aktarılmaz</strong>.
+          </li>
+          <li>
+            Kullanıcı verisi <strong>kişiselleştirilmiş reklam için
+            aktarılmaz veya kullanılmaz</strong>.
+          </li>
+          <li>
+            Kullanıcı verisi <strong>kredi notu belirlemek veya kredilendirme
+            amaçlı kullanılmaz</strong>.
+          </li>
+          <li>
+            İnsanlar, kullanıcı belirli durumlar için açık onay vermediği veya
+            güvenlik amaçları, geçerli yasalara uyum ya da veri toplanmış ve
+            anonimleştirilmiş eklenti iç operasyonları için gerekli olmadığı
+            sürece kullanıcı verisini okumaz.
+          </li>
         </ul>
+
+        <h2>8. Güvenlik</h2>
         <p>
-          Bu veriler yalnızca sizin tarayıcınızın <code>chrome.storage.local</code>
-          alanında geçici olarak (popup oturumu boyunca) ve indirdiğiniz
-          CSV/XLSX/VCard dosyasında saklanır.
+          API anahtarları (bulut AI sağlayıcıları için) ve Gumroad lisans
+          anahtarları yalnızca tarayıcı profiline özel
+          <code>chrome.storage.local</code>'da saklanır. Eklenti bu kimlik
+          bilgilerini Bluedev'e <strong>iletmez</strong>. Kullanıcı kendi
+          cihazının ve tarayıcı profilinin güvenliğinden sorumludur.
         </p>
 
-        <h2>3. AI sağlayıcı seçimi ve veri akışı</h2>
+        <h2>9. KVKK / GDPR Sorumluluğu</h2>
         <p>
-          AI özelliklerini kullanırsanız, seçtiğiniz sağlayıcının domain'ine
-          (Anthropic, OpenAI, Google, Groq veya kendi yerel Ollama / LM Studio
-          sunucunuz) <strong>doğrudan tarayıcınızdan</strong> istek yapılır.
-          Bluedev bu istekleri görmez ve aracılık etmez. API anahtarlarınız
-          yalnızca yerel olarak <code>chrome.storage.local</code>'da saklanır.
-        </p>
-
-        <h2>4. KVKK / GDPR Sorumluluğu</h2>
-        <p>
-          Eklentiyi kullanarak çıkardığınız veriler, üçüncü kişilere ait
-          kişisel verileri içerebilir (sohbet ettiğiniz kişilerin telefon
-          numaraları, isimleri, grup üyeleri vb.). Bu veriler için:
-        </p>
-        <ul>
-          <li>İlgili kişilerden gerekli açık rızayı almak,</li>
-          <li>KVKK 5. madde veya GDPR 6. madde anlamında hukuki sebep belirlemek,</li>
-          <li>Verileri yalnızca işleme amacıyla sınırlı tutmak,</li>
-          <li>Verileri güvenli saklamak veya silmek</li>
-        </ul>
-        <p>
-          <strong>Tamamen kullanıcının (sizin) sorumluluğunuzdadır.</strong>
+          Eklentiyi kullanarak çıkardığınız veriler, üçüncü kişilere ait kişisel
+          verileri içerebilir (sohbet ettiğiniz kişilerin telefon numaraları,
+          isimleri, grup üyeleri vb.). Bu veriler için ilgili kişilerden açık
+          rıza almak, KVKK madde 5 / GDPR madde 6 anlamında hukuki sebep
+          belirlemek, verileri işleme amacıyla sınırlı tutmak ve güvenli
+          saklamak/silmek <strong>tamamen kullanıcının sorumluluğundadır</strong>.
           Bluedev, kullanıcının yetkisiz veri işleme faaliyetlerinden hiçbir
           şekilde sorumlu değildir.
         </p>
 
-        <h2>5. Varsayılan ayarlar</h2>
-        <ul>
-          <li>"Kayıtlı olmayan kişileri dahil et" anahtarı <strong>varsayılan kapalıdır</strong>.</li>
-          <li>Eklenti ilk açılışta KVKK rızası ister; rıza verilmeden hiçbir çıkarma yapılamaz.</li>
-          <li>Otomatik cevap modülü <strong>varsayılan kapalı</strong>; etkin olduğunda taslak modunda çalışır.</li>
-          <li>Hata logu yalnızca yerel <code>chrome.storage.local</code>'da, en fazla 50 kayıt; otomatik döner.</li>
-        </ul>
-
-        <h2>6. Verilerin silinmesi</h2>
+        <h2>10. Çocukların Gizliliği</h2>
         <p>
-          Eklentinin tuttuğu yerel verileri silmek için
-          <code>chrome://extensions</code> → "WA Contacts Exporter" → "Detaylar"
-          → "Site verilerini sil" yolunu kullanabilirsiniz. İndirdiğiniz
-          dosyalar bilgisayarınızda kalmaya devam eder; onları kendiniz
-          silmelisiniz.
+          Eklenti 13 yaş altı çocuklara yönelik değildir ve çocuklardan bilerek
+          veri toplamaz.
         </p>
 
-        <h2>7. Meta / WhatsApp ile bağlantı</h2>
+        <h2>11. Politika Değişiklikleri</h2>
+        <p>
+          Bu Gizlilik Politikası'ndaki değişiklikler "Son güncelleme" tarihiyle
+          bu sayfada yayımlanır. Önemli değişiklikler ayrıca eklenti popup'ında
+          bir bildirim ile duyurulabilir.
+        </p>
+
+        <h2>12. Meta / WhatsApp İlişkisi</h2>
         <p>
           Bu eklenti <strong>resmi WhatsApp / Meta ürünü değildir</strong> ve
           WhatsApp LLC veya Meta Platforms Inc. tarafından desteklenmez,
           sponsorluk almaz veya bağlantılı değildir. WhatsApp markası WhatsApp
-          LLC'ye aittir. Eklenti yalnızca kullanıcının kendi cihazındaki kendi
-          WhatsApp Web oturumundaki kendi verilerine erişir.
+          LLC'ye aittir.
         </p>
 
-        <h2>8. İletişim</h2>
+        <h2>13. İletişim</h2>
         <p>
-          Bu metin veya eklenti hakkında soru ve görüşleriniz için:
+          Gizlilik ile ilgili sorularınız veya talepleriniz için:
           <a href="https://bluedev.dev">bluedev.dev</a> ·
           <a href="https://bluedev.dev/contact">bluedev.dev/contact</a>
         </p>
       </section>
 
-      <!-- EN section -->
+      <!-- ============================== EN section ============================== -->
       <section data-lang-section="en" hidden>
-        <h1>Privacy Policy (GDPR / KVKK)</h1>
-        <p class="meta">Last updated: 2026-05-06 · v1.0.0</p>
+        <h1>Privacy Policy — WA Contacts Exporter</h1>
+        <p class="meta">Last updated: 2026-05-12 · v1.0.2</p>
 
         <div class="callout">
-          <strong>Important:</strong> This extension does not send any extracted
-          data to any server, does not share with third parties, and does not
-          use any cloud-based service (except the AI provider you explicitly
-          select). All processing is local on your device.
+          This Privacy Policy describes how the WA Contacts Exporter Chrome
+          extension ("the extension") handles user data. It applies to both the
+          Free and Pro versions. The extension does not transmit any data to
+          Bluedev servers; all processing is local on the user's device.
         </div>
 
-        <h2>1. Data controller</h2>
+        <h2>1. What Data the Extension Accesses</h2>
         <p>
-          <strong>Bluedev</strong>, the developer of this extension, declares
-          that the extension is a piece of software running on your device, and
-          that no server-side processing is performed on data generated through
-          its use. The extension only accesses data on the WhatsApp Web page
-          you interact with.
+          The extension accesses the following data from the user's own device,
+          only when the user explicitly triggers an action through the extension
+          popup:
+        </p>
+        <h3>a. WhatsApp Web session data</h3>
+        <ul>
+          <li>Chat list (1-on-1 and group chats), with last-message timestamps</li>
+          <li>Message history per chat (controlled by the user, 100 to 5000 messages)</li>
+          <li>Group members and their admin status</li>
+          <li>WhatsApp Business labels and label-chat mappings</li>
+          <li>Saved contacts (phonebook entries with WA accounts)</li>
+          <li>Optional: unsaved contacts (off by default, user opt-in required)</li>
+        </ul>
+        <h3>b. User preferences (stored locally in chrome.storage.local)</h3>
+        <ul>
+          <li>GDPR / KVKK consent acceptance</li>
+          <li>AI provider configuration (provider type, server URL, model name, user-supplied API key)</li>
+          <li>Per-chat AI instructions</li>
+          <li>Auto-reply settings (rate limits, quiet hours, per-chat opt-in)</li>
+          <li>Pro license activation state</li>
+          <li>UI language preference</li>
+        </ul>
+        <h3>c. Pro license data (Pro version only)</h3>
+        <ul>
+          <li>Gumroad license key (entered by the user)</li>
+          <li>Email associated with the Gumroad purchase</li>
+          <li>Activation timestamp and last-verification timestamp</li>
+        </ul>
+
+        <h2>2. How the Data Is Used</h2>
+        <h3>a. Export</h3>
+        <p>
+          The extension generates CSV, XLSX, or VCard files from the WhatsApp
+          Web data and saves them to the user's local Downloads folder via the
+          <code>chrome.downloads</code> API.
+        </p>
+        <h3>b. AI features (Pro, optional)</h3>
+        <p>
+          When the user invokes an AI feature (chat summary, reply suggestion,
+          triage, voice mimicry), the relevant chat content is sent
+          <strong>directly from the user's browser</strong> to the AI provider
+          that the user has configured. The AI provider returns a response,
+          which is displayed in the extension popup. The extension does not
+          store or relay AI responses through any intermediary server.
+        </p>
+        <h3>c. Auto-reply (Pro, optional)</h3>
+        <p>
+          When the user enables auto-reply for a specific chat, the extension
+          monitors incoming messages on that chat and generates draft replies
+          using the configured AI provider. Drafts are reviewed by the user
+          before sending (Draft mode is the default; auto-send is opt-in per
+          chat).
+        </p>
+        <h3>d. Pro license verification</h3>
+        <p>
+          When the user activates a Pro license, the extension sends the license
+          key and product identifier to Gumroad's License API
+          (<code>POST https://api.gumroad.com/v2/licenses/verify</code>) for
+          one-time activation. After activation, the same call is made
+          approximately every 7 days to verify that the license has not been
+          refunded, charge-backed, or disputed. The request body contains
+          <strong>only</strong> the license key and product identifier; no chat
+          content, contact data, or other personal information is included.
         </p>
 
-        <h2>2. What data is processed?</h2>
+        <h2>3. Where the Data Is Stored</h2>
+        <h3>a. On the user's device</h3>
+        <ul>
+          <li>
+            User preferences, AI configuration, license state, and consent flag
+            are stored in <code>chrome.storage.local</code>. This storage is
+            scoped to the user's browser profile.
+          </li>
+          <li>
+            Exported files (CSV / XLSX / VCard) are written to the user's
+            Downloads folder.
+          </li>
+        </ul>
+        <h3>b. Outside the device</h3>
+        <ul>
+          <li>
+            The extension does not transmit any user data to Bluedev servers.
+            Bluedev operates no backend service for this extension.
+          </li>
+        </ul>
+
+        <h2>4. Third Parties That May Receive Data</h2>
         <p>
-          Data read from WhatsApp Web's own <em>Store</em> object during user-initiated
-          "Extract" operations:
+          The extension may transmit data to the following third parties, and
+          only under the conditions described:
+        </p>
+        <table>
+          <thead>
+            <tr><th>Third party</th><th>Triggered when</th><th>Data transmitted</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>User-selected AI provider (local LLM server or cloud AI API)</td>
+              <td>Only if the user activates an AI feature and configures a provider</td>
+              <td>Chat content to be summarized / replied to — sent directly from the user's browser to the provider, with the user's own API key. Bluedev runs no relay server.</td>
+            </tr>
+            <tr>
+              <td>Gumroad (<a href="https://gumroad.com/privacy">gumroad.com/privacy</a>)</td>
+              <td>Only if the user activates a Pro license, and during the weekly verification thereafter</td>
+              <td>License key, product identifier, and a usage-counter flag. <strong>NO</strong> chat content, contact data, or other personal information.</td>
+            </tr>
+            <tr>
+              <td>WhatsApp Web (web.whatsapp.com)</td>
+              <td>While the extension is active, inside the user's own browser</td>
+              <td>Session data reads; for auto-reply, approved replies are sent. The extension does not contact WhatsApp / Meta servers on its own.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          The extension does <strong>not</strong> share data with advertising
+          networks, analytics services, or any other third party not listed
+          above.
+        </p>
+
+        <h2>5. Data Retention</h2>
+        <ul>
+          <li>
+            User preferences and license state remain in
+            <code>chrome.storage.local</code> until the user uninstalls the
+            extension, manually clears extension data via chrome://settings, or
+            uses the in-extension <em>"Disable on this device"</em> button for
+            the Pro license.
+          </li>
+          <li>
+            Exported files remain on the user's device until the user deletes
+            them.
+          </li>
+          <li>
+            AI providers and Gumroad retain data according to their own
+            retention policies; refer to each provider's privacy policy.
+          </li>
+        </ul>
+
+        <h2>6. User Rights</h2>
+        <ul>
+          <li>
+            <strong>Right to access:</strong> All extension data is stored
+            locally on the user's device and can be inspected via
+            <code>chrome://extensions</code> or by exporting from the extension
+            UI.
+          </li>
+          <li>
+            <strong>Right to delete:</strong> Uninstalling the extension removes
+            all data stored in <code>chrome.storage.local</code>. Exported files
+            can be deleted directly from the file system.
+          </li>
+          <li>
+            <strong>Right to disable Pro on a device:</strong> The Pro tab
+            offers a <em>"Disable on this device"</em> button that removes the
+            license from local storage.
+          </li>
+          <li>
+            <strong>Refunds:</strong> Pro licenses are eligible for refunds
+            through Gumroad's 30-day no-questions-asked refund policy.
+          </li>
+        </ul>
+
+        <h2>7. Limited Use Disclosure (Chrome Web Store Policy)</h2>
+        <p>
+          The extension's use of information received from Google APIs (when the
+          user configures a Google AI provider) adheres to the Chrome Web Store
+          User Data Policy, including the <strong>Limited Use</strong>
+          requirements. Specifically:
         </p>
         <ul>
-          <li>Chat names, phone numbers, last-message timestamps</li>
-          <li>Group names, member lists, members' phone numbers and admin status</li>
-          <li>WhatsApp labels and which chat each is applied to</li>
-          <li>Saved contacts (Contact collection)</li>
-          <li>Message history (100-5000 per chat, user-controlled)</li>
+          <li>
+            User data is used solely to provide or improve the user-facing
+            features that are prominent in the extension's user interface.
+          </li>
+          <li>
+            User data is <strong>not transferred</strong> to others except as
+            necessary to provide or improve user-facing features, to comply with
+            applicable laws, or as part of a merger or acquisition.
+          </li>
+          <li>
+            User data is <strong>not transferred or used for personalized
+            advertising</strong>.
+          </li>
+          <li>
+            User data is <strong>not used to determine creditworthiness or for
+            lending purposes</strong>.
+          </li>
+          <li>
+            Humans do not read user data unless the user provides explicit
+            affirmative consent for specific instances, or it is necessary for
+            security purposes, to comply with applicable laws, or for the
+            extension's internal operations where the data has been aggregated
+            and anonymized.
+          </li>
         </ul>
+
+        <h2>8. Security</h2>
         <p>
-          This data is stored only temporarily in your browser's
-          <code>chrome.storage.local</code> (for the popup session) and in any
-          CSV/XLSX/VCard file you download.
+          API keys (for cloud AI providers) and Gumroad license keys are stored
+          only in <code>chrome.storage.local</code>, scoped to the browser
+          profile. The extension does <strong>not</strong> transmit these
+          credentials to Bluedev. The user is responsible for the security of
+          their own device and browser profile.
         </p>
 
-        <h2>3. AI provider selection and data flow</h2>
-        <p>
-          When you use AI features, requests go <strong>directly from your
-          browser</strong> to the domain of the provider you select (Anthropic,
-          OpenAI, Google, Groq, or your own local Ollama / LM Studio server).
-          Bluedev does not see or proxy these requests. API keys are stored only
-          locally in <code>chrome.storage.local</code>.
-        </p>
-
-        <h2>4. GDPR / KVKK responsibility</h2>
+        <h2>9. GDPR / KVKK Responsibility</h2>
         <p>
           Data extracted using the extension may include personal data of third
           parties (phone numbers, names, group members of people you chat with).
-          For this data:
-        </p>
-        <ul>
-          <li>Obtain the necessary explicit consent,</li>
-          <li>Establish a lawful basis under GDPR Article 6 / KVKK Article 5,</li>
-          <li>Limit data use to the processing purpose,</li>
-          <li>Store securely or delete</li>
-        </ul>
-        <p>
-          <strong>Is entirely the user's (your) responsibility.</strong> Bluedev
-          is not liable for any unauthorized data processing by the user.
+          Obtaining the necessary consent, establishing a lawful basis under
+          GDPR Article 6 / KVKK Article 5, limiting use to the processing
+          purpose, and storing or deleting data securely is
+          <strong>entirely the user's responsibility</strong>. Bluedev is not
+          liable for any unauthorized data processing by the user.
         </p>
 
-        <h2>5. Default settings</h2>
-        <ul>
-          <li>"Include unsaved contacts" defaults <strong>OFF</strong>.</li>
-          <li>The first run requires consent; without consent, no extraction is allowed.</li>
-          <li>Auto-reply module defaults <strong>OFF</strong>; when enabled, runs in draft mode.</li>
-          <li>Error log lives only in local <code>chrome.storage.local</code>, capped at 50 entries; rotates.</li>
-        </ul>
-
-        <h2>6. Data deletion</h2>
+        <h2>10. Children's Privacy</h2>
         <p>
-          To delete the local data the extension keeps, go to
-          <code>chrome://extensions</code> → "WA Contacts Exporter" → "Details"
-          → "Clear site data". Files you've downloaded remain on your computer;
-          delete them yourself.
+          The extension is not directed to children under 13 and does not
+          knowingly collect data from children.
         </p>
 
-        <h2>7. Meta / WhatsApp affiliation</h2>
+        <h2>11. Changes to This Policy</h2>
         <p>
-          This extension is <strong>not an official WhatsApp / Meta product</strong> and
-          is not affiliated with, endorsed by, or sponsored by WhatsApp LLC or
-          Meta Platforms Inc. The WhatsApp trademark is owned by WhatsApp LLC.
-          The extension only accesses data from the user's own WhatsApp Web
-          session on the user's own device.
+          Any changes to this Privacy Policy will be posted on this page with an
+          updated "Last updated" date. Material changes may also be announced
+          via a notice in the extension popup.
         </p>
 
-        <h2>8. Contact</h2>
+        <h2>12. Meta / WhatsApp Affiliation</h2>
         <p>
-          For questions or comments about this policy or the extension:
+          This extension is <strong>not an official WhatsApp / Meta
+          product</strong> and is not affiliated with, endorsed by, or sponsored
+          by WhatsApp LLC or Meta Platforms Inc. The WhatsApp trademark is owned
+          by WhatsApp LLC.
+        </p>
+
+        <h2>13. Contact</h2>
+        <p>
+          For privacy-related questions or requests:
           <a href="https://bluedev.dev">bluedev.dev</a> ·
           <a href="https://bluedev.dev/contact">bluedev.dev/contact</a>
         </p>
@@ -318,7 +656,7 @@
           <a href="https://bluedev.dev">bluedev.dev</a>
         </div>
         <div class="footer-disclaimer">
-          WhatsApp™ WhatsApp LLC's registered trademark. This extension is not
+          WhatsApp™ is a trademark of WhatsApp LLC. This extension is not
           affiliated with Meta / WhatsApp. © 2026 Bluedev. All rights reserved.
         </div>
       </div>

@@ -66,16 +66,12 @@ Export your WhatsApp Web data to CSV, XLSX or VCard with a single click. Process
 
 ## 🤖 AI Assistant (optional)
 
-Choose from six providers based on your preference:
+You bring your own AI provider. The extension supports two categories:
 
-| Provider | Type | Cost | API Key |
-|---|:---:|:---:|:---:|
-| **Ollama** (recommended) | 🟢 Local | Free | Not needed |
-| **LM Studio / llama.cpp** | 🟢 Local | Free | Not needed |
-| **Anthropic Claude** | ☁️ Cloud | $0.001 - $0.05 / request | Required |
-| **OpenAI ChatGPT** | ☁️ Cloud | $0.0002 - $0.005 / request | Required |
-| **Google Gemini** | ☁️ Cloud | **Free tier** (1500 req/day) | Required |
-| **Groq** | ☁️ Cloud | **Free tier** + ultra fast | Required |
+- **Local LLM servers** — run an open-source LLM on your own machine. Free, no API key required.
+- **Cloud AI APIs** — use a cloud-hosted provider with your own API key. Some have free tiers; others are paid per request.
+
+The provider is configured in the AI tab inside the extension popup. AI requests go directly from your browser to the provider you select; Bluedev runs no relay server.
 
 ### AI capabilities
 
@@ -117,7 +113,7 @@ AI replies to incoming messages. **Default = Draft mode**: AI proposes, you appr
 
 - Chrome 111+ (or compatible Chromium-based browser)
 - WhatsApp Web account (paired with your phone)
-- For local AI: Ollama or LM Studio installed (optional)
+- For local AI: a local LLM server installed (optional)
 - For cloud AI: API key from the chosen provider (optional)
 
 ## ⚠️ Limitations
@@ -151,7 +147,7 @@ Built by Bluedev · All rights reserved · v1.0.0
 ## Single Purpose Declaration (CWS form)
 
 ```
-This extension is designed to export the user's own WhatsApp Web data (chats, messages, contacts, groups, labels) locally and to optionally process that data through an AI assistant for summarization, reply suggestions, and prioritization. All AI operations occur with a user-selected provider (local Ollama/LM Studio or cloud Claude/ChatGPT/Gemini/Groq). Bluedev never accesses, stores, or transmits any user data.
+This extension is designed to export the user's own WhatsApp Web data (chats, messages, contacts, groups, labels) locally and to optionally process that data through an AI assistant for summarization, reply suggestions, and prioritization. All AI operations occur with a user-selected provider (either a local LLM server or a cloud AI API using the user's own API key). Bluedev never accesses, stores, or transmits any user data.
 ```
 
 ---

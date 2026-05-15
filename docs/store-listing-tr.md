@@ -66,16 +66,12 @@ WhatsApp Web verilerinizi tek tıkla CSV, XLSX veya VCard olarak dışa aktarın
 
 ## 🤖 Yapay zeka asistanı (isteğe bağlı)
 
-Altı sağlayıcı arasından kendi tercihinizi seçin:
+Kendi AI sağlayıcınızı seçersiniz. Eklenti iki kategoriyi destekler:
 
-| Sağlayıcı | Tip | Maliyet | API Anahtarı |
-|---|:---:|:---:|:---:|
-| **Ollama** (önerilen) | 🟢 Yerel | Ücretsiz | Gerekmez |
-| **LM Studio / llama.cpp** | 🟢 Yerel | Ücretsiz | Gerekmez |
-| **Anthropic Claude** | ☁️ Bulut | $0.001 - $0.05 / istek | Gerekli |
-| **OpenAI ChatGPT** | ☁️ Bulut | $0.0002 - $0.005 / istek | Gerekli |
-| **Google Gemini** | ☁️ Bulut | **Ücretsiz tier** (1500 istek/gün) | Gerekli |
-| **Groq** | ☁️ Bulut | **Ücretsiz tier** + ultra hızlı | Gerekli |
+- **Yerel LLM sunucuları** — kendi makinenizde açık kaynak bir LLM çalıştırın. Ücretsiz, API anahtarı gerekmez.
+- **Bulut AI API'leri** — kendi API anahtarınızla bulut barındırmalı bir sağlayıcı kullanın. Bazıları ücretsiz tier sunar; bazıları istek başına ücretlidir.
+
+Sağlayıcı eklenti popup'ındaki AI sekmesinde yapılandırılır. AI istekleri tarayıcınızdan doğrudan sağlayıcıya gider; Bluedev aracı sunucu kullanmaz.
 
 ### AI yetenekleri
 
@@ -117,7 +113,7 @@ AI gelen mesajlara cevap verir. **Varsayılan = Taslak modu**: AI önerir, siz o
 
 - Chrome 111+ (veya uyumlu Chromium tabanlı tarayıcı)
 - WhatsApp Web hesabı (telefonunuza eşleşmiş)
-- Yerel AI için: Ollama veya LM Studio yüklü (opsiyonel)
+- Yerel AI için: bir yerel LLM sunucusu yüklü (opsiyonel)
 - Bulut AI için: ilgili sağlayıcının API anahtarı (opsiyonel)
 
 ## ⚠️ Sınırlamalar
@@ -151,7 +147,7 @@ Bluedev tarafından geliştirilmiştir · Tüm hakları saklıdır · v1.0.0
 ## Single Purpose Declaration (CWS form)
 
 ```
-Bu eklenti, kullanıcının kendi WhatsApp Web verilerini (sohbetler, mesajlar, kişiler, gruplar, etiketler) yerel olarak dışa aktarmak ve isteğe bağlı yapay zeka asistanıyla bu verileri özetleme/cevap önerisi/önceliklendirme amaçlı işlemek için tasarlanmıştır. Tüm AI işlemleri kullanıcı tarafından açıkça seçilen bir sağlayıcı (yerel Ollama/LM Studio veya bulut Claude/ChatGPT/Gemini/Groq) ile gerçekleşir. Bluedev hiçbir kullanıcı verisine erişmez, saklamaz veya iletmez.
+Bu eklenti, kullanıcının kendi WhatsApp Web verilerini (sohbetler, mesajlar, kişiler, gruplar, etiketler) yerel olarak dışa aktarmak ve isteğe bağlı yapay zeka asistanıyla bu verileri özetleme/cevap önerisi/önceliklendirme amaçlı işlemek için tasarlanmıştır. Tüm AI işlemleri kullanıcı tarafından açıkça seçilen bir sağlayıcı (yerel bir LLM sunucusu ya da kullanıcının kendi API anahtarıyla bir bulut AI API'si) ile gerçekleşir. Bluedev hiçbir kullanıcı verisine erişmez, saklamaz veya iletmez.
 ```
 
 ---
